@@ -12,8 +12,8 @@ function generateUUID() {
 
 function PaymentWidget() {
     const findDormUrl = 'http://localhost:8080/dorms'
-    const successUrl = window.location.origin + '/success'
-    const failUrl = window.location.origin + '/fail'
+    const successUrl = window.location.origin + '/payments-success'
+    const failUrl = window.location.origin + '/payments-fail'
 
     const location = useLocation()
     const bookingInfo = { ...location.state }

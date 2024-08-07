@@ -13,8 +13,7 @@ function SuccessPage() {
                 paymentKey: searchParams.get("paymentKey"),
                 amount: searchParams.get("amount"),
             }
-            console.log('request', requestData)
-            
+
             const response = await fetch('http://localhost:8080/payments/confirm', {
                 method: 'POST',
                 // credentials: 'include',
@@ -23,12 +22,9 @@ function SuccessPage() {
                 },
                 body: JSON.stringify(requestData),
             })
-            console.log('response', response)
-            
             const data = await response.json()
-            console.log(data)
 
-            if (!response.ok) {
+            if (data && !response.ok) {
                 throw { message: data.message, code: data.code }
             }
             
@@ -38,6 +34,7 @@ function SuccessPage() {
         confirm()
             .then((data) => {
                 setResponseData(data)
+                navigate(`/bookings`);
             })
             .catch((error) => {
                 navigate(`/payments-fail?code=${error.code}&message=${error.message}`)

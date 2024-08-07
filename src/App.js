@@ -10,8 +10,8 @@ function App() {
     <Routes>
       <Route path='/bookings' element={<Booking />} />
       <Route path='/payments' element={<PaymentWidget />} />
-      <Route path='/success' element={<SuccessPage />} />
-      <Route path='/fail' element={<FailPage />} />
+      <Route path='/payments-success' element={<SuccessPage />} />
+      <Route path='/payments-fail' element={<FailPage />} />
     </Routes>
   );
 }
