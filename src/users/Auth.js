@@ -38,15 +38,14 @@ function Auth() {
             })
 
             console.log(resp.data.result)
-            // if (resp.status === 200) {
-                if (resp.status === 200 && resp.data.result === 'success') {
-                /*const userInfo = {
-                          id: resp.data.id,
-                          role: resp.data.role,
-                          nickname: resp.data.nickname,
-                        }
-                        navigate('/', { state: { userInfo: userInfo } })*/
-                navigate('/')
+            if (resp.status === 200 && resp.data.result === 'success') {
+                const userInfo = {
+                    id: resp.data.id,
+                    role: resp.data.role,
+                    name: resp.data.name,
+                }
+                navigate('/', {state: {userInfo: userInfo}})
+                // navigate('/')
             }
         } catch (error) {
             console.log(error)
