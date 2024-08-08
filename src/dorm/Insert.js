@@ -1,7 +1,7 @@
-import {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {Button, Container, FormControl, Table} from 'react-bootstrap';
+import { Button, Container, FormControl, Table } from 'react-bootstrap';
 
 const Insert = () => {
     const [inputs, setInputs] = useState({
@@ -22,7 +22,7 @@ const Insert = () => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/dcategory/list');
-                const {dcategoryList} = response.data;
+                const { dcategoryList } = response.data;
                 setCategories(dcategoryList);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -33,7 +33,7 @@ const Insert = () => {
     }, []);
 
     const onChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setInputs({
             ...inputs,
             [name]: value

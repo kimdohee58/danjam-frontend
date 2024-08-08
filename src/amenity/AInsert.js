@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Container, FormControl} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import { Button, Container, FormControl } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const AInsert = () => {
@@ -14,7 +14,7 @@ const AInsert = () => {
         const fetchAmenities = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/amenity/list');
-                const {amenityList} = response.data;
+                const { amenityList } = response.data;
                 setAmenities(amenityList);
                 console.log('fetching amenities:', amenityList);
             } catch (error) {
@@ -26,7 +26,7 @@ const AInsert = () => {
     }, []);
 
     const onChange = (e) => {
-        const {value, checked} = e.target;
+        const { value, checked } = e.target;
         setSelectedAmenities(prev =>
             checked ? [...prev, parseInt(value)] : prev.filter(id => id !== parseInt(value))
         );

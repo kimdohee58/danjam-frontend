@@ -1,6 +1,6 @@
-import {useParams} from "react-router-dom";
-import {Button, Container, FormControl, Table} from "react-bootstrap";
-import {useState} from "react";
+import { useParams } from "react-router-dom";
+import { Button, Container, FormControl, Table } from "react-bootstrap";
+import { useState } from "react";
 import axios from "axios";
 
 const RInsert = () => {
@@ -20,7 +20,7 @@ const RInsert = () => {
     const [filePreviews, setFilePreviews] = useState([]); // To store file previews
 
     const onChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setInputs({
             ...inputs,
             [name]: value
@@ -172,7 +172,7 @@ const RInsert = () => {
             </form>
             <div>
                 <h5>File Data</h5>
-                <input type="file" id="file" onChange={handleChangeFile} multiple/>
+                <input type="file" id="file" onChange={handleChangeFile} multiple />
                 <div>
                     <h5>Selected Files:</h5>
                     {filePreviews.length > 0 && (
@@ -182,7 +182,7 @@ const RInsert = () => {
                                     <img
                                         src={preview}
                                         alt={`Preview ${index}`}
-                                        style={{width: '100px', height: '100px', objectFit: 'cover', margin: '5px'}}
+                                        style={{ width: '100px', height: '100px', objectFit: 'cover', margin: '5px' }}
                                     />
                                     <p>{file[index]?.name}</p>
                                 </div>
