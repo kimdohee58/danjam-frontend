@@ -3,7 +3,7 @@ import Search from "./search/Search";
 import Header from "./Header";
 
 function Main() {
-    let userInfo={
+    let userInfo = {
         id: '',
         name: '',
         role: ''

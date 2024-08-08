@@ -15,7 +15,6 @@ function Header(props) {
     }
     const LogOut = async () => {
         try {
-            // const resp = await axios.post('http://localhost:8080/user/logout')
             const resp = await axios({
                 url: 'http://localhost:8080/users/logout',
                 method: 'POST',
