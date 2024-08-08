@@ -1,25 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
+import {Route, Routes} from "react-router-dom";
+import DormOne from "./Dorm/DormOne";
+import DormList from "./Dorm/DormList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    return (
+        <Routes>
+            <Route path="/" element={<DormList/>}/>
+            <Route path="/dorm/:id" element={<DormOne/>}/>
+        </Routes>
+    );
 }
 
 export default App;
