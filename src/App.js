@@ -1,23 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import {Route, Routes} from "react-router-dom";
+import Insert from "./dorm/Insert";
+import AInsert from "./amenity/AInsert";
+import RInsert from "./room/RInsert";
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        <Route path="/dorm/insert" element={<Insert/>}/>
+        <Route path="/amenity/AInsert/:id" element={<AInsert/>}/>
+        <Route path="/room/RInsert/:id" element={<RInsert/>}/>
+      </Routes>
     </div>
   );
 }
