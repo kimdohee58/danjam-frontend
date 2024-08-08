@@ -45,11 +45,6 @@ function Register() {
     }
 
     const onSubmit = async (e) => {
-        // console.log(e.target.role.value)
-        // setUser({
-        //     ...user,
-        //     role: e.target.role.value
-        // })
         console.log(email, password, name, phoneNum, role)
         e.preventDefault()
         try {
@@ -69,17 +64,17 @@ function Register() {
     const {email, password, name, phoneNum, role} = user
 
     // 핸드폰 번호 하이픈 넣기, https://fedev-kim.medium.com/react-%EC%A0%95%EA%B7%9C%EC%8B%9D%EC%9C%BC%EB%A1%9C-%ED%9C%B4%EB%8C%80%EC%A0%84%ED%99%94-%EB%B2%88%ED%98%B8-input-%EB%A7%8C%EB%93%A4%EA%B8%B0-1a67f28855d2
-    const [phoneNumber, setPhoneNum] = useState('')
+    /*const [phoneNumber, setPhoneNum] = useState('')
 
-            const parsingPhoneNum = (num) => {
-              return num
-                .replace(/[^0-9]/g, '')
-                .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-                .replace(/(-{1,2})$/g, '')
-            }
+    const parsingPhoneNum = (num) => {
+        return num
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+            .replace(/(-{1,2})$/g, '')
+    }
 
-            const onChangeNum = (e) =>
-              setPhoneNum(parsingPhoneNum(e.currentTarget.value))
+    const onChangeNum = (e) =>
+        setPhoneNum(parsingPhoneNum(e.currentTarget.value))*/
 
     return (
         <Container className={'mt-3'}>
@@ -117,11 +112,16 @@ function Register() {
                     onChange={onChange}
                     placeholder={'phoneNumber'}
                 />
-                {/* https://www.daleseo.com/react-radio-buttons /*/}
-                {/*<RadioGroup label={'role'}>*/}
-                {/*    <Radio name={'role'} value={'ROLE_USER'} onChange={onChange}>일반 회원</Radio>*/}
-                {/*    <Radio name={'role'} value={'ROLE_SELLER'} onChange={onChange}>판매자</Radio>*/}
-                {/*</RadioGroup>*/}
+                {/* 핸드폰번호 하이픈 */}
+                {/*<input
+                    type={'tel'}
+                    name={'phoneNumber'}
+                    value={phoneNumber}
+                    minLength={13}
+                    maxLength={13}
+                    onChange={onChangeNum}
+                    placeholder={'phoneNumber'}
+                />*/}
                 <input type={'radio'} id={'ROLE_USER'} name={'role'} value={'ROLE_USER'} onChange={onChange}/>
                 <label htmlFor={'ROLE_USER'}>일반회원</label>
                 <input type={'radio'} id={'ROLE_SELLER'} name={'role'} value={'ROLE_SELLER'} onChange={onChange}/>

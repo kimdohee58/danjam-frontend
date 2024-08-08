@@ -12,7 +12,7 @@ const Insert = () => {
         town: '',
         address: '',
         categoryId: '',
-        usersId:''
+        usersId: ''
     });
 
     const [categories, setCategories] = useState([]);
