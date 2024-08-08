@@ -28,6 +28,11 @@ const Header = () => {
         navigate('/')
     }
 
+    // TODO 로그인 한 계정의 id를 path variable 넘겨줘야 함
+    const handleMyPage = () => {
+        navigate(`/my-page/8`)
+    }
+
     const [isLogin, setIsLogin] = useState(false)
     const [isLogOut, setInLogOut] = useState(true)
 
@@ -37,6 +42,7 @@ const Header = () => {
             <Button onClick={SignUp}>{'회원가입'}</Button>
             <Button onClick={LogOut} disabled={isLogOut}>{'로그아웃'}</Button>
             <Button onClick={Home}>{'home'}</Button>
+            <Button onClick={handleMyPage}>{'My Page'}</Button>
         </>
     )
 }
