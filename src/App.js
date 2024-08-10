@@ -6,6 +6,7 @@ import RInsert from "./room/RInsert";
 import Auth from "./users/Auth";
 import Register from "./users/Register";
 import Main from "./Main";
+import SearchResult from "./search/SearchResult";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <Route path={'/login'} element={<Auth/>}/>
                 <Route path={'/signUp'} element={<Register/>}/>
                 <Route path={'/'} element={<Main/>}/>
+                {/*<Route path={'/search'} element={<SearchResult/>}/>*/}
                 <Route path="/dorm/insert" element={<Insert/>}/>
                 <Route path="/amenity/AInsert/:id" element={<AInsert/>}/>
                 <Route path="/room/RInsert/:id" element={<RInsert/>}/>

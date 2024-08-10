@@ -1,4 +1,4 @@
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import Search from "./search/Search";
 import Header from "./Header";
 
@@ -18,7 +18,7 @@ function Main() {
     return (
         <>
             <Header userInfo={userInfo}/>
-            <h1>{'여기가 메인 페이지 입니다.'}</h1>
+            <h1>{'단잠'}</h1>
             <Search/>
         </>
     )
