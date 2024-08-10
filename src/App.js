@@ -7,6 +7,9 @@ import Auth from "./users/Auth";
 import Register from "./users/Register";
 import Main from "./Main";
 
+import SellerCalendar from "./seller/SellerCalendar";
+import SellerList from "./seller/SellerList";
+
 
 function App() {
     return (
@@ -18,6 +21,8 @@ function App() {
                 <Route path="/dorm/insert" element={<Insert/>}/>
                 <Route path="/amenity/AInsert/:id" element={<AInsert/>}/>
                 <Route path="/room/RInsert/:id" element={<RInsert/>}/>
+                <Route path="/seller/SellerList" element={<SellerList/>}/>
+                <Route path="/seller/SellerCalendar" element={<SellerCalendar/>}/>
             </Routes>
         </div>
     );

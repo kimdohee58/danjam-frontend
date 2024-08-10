@@ -1,7 +1,8 @@
 import {Button} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useState} from "react";
+import sellerCalendar from "./seller/SellerCalendar";
 
 function Header(props) {
     const navigate = useNavigate()
@@ -32,6 +33,22 @@ function Header(props) {
         navigate('/')
     }
 
+    const REGIST = () => {
+        navigate('/dorm/insert')
+    }
+
+    const RoomInser = () => {
+
+        navigate('/seller/SellerList' , { state: { userInfo: props.userInfo } });
+    };
+
+    const SellerCalendar = () => {
+
+        navigate('/seller/SellerCalendar' , { state: { userInfo: props.userInfo } });
+    };
+
+
+
     return (
         <>
             {props.userInfo.name !== '' ? (<h3>{props.userInfo.name}</h3>) : (<h3>비회원</h3>)}
@@ -43,6 +60,12 @@ function Header(props) {
                 <Button onClick={LogOut}>{'로그아웃'}</Button>
             </div>
             <Button onClick={Home}>{'home'}</Button>
+            <div hidden={props.userInfo.role !== 'ROLE_SELLER'}>
+                <Button onClick={REGIST}>{'숙소등록'}</Button>
+                <Button onClick={RoomInser}>{'방추가'}</Button>
+                <Button onClick={SellerCalendar}>{'예약리스트'}</Button>
+            </div>
+
         </>
     )
 }
