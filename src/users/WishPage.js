@@ -10,7 +10,7 @@ const WishPage = () => {
     const [page, setPage] = useState(0)
     const [hasNext, setHasNext] = useState(true)
     const [loading, setLoading] = useState(false)
-    const size = 2
+    const size = 25
 
     const listRef = useRef(null)
 
