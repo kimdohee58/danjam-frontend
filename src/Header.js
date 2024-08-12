@@ -32,9 +32,9 @@ function Header(props) {
         navigate('/')
     }
 
-    // TODO 로그인 한 계정의 id를 path variable 넘겨줘야 함
     const handleMyPage = () => {
-        navigate(`/my-page/8`)
+        const { userInfo } = props
+        navigate(`/my-page/${userInfo.id}`)
     }
 
     const [isLogin, setIsLogin] = useState(false)
