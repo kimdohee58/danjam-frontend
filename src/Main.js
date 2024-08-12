@@ -1,4 +1,4 @@
-import {useLocation} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import Search from "./search/Search";
 import Header from "./Header";
 
@@ -18,7 +18,6 @@ function Main() {
     return (
         <>
             <Header userInfo={userInfo}/>
-            <h1>{'단잠'}</h1>
             <Search/>
         </>
     )

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import List from "./List";
 import DatePicker from "react-datepicker";
@@ -8,11 +8,24 @@ import {useNavigate} from "react-router-dom";
 import SearchResult from "./SearchResult";
 
 function Search() {
+    const navigate = useNavigate();
+
     const [search, setSearch] = useState({
         city: '',
-        date: [],
+        startDate: '',
+        endDate: '',
         person: '',
     })
+
+    // logo 누르면 main으로 돌아가기
+    const toMain = () => {
+        setSelectedCity('선택')
+        setSelectedDate({
+            startDate: new Date(),
+            endDate: null,
+        })
+        setSelectedPerson(0)
+    }
 
     const cityList = ["서울특별시", "경기도", "강원도", "인천광역시",
         "충청북도", "충청남도", "경상남도", "경상북도", "전라남도", "전라북도",
@@ -31,8 +44,8 @@ function Search() {
     const setChangeDate = (dates) => {
         const [start, end] = dates
         setSelectedDate({
-            startDate: start,
-            endDate: end,
+            startDate: start.toLocaleDateString(),
+            endDate: end.toLocaleDateString(),
         })
     }
 
@@ -48,15 +61,14 @@ function Search() {
     }
 
     // submit
-    const navigate = useNavigate()
-
+    // const navigate = useNavigate()
     const onSubmit = () => {
         setSearch({
             city: selectedCity,
             date: selectedDate,
             person: selectedPerson,
         })
-        console.log(search)
+        console.log("onSubmit", search)
         // navigate('/search')
     }
 
@@ -64,6 +76,7 @@ function Search() {
 
     return (
         <>
+            <h1 onClick={toMain}>{'단잠'}</h1>
             <div style={{display: "flex", justifyContent: "space-evenly"}}>
                 {/* https://wazacs.tistory.com/31 */}
                 <select onChange={handleSelect} value={selectedCity}>
@@ -89,22 +102,6 @@ function Search() {
                     minDate={new Date()} // minDate 이전 날짜 선택 불가
                     maxDate={new Date('2025-12-31')} // maxDate 이후 날짜 선택 불가
                     onChange={setChangeDate}/>
-                {/*<DatePicker
-                    selectsRange={true}
-                    selectsStart={true}
-                    selectsEnd={true}
-                    dateFormat='yyyy.MM.dd' // 날짜 형태
-                    shouldCloseOnSelect={true} // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                    minDate={new Date()} // minDate 이전 날짜 선택 불가
-                    maxDate={new Date('2025-12-31')} // maxDate 이후 날짜 선택 불가
-                    selected={startDate}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(dates) => onChangeDate(dates)}
-                    monthsShown={2}
-                    placeholderText={'날짜를 선택하세요'}
-                    // excludeDates={selectedDate}
-                />*/}
 
                 {/* person */}
                 <div>
@@ -116,7 +113,8 @@ function Search() {
                 <Button onClick={onSubmit}>검색</Button>
             </div>
             <div>
-                {search.city === '선택' || search.city === '' ? <List/> : <SearchResult search={search}/>}
+                {search.city === '선택' || search.city === '' ?
+                    <List/> : <SearchResult search={search}/>}
             </div>
         </>
     );
