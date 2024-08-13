@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
@@ -9,10 +9,10 @@ import Header from "../Header";
 // 접근성 향상을 위해 모달의 루트 엘리먼트를 설정
 Modal.setAppElement('#root');
 
-const SellerCalendar = () => {
+const SellerCalendar2 = () => {
     const location = useLocation();  // 현재 URL의 위치 정보를 가져옵니다.
     const userInfo = location.state.userInfo;  // URL 상태에서 사용자 정보를 가져옵니다.
-    const [selectedDate, setSelectedDate] = useState(null);  // 선택된 날짜 상태
+    const [selectedDate, setSelectedDate] = useState(new Date());  // 선택된 날짜 상태
     const [events, setEvents] = useState([]);  // 선택된 날짜의 이벤트 상태
     const [eventsData, setEventsData] = useState({});  // 모든 날짜의 이벤트 데이터 상태
     const [modalIsOpen, setModalIsOpen] = useState(false);  // 모달 열림 상태
@@ -31,18 +31,13 @@ const SellerCalendar = () => {
     // 날짜 변경 핸들러
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        if (date) {
-            const dateString = formatDateString(date);
-            setEvents(eventsData[dateString] || []);  // 선택된 날짜의 이벤트 설정
-            setSearchDate(dateString);  // 입력 필드 업데이트
-        } else {
-            setEvents([]);
-            setSearchDate('');  // 입력 필드 초기화
-        }
+        const dateString = formatDateString(date);
+        setEvents(eventsData[dateString] || []);  // 선택된 날짜의 이벤트 설정
+        setSearchDate(dateString);  // 입력 필드 업데이트
     };
 
-    // 이벤트가 있는 날짜에 클래스명을 반환
-    const getDayClassName = (date) => {
+    // 선택된 날짜의 이벤트가 있는지 확인
+    const getTileClassName = (date) => {
         const dateString = formatDateString(date);
         return eventsData[dateString] ? 'highlighted-date' : '';  // 이벤트가 있는 날에 클래스 적용
     };
@@ -115,10 +110,8 @@ const SellerCalendar = () => {
                 }, {});
 
                 setEventsData(fetchedEventsData);  // 이벤트 데이터 상태 업데이트
-                if (selectedDate) {
-                    const dateString = formatDateString(selectedDate);
-                    setEvents(fetchedEventsData[dateString] || []);  // 선택된 날짜의 이벤트 업데이트
-                }
+                const dateString = formatDateString(selectedDate);
+                setEvents(fetchedEventsData[dateString] || []);  // 선택된 날짜의 이벤트 업데이트
             } catch (error) {
                 console.error('Error fetching bookings:', error);  // 에러 처리
             }
@@ -153,17 +146,11 @@ const SellerCalendar = () => {
                     />
                 </div>
 
-                <div className="datepicker-container">
-                    <DatePicker
-                        selected={selectedDate}
+                <div className="calendar-container">
+                    <Calendar
                         onChange={handleDateChange}
-                        dateFormat="yyyy-MM-dd"
-                        isClearable
-                        showYearDropdown
-                        scrollableYearDropdown
-                        dayClassName={getDayClassName}
-                        inline  // 캘린더를 항상 보이도록 설정
-                        placeholderText="Select a date"  // DatePicker의 플레이스홀더 텍스트
+                        value={selectedDate}
+                        tileClassName={({date}) => getTileClassName(date)}
                     />
                 </div>
 
@@ -229,14 +216,13 @@ const SellerCalendar = () => {
                         border-radius: 50%;
                         color: black;
                     }
-                    .react-datepicker__day--highlighted-date {
+                    .react-calendar__tile--highlighted-date {
                         background-color: #ffeb3b !important; /* 강조된 날짜를 노란색으로 설정 */
                         border-radius: 50%;
                         color: black;
                     }
-                    .datepicker-container {
+                    .calendar-container {
                         display: flex;
-                        // justify-content: center; /* 가운데 정렬 */
                         margin: 20px 0;
                     }
                 `}
@@ -246,4 +232,4 @@ const SellerCalendar = () => {
     );
 };
 
-export default SellerCalendar;
+export default SellerCalendar2;

@@ -30,11 +30,11 @@ function Header(props) {
         }
     }
     const Home = () => {
-        navigate('/')
+        navigate('/', { state: { userInfo: props.userInfo } })
     }
 
     const REGIST = () => {
-        navigate('/dorm/insert')
+        navigate('/dorm/insert', { state: { userInfo: props.userInfo } })
     }
 
     const RoomInser = () => {
@@ -46,7 +46,18 @@ function Header(props) {
 
         navigate('/seller/SellerCalendar' , { state: { userInfo: props.userInfo } });
     };
+    const SellerCalendar2 = () => {
 
+        navigate('/seller/SellerCalendar2' , { state: { userInfo: props.userInfo } });
+    };
+    const Approve = () => {
+
+        navigate('/admin/Approve' , { state: { userInfo: props.userInfo } });
+    };
+    const MemberList = () => {
+
+        navigate('/admin/MemberList' , { state: { userInfo: props.userInfo } });
+    };
 
 
     return (
@@ -62,10 +73,12 @@ function Header(props) {
             <Button onClick={Home}>{'home'}</Button>
             <div hidden={props.userInfo.role !== 'ROLE_SELLER'}>
                 <Button onClick={REGIST}>{'숙소등록'}</Button>
-                <Button onClick={RoomInser}>{'방추가'}</Button>
+                <Button onClick={RoomInser}>{'숙소리스트'}</Button>
                 <Button onClick={SellerCalendar}>{'예약리스트'}</Button>
+                <Button onClick={SellerCalendar2}>{'큰예약리스트'}</Button>
             </div>
-
+            <Button onClick={Approve}>{'호텔승인'}</Button>
+            <Button onClick={MemberList}>{'회원리스트'}</Button>
         </>
     )
 }

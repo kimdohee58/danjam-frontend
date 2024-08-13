@@ -9,6 +9,9 @@ import Main from "./Main";
 
 import SellerCalendar from "./seller/SellerCalendar";
 import SellerList from "./seller/SellerList";
+import SellerCalendar2 from "./seller/SellerCalendar2";
+import Approve from "./admin/Approve";
+import MemberList from "./admin/MemberList";
 
 
 function App() {
@@ -23,6 +26,9 @@ function App() {
                 <Route path="/room/RInsert/:id" element={<RInsert/>}/>
                 <Route path="/seller/SellerList" element={<SellerList/>}/>
                 <Route path="/seller/SellerCalendar" element={<SellerCalendar/>}/>
+                <Route path="/seller/SellerCalendar2" element={<SellerCalendar2/>}/>
+                <Route path="/admin/Approve" element={<Approve/>}/>
+                <Route path="/admin/MemberList" element={<MemberList/>}/>
             </Routes>
         </div>
     );
