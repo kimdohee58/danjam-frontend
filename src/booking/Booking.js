@@ -1,24 +1,42 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import './Booking.css'
+import {useState} from 'react'
+import Modal from 'react-modal'
+import PaymentWidget from "../payment/PaymentWidget";
+
+Modal.setAppElement('#root');
 
 const Booking = () => {
     const location = useLocation()
     const navigate = useNavigate()
-    // const bookingInfo = { ...location.state }
-    const bookingInfo = {
-        user: {
-            id: 1,
-            email: 'test1@test.com',
-            name: 'test1',
-            phoneNumber: '1011111111',
+    const params = useParams()
+    const id = params.id
+
+    const [isOpen, setIsOpen] = useState(false)
+    const handleOpenModal = () => {
+        setIsOpen(true);
+    }
+    const handleCloseModal = () => {
+        setIsOpen(false);
+    }
+    const customStyles = {
+        overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
         },
-        dormId: 1,
+        content: {
+            width: "650px",
+            height: "450px",
+            margin: "auto",
+            borderRadius: "12px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+            padding: "20px",
+        },
     }
 
+    const bookingInfo = { ...location.state }
+
     const handleClick = () => {
-        navigate('/payments', {
-            state: bookingInfo,
-        })
+        navigate(`/dorms/${id}`)
     }
 
     return (
@@ -102,10 +120,14 @@ const Booking = () => {
                     <button
                         type={'button'}
                         className={'req-booking-btn'}
-                        onClick={handleClick}
+                        onClick={handleOpenModal}
                     >
                         {'예약 요청'}
                     </button>
+
+                    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+                        <PaymentWidget bookingInfo={bookingInfo} />
+                    </Modal>
                 </div>
             </div>
         </>

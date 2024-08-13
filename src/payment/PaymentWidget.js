@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import { loadTossPayments } from '@tosspayments/tosspayments-sdk'
-import { v4 as uuidv4 } from 'uuid'
-import { useLocation } from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {loadTossPayments} from '@tosspayments/tosspayments-sdk'
+import {v4 as uuidv4} from 'uuid'
+import {useParams, useSearchParams} from 'react-router-dom'
+import './PaymentWidget.css'
 
 const clientKey = process.env.REACT_APP_TOSS_PAYMENTS_CLIENT_KEY
 const customerKey = generateUUID()
@@ -10,15 +11,15 @@ function generateUUID() {
     return uuidv4()
 }
 
-function PaymentWidget() {
-    const findDormUrl = 'http://localhost:8080/dorms'
+function PaymentWidget({ bookingInfo }) {
+    const [searchParams, setSearchParams] = useSearchParams()
+    const params = useParams()
+    const id = params.id
+
     const successUrl = window.location.origin + '/payments-success'
     const failUrl = window.location.origin + '/payments-fail'
 
-    const location = useLocation()
-    const bookingInfo = { ...location.state }
-    const { user, dormId } = bookingInfo
-
+    const { user, dormName, roomId, person, checkIn, checkOut } = bookingInfo
 
     const [amount, setAmount] = useState({
         currency: 'KRW',
@@ -26,13 +27,6 @@ function PaymentWidget() {
     })
     const [ready, setReady] = useState(false)
     const [widgets, setWidgets] = useState(null)
-
-    // useEffect(async () => {
-    //     const response = await fetch(`${findDormUrl}/${dormId}`,{
-    //         credentials: 'include',
-    //     })
-    //     console.log(response)
-    // }, [dormId])
 
     useEffect(() => {
         async function fetchPaymentWidgets() {
@@ -47,48 +41,57 @@ function PaymentWidget() {
         }
 
         fetchPaymentWidgets()
-    }, [])
+    }, [clientKey, customerKey])
 
     useEffect(() => {
         async function renderPaymentWidgets() {
             if (widgets == null) {
-                return
+                return;
             }
-
-            await widgets.setAmount(amount)
+            // ------ 주문의 결제 금액 설정 ------
+            await widgets.setAmount(amount);
 
             await Promise.all([
+                // ------  결제 UI 렌더링 ------
                 widgets.renderPaymentMethods({
-                    selector: '#payment-method',
+                    selector: "#payment-method",
                     variantKey: "DEFAULT",
                 }),
+                // ------  이용약관 UI 렌더링 ------
                 widgets.renderAgreement({
-                    selector: '#agreement',
+                    selector: "#agreement",
                     variantKey: "AGREEMENT",
-                })
-            ])
+                }),
+            ]);
 
-            setReady(true)
+            setReady(true);
         }
 
-        renderPaymentWidgets()
-    }, [widgets, amount])
+        renderPaymentWidgets();
+    }, [widgets]);
 
     useEffect(() => {
         if (widgets == null) {
-            return
+            return;
         }
 
-        widgets.setAmount(amount)
-    }, [widgets, amount])
+        widgets.setAmount(amount);
+    }, [widgets, amount]);
 
     const handleClick = async () => {
         try {
             if (widgets) {
+                searchParams.set('userId', id)
+                searchParams.set('roomId', roomId)
+                searchParams.set('person', person)
+                searchParams.set('checkIn', checkIn)
+                searchParams.set('checkOut', checkOut)
+                setSearchParams(searchParams)
+
                 await widgets.requestPayment({
                     orderId: generateUUID(),
-                    orderName: '나르샤호텔',
-                    successUrl: successUrl,
+                    orderName: dormName,
+                    successUrl: `${successUrl}?${searchParams}`,
                     failUrl: failUrl,
                     customerEmail: user.email,
                     customerName: user.name,
@@ -115,13 +118,15 @@ function PaymentWidget() {
                 <div id="agreement" />
 
                 {/* 결제하기 버튼 */}
-                <button
-                    className="btn"
-                    disabled={!ready}
-                    onClick={handleClick}
-                >
-                    결제하기
-                </button>
+                <div className="parent-payment-btn">
+                    <button
+                        className="payment-btn"
+                        disabled={!ready}
+                        onClick={handleClick}
+                    >
+                        결제하기
+                    </button>
+                </div>
             </div>
         </div>
     )

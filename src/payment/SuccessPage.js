@@ -1,17 +1,23 @@
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import {Link, useNavigate, useSearchParams} from 'react-router-dom'
+import {useEffect, useState} from 'react'
 
 function SuccessPage() {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const [responseData, setResponseData] = useState(null)
-    
+    const userId = searchParams.get("userId")
+
     useEffect(() => {
         async function confirm() {
             const requestData = {
                 orderId: searchParams.get("orderId"),
                 paymentKey: searchParams.get("paymentKey"),
                 amount: searchParams.get("amount"),
+                userId,
+                roomId: searchParams.get("roomId"),
+                person: searchParams.get("person"),
+                checkIn: searchParams.get("checkIn"),
+                checkOut: searchParams.get("checkOut"),
             }
 
             const response = await fetch('http://localhost:8080/payments/confirm', {
@@ -34,7 +40,7 @@ function SuccessPage() {
         confirm()
             .then((data) => {
                 setResponseData(data)
-                navigate(`/bookings`);
+                navigate(`/my-page/${userId}/bookings`);
             })
             .catch((error) => {
                 navigate(`/payments-fail?code=${error.code}&message=${error.message}`)

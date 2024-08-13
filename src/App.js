@@ -35,8 +35,8 @@ function App() {
               {/*TODO : 휘 예약 컴포넌트 넣어야함*/}
               <Route path={'/my-page/:id/reservations'} element={''}/>
 
-              <Route path='/bookings' element={<Booking />} />
-              <Route path='/payments' element={<PaymentWidget />} />
+              <Route path='/bookings/:id' element={<Booking />} />
+              <Route path='/payments/:id' element={<PaymentWidget />} />
               <Route path='/payments-success' element={<SuccessPage />} />
               <Route path='/payments-fail' element={<FailPage />} />
           </Routes>
