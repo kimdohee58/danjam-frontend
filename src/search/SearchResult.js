@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {FormCheck} from "react-bootstrap";
 
 function SearchResult(props) {
     const search = ({

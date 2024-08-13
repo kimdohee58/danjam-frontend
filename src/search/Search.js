@@ -47,11 +47,15 @@ function Search() {
         const [start, end] = dates
         setSelectedDate({
             // format https://steemit.com/hive-101145/@realmankwon/react
-            // checkIn: format(start.setHours(15).toString(), 'yyyy-MM-dd HH:mm:ss'),
-            // checkOut: format(end.setHours(11).toString(), 'yyyy-MM-dd HH:mm:ss'),
-            checkIn: format(start.toString(), 'yyyy-MM-dd HH:mm:ss'),
-            checkOut: format(end.toString(), 'yyyy-MM-dd HH:mm:ss'),
+            // checkIn: format(start.setHours(15).setMinutes(0).setSeconds(0).toString(), 'yyyy-MM-dd HH:mm:ss'),
+
+            checkIn: format(start.toString(), 'yyyy-MM-dd 15:00:00'),
+            checkOut: format(end.toString(), 'yyyy-MM-dd 11:00:00'),
+
+            // checkIn: format(start.toString(), 'yyyy-MM-dd HH:mm:ss'),
+            // checkOut: format(end.toString(), 'yyyy-MM-dd HH:mm:ss'),
         })
+        console.log(selectedDate.checkIn, selectedDate.checkOut)
     }
 
     // person
