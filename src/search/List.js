@@ -42,6 +42,7 @@ function List() {
                     <th>주소</th>
                     <th>category</th>
                     <th>user</th>
+                    <th>price</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -71,6 +72,7 @@ let TableRow = ({dorm, moveToDorm}) => {
             <td>{dorm.address}</td>
             <td>{dorm.dcategory.name}</td>
             <td>{dorm.user.name}</td>
+            <td>{dorm.room.price}</td>
         </tr>
     )
 }

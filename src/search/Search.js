@@ -6,14 +6,15 @@ import {ko} from "date-fns/locale";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "./SearchResult";
+import {format} from "date-fns";
 
 function Search() {
     const navigate = useNavigate();
 
     const [search, setSearch] = useState({
         city: '',
-        startDate: '',
-        endDate: '',
+        checkIn: '',
+        checkOut: '',
         person: '',
     })
 
@@ -21,10 +22,11 @@ function Search() {
     const toMain = () => {
         setSelectedCity('선택')
         setSelectedDate({
-            startDate: new Date(),
-            endDate: null,
+            checkIn: new Date(),
+            checkOut: null,
         })
         setSelectedPerson(0)
+        onSubmit()
     }
 
     const cityList = ["서울특별시", "경기도", "강원도", "인천광역시",
@@ -37,15 +39,18 @@ function Search() {
 
     // calendar
     const [selectedDate, setSelectedDate] = useState({
-        startDate: new Date(),
-        endDate: null,
+        checkIn: new Date(),
+        checkOut: null,
     })
 
     const setChangeDate = (dates) => {
         const [start, end] = dates
         setSelectedDate({
-            startDate: start.toLocaleDateString(),
-            endDate: end.toLocaleDateString(),
+            // format https://steemit.com/hive-101145/@realmankwon/react
+            // checkIn: format(start.setHours(15).toString(), 'yyyy-MM-dd HH:mm:ss'),
+            // checkOut: format(end.setHours(11).toString(), 'yyyy-MM-dd HH:mm:ss'),
+            checkIn: format(start.toString(), 'yyyy-MM-dd HH:mm:ss'),
+            checkOut: format(end.toString(), 'yyyy-MM-dd HH:mm:ss'),
         })
     }
 
@@ -96,9 +101,9 @@ function Search() {
                     className="datepicker"
                     // locale={ko}
                     dateFormat="MM월 dd일"
-                    selected={selectedDate.startDate}
-                    startDate={selectedDate.startDate}
-                    endDate={selectedDate.endDate}
+                    selected={selectedDate.checkIn}
+                    startDate={selectedDate.checkIn}
+                    endDate={selectedDate.checkOut}
                     minDate={new Date()} // minDate 이전 날짜 선택 불가
                     maxDate={new Date('2025-12-31')} // maxDate 이후 날짜 선택 불가
                     onChange={setChangeDate}/>

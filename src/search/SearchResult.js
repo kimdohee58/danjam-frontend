@@ -4,7 +4,13 @@ import axios from "axios";
 import {FormCheck} from "react-bootstrap";
 
 function SearchResult(props) {
-    console.log('SearchResult: ', props.search)
+    const search = ({
+        city: props.search.city,
+        checkIn: props.search.date.checkIn,
+        checkOut: props.search.date.checkOut,
+        person: props.search.person,
+    })
+    console.log('SearchResult: ', search)
 
     // filter
     // 1. amenity
@@ -113,7 +119,7 @@ function SearchResult(props) {
 
         let selectList = async () => {
             let resp = await axios
-                .post("http://localhost:8080/search", props.search, {
+                .post("http://localhost:8080/search", search, {
                     withCredentials: true
                 })
                 .catch((e) => {
