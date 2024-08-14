@@ -16,6 +16,10 @@ function Search() {
         checkIn: '',
         checkOut: '',
         person: '',
+        /*city: '선택',
+        checkIn: '',
+        checkOut: '',
+        person: '0',*/
     })
 
     // logo 누르면 main으로 돌아가기
@@ -25,10 +29,10 @@ function Search() {
             checkIn: new Date(),
             checkOut: null,
         })
-        setSelDate({
-            checkIn: '',
-            checkOut: '',
-        })
+        // setSelDate({
+        //     checkIn: '',
+        //     checkOut: '',
+        // })
         setSelectedPerson(0)
         onSubmit()
     }
@@ -36,7 +40,7 @@ function Search() {
     const cityList = ["서울특별시", "경기도", "강원도", "인천광역시",
         "충청북도", "충청남도", "경상남도", "경상북도", "전라남도", "전라북도",
         "부산광역시", "대전광역시", "울산광역시", "광주광역시", "대구광역시"]
-    const [selectedCity, setSelectedCity] = useState()
+    const [selectedCity, setSelectedCity] = useState('선택')
     const handleSelect = (e) => {
         setSelectedCity(e.currentTarget.value)
     }
@@ -45,6 +49,9 @@ function Search() {
     const [selectedDate, setSelectedDate] = useState({
         checkIn: new Date(),
         checkOut: null,
+        // 예외처리
+        // checkIn: null,
+        // checkOut: null,
     })
     const setChangeDate = (dates) => {
         const [start, end] = dates
@@ -78,10 +85,10 @@ function Search() {
         setSelectedPerson(selectedPerson + 1);
     }
 
-    const [selDate, setSelDate] = useState({
-        checkIn: '',
-        checkOut: '',
-    })
+    // const [selDate, setSelDate] = useState({
+    //     checkIn: '',
+    //     checkOut: '',
+    // })
 
     // submit
     // const navigate = useNavigate()
@@ -132,7 +139,7 @@ function Search() {
                     className="datepicker"
                     // locale={ko}
                     dateFormat="MM월 dd일"
-                    selected={selectedDate.checkIn}
+                    // selected={selectedDate.checkIn}
                     startDate={selectedDate.checkIn}
                     endDate={selectedDate.checkOut}
                     minDate={new Date()} // minDate 이전 날짜 선택 불가

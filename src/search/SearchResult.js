@@ -4,12 +4,29 @@ import axios from "axios";
 import {format} from "date-fns";
 
 function SearchResult(props) {
-    const search = ({
+    const search =({
         city: props.search.city,
-        checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd HH:mm:ss'),
-        checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd HH:mm:ss'),
+        checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd 15:00:00'),
+        checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd 11:00:00'),
         person: props.search.person,
     })
+    // 예외처리
+    /*let search={}
+    if (props.search.date.checkIn === null || props.search.date.checkOut === null) {
+        search = ({
+            city: props.search.city,
+            checkIn: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            checkOut: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            person: props.search.person,
+        })
+    } else if (props.search.person===0){
+        search = ({
+            city: props.search.city,
+            checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd HH:mm:ss'),
+            checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd HH:mm:ss'),
+            person: props.search.person,
+        })
+    }*/
     console.log('SearchResult: ', search)
 
     // filter
@@ -41,7 +58,7 @@ function SearchResult(props) {
         setIsChecked(!isChecked)
         checkedAmenityHandler(value, e.target.checked)
     }
-    console.log("checkedAmenity: ", selectedAmenity)
+    // console.log("checkedAmenity: ", selectedAmenity)
 
     // 2. town
     const checkedTownHandler = (value, isChecked) => {
@@ -60,7 +77,7 @@ function SearchResult(props) {
         setIsChecked(!isChecked)
         checkedTownHandler(value, e.target.checked)
     }
-    console.log("checkedTown: ", selectedTown)
+    // console.log("checkedTown: ", selectedTown)
 
 
     // dormList
@@ -75,7 +92,7 @@ function SearchResult(props) {
         setSelectedAmenity([])
         setSelectedTown([])
 
-        console.log('showTown')
+        // console.log('showTown')
         const showTownList = async () => {
             let resp = await axios
                 .post("http://localhost:8080/town/list", props.search, {
@@ -115,34 +132,39 @@ function SearchResult(props) {
 
             if (resp.status === 200 && resp.data.result === 'success') {
                 setData(resp.data)
-                console.log('searchList')
             }
         }
         selectList()
     }, [props]);
 
     useEffect(() => {
-        const data = {
-            search: search,
-            amenity: selectedAmenity,
-            town: selectedTown,
-        }
+        let filter = ({
+            searchDto: search,
+            amenities: selectedAmenity,
+            cities: selectedTown,
+        })
+        console.log("filter: ", filter)
         let selectedAmenityList = async () => {
             let resp = await axios
-                // .post("http://localhost:8080/search/amenity", data, {
-                .post("http://localhost:8080/search/amenity", selectedTown, {
-                    withCredentials: true
+                .post("http://localhost:8080/search/amenity", filter, {
+                    // .post("http://localhost:8080/search/amenity", selectedTown, {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': "application/json"
+                    },
                 })
                 .catch((e) => {
                     console.error(e)
                 })
+
+            console.log(resp)
 
             if (resp.status === 200 && resp.data.result === 'success') {
                 setData(resp.data)
             }
         }
         selectedAmenityList()
-    }, [selectedTown]);
+    }, [selectedAmenity, selectedTown]);
 
     return (
         <>
@@ -156,7 +178,7 @@ function SearchResult(props) {
                             <label>
                                 <input id={town} type={"checkbox"}
                                        checked={selectedTown.includes(town)}
-                                       onChange={(e)=>checkTHandler(e, town)}/>
+                                       onChange={(e) => checkTHandler(e, town)}/>
                                 {town}
                             </label>
                         ))}
