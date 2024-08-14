@@ -2,7 +2,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Button, Container, Card, Row, Col, Carousel} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Header from "../Header";
+
 
 const Approve = () => {
     const navigate = useNavigate();
@@ -64,8 +64,6 @@ const Approve = () => {
     };
 
     return (
-        <>
-            <Header userInfo={userInfo}/>
             <Container className="mt-3">
                 <h1>{userInfo.name}님 admin 승인 리스트</h1>
 
@@ -131,7 +129,6 @@ const Approve = () => {
                     </Row>
                 )}
             </Container>
-        </>
     );
 
 };

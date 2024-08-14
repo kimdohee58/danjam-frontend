@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Container, FormControl, Table } from 'react-bootstrap';
-import Header from "../Header";
+
 
 const Insert = (props) => {
     const location = useLocation();
@@ -84,8 +84,6 @@ const Insert = (props) => {
     };
 
     return (
-        <>
-            <Header userInfo={userInfo} />
             <Container className={"mt-3"}>
                 <form onSubmit={onSubmit}>
                     <Table striped hover bordered>
@@ -191,7 +189,6 @@ const Insert = (props) => {
                 </form>
                 {error && <div className="error-message">{error}</div>}
             </Container>
-        </>
     );
 };
 

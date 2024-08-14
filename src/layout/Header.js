@@ -1,8 +1,6 @@
 import {Button} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useState} from "react";
-import sellerCalendar from "./seller/SellerCalendar";
 
 function Header(props) {
     const navigate = useNavigate()
@@ -60,7 +58,7 @@ function Header(props) {
 
 
     return (
-        <>
+        <header>
             {props.userInfo.name !== '' ? (<h3>{props.userInfo.name}</h3>) : (<h3>비회원</h3>)}
             <div hidden={props.userInfo.name !== '' ? true : false}>
                 <Button onClick={LogIn}>{'로그인'}</Button>
@@ -78,7 +76,7 @@ function Header(props) {
             </div>
             <Button onClick={Approve}>{'호텔승인'}</Button>
             <Button onClick={MemberList}>{'회원리스트'}</Button>
-        </>
+        </header>
     )
 }
 

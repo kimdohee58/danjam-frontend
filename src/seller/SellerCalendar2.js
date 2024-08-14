@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-import Header from "../Header";
+
 
 // 접근성 향상을 위해 모달의 루트 엘리먼트를 설정
 Modal.setAppElement('#root');
@@ -132,8 +132,6 @@ const SellerCalendar2 = () => {
     };
 
     return (
-        <>
-            <Header userInfo={userInfo}/>
             <div style={{padding: '20px'}}>
                 <h1>{userInfo.name} Seller Calendar</h1>  {/* 사용자 이름을 제목으로 표시 */}
 
@@ -228,7 +226,6 @@ const SellerCalendar2 = () => {
                 `}
                 </style>
             </div>
-        </>
     );
 };
 

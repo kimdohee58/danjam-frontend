@@ -2,7 +2,7 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {Button, Container, FormControl} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Header from "../Header";
+
 
 const AInsert = () => {
     const location = useLocation();  // 현재 URL의 위치 정보를 가져옵니다.
@@ -61,8 +61,6 @@ const AInsert = () => {
     };
 
     return (
-        <>
-            <Header userInfo={userInfo}/>
             <Container className="mt-3">
                 <h1>숙소 편의시설 정보를 추가하세요</h1>
                 <form onSubmit={onSubmit}>
@@ -88,7 +86,6 @@ const AInsert = () => {
                     </Button>
                 </form>
             </Container>
-        </>
     );
 };
 

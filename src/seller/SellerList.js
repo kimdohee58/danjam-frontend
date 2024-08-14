@@ -2,7 +2,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Button, Container, Card, Row, Col, Carousel} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Header from "../Header";
+
 
 const SellerList = () => {
     const navigate = useNavigate();
@@ -67,8 +67,6 @@ const SellerList = () => {
     };
 
     return (
-        <>
-            <Header userInfo={userInfo}/>
             <Container className="mt-3">
                 <h1>Dorms List for Seller name: {userInfo.name}</h1>
                 <Row>
@@ -114,7 +112,6 @@ const SellerList = () => {
                     ))}
                 </Row>
             </Container>
-        </>
     );
 }
 
