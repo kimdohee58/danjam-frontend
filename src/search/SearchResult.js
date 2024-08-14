@@ -122,9 +122,15 @@ function SearchResult(props) {
     }, [props]);
 
     useEffect(() => {
+        const data = {
+            search: search,
+            amenity: selectedAmenity,
+            town: selectedTown,
+        }
         let selectedAmenityList = async () => {
             let resp = await axios
-                .post("http://localhost:8080/search/amenity", selectedAmenity, {
+                // .post("http://localhost:8080/search/amenity", data, {
+                .post("http://localhost:8080/search/amenity", selectedTown, {
                     withCredentials: true
                 })
                 .catch((e) => {
@@ -136,7 +142,7 @@ function SearchResult(props) {
             }
         }
         selectedAmenityList()
-    }, [selectedAmenity]);
+    }, [selectedTown]);
 
     return (
         <>

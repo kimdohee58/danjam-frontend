@@ -67,7 +67,11 @@ function Search() {
     let [selectedPerson, setSelectedPerson] = useState(0)
 
     let onMinus = () => {
-        setSelectedPerson(selectedPerson - 1);
+        if (selectedPerson > 0) {
+            setSelectedPerson(selectedPerson - 1);
+        } else {
+            setSelectedPerson(0)
+        }
     }
 
     let onPlus = () => {
@@ -98,6 +102,11 @@ function Search() {
         console.log("onSubmit", search)
         // navigate('/search')
     }
+
+    // let makeFalse = false;
+    // useEffect(() => {
+    //     makeFalse = false
+    // }, [selectedCity, selectedDate, selectedPerson]);
 
     // https://ityranno.tistory.com/entry/react-Spring-Boot-Spring-Boot-%EB%8D%B0%EC%9D%B4%ED%84%B0-react%EC%97%90-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0
 
