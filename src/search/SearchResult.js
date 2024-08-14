@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {format} from "date-fns";
 
 function SearchResult(props) {
-    const search =({
+    const search = ({
         city: props.search.city,
         checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd 15:00:00'),
         checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd 11:00:00'),
@@ -56,6 +56,7 @@ function SearchResult(props) {
     }
     const checkAHandler = (e, value) => {
         setIsChecked(!isChecked)
+        console.log(value)
         checkedAmenityHandler(value, e.target.checked)
     }
     // console.log("checkedAmenity: ", selectedAmenity)
@@ -147,7 +148,6 @@ function SearchResult(props) {
         let selectedAmenityList = async () => {
             let resp = await axios
                 .post("http://localhost:8080/search/amenity", filter, {
-                    // .post("http://localhost:8080/search/amenity", selectedTown, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': "application/json"
@@ -188,8 +188,8 @@ function SearchResult(props) {
                         {amenity.amenityList.map((amenity) => (
                             <label>
                                 <input id={amenity.id} type={"checkbox"}
-                                       checked={selectedAmenity.includes(amenity)}
-                                       onChange={(e) => checkAHandler(e, amenity)}
+                                       checked={selectedAmenity.includes(amenity.id)}
+                                       onChange={(e) => checkAHandler(e, amenity.id)}
                                 />
                                 {amenity.name}
                             </label>
