@@ -25,6 +25,10 @@ function Search() {
             checkIn: new Date(),
             checkOut: null,
         })
+        setSelDate({
+            checkIn: '',
+            checkOut: '',
+        })
         setSelectedPerson(0)
         onSubmit()
     }
@@ -42,7 +46,6 @@ function Search() {
         checkIn: new Date(),
         checkOut: null,
     })
-
     const setChangeDate = (dates) => {
         const [start, end] = dates
         setSelectedDate({
@@ -51,11 +54,11 @@ function Search() {
             // checkIn: format(start.setHours(15).setMinutes(0).setSeconds(0), 'yyyy-MM-dd HH:mm:ss'),
             // checkOut: format(end.setHours(15).setMinutes(0).setSeconds(0), 'yyyy-MM-dd HH:mm:ss'),
 
-            // checkIn: format(start, 'yyyy-MM-dd 15:00:00'),
-            // checkOut: format(end, 'yyyy-MM-dd 11:00:00'),
+            checkIn: start,
+            checkOut: end,
 
-            checkIn: format(start, 'yyyy-MM-dd HH:mm:ss'),
-            checkOut: format(end, 'yyyy-MM-dd HH:mm:ss'),
+            // checkIn: format(start, 'yyyy-MM-dd HH:mm:ss'),
+            // checkOut: format(end, 'yyyy-MM-dd HH:mm:ss'),
         })
         console.log(selectedDate.checkIn, selectedDate.checkOut)
     }
@@ -71,12 +74,25 @@ function Search() {
         setSelectedPerson(selectedPerson + 1);
     }
 
+    const [selDate, setSelDate] = useState({
+        checkIn: '',
+        checkOut: '',
+    })
+
     // submit
     // const navigate = useNavigate()
     const onSubmit = () => {
+        // setSelDate({
+        //     checkIn: format(selectedDate.checkIn, 'yyyy-MM-dd HH:mm:ss'),
+        //     checkOut: format(selectedDate.checkOut, 'yyyy-MM-dd HH:mm:ss'),
+        // })
+        // console.log(selDate.checkIn, selDate.checkOut)
+        // console.log("selDate", selDate)
+
         setSearch({
             city: selectedCity,
             date: selectedDate,
+            // date: selDate,
             person: selectedPerson,
         })
         console.log("onSubmit", search)

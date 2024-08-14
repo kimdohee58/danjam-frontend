@@ -1,17 +1,20 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {format} from "date-fns";
 
 function SearchResult(props) {
     const search = ({
         city: props.search.city,
-        checkIn: props.search.date.checkIn,
-        checkOut: props.search.date.checkOut,
+        checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd HH:mm:ss'),
+        checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd HH:mm:ss'),
         person: props.search.person,
     })
     console.log('SearchResult: ', search)
 
     // filter
+    const [isChecked, setIsChecked] = useState(false)
+
     // 1. amenity
     const [selectedAmenity, setSelectedAmenity] = useState([])
     const [amenity, setAmenity] = useState({amenityList: []})
@@ -20,62 +23,45 @@ function SearchResult(props) {
     const [selectedTown, setSelectedTown] = useState([])
     const [town, setTown] = useState({townList: []})
 
-    /*useEffect(() => {
-        console.log('showTown')
-        const showTownList = async () => {
-            let resp = await axios
-                .post("http://localhost:8080/town/list", props.search.city, {
-                    withCredentials: true
-                })
-                .catch((e) => {
-                    console.error("showTown console.log.error: " , e)
-                })
-            console.log("showTown console.log: " , resp.data.townList)
-            if (resp.status === 200 && resp.data.result === 'success') {
-                setTown(resp.data)
-            }
+    // checkbox
+    // 1. amenity
+    const checkedAmenityHandler = (value, isChecked) => {
+        if (isChecked) {
+            setSelectedAmenity((prev) => [...prev, value])
+            return;
         }
-        showTownList()
 
-        /!*const showAmenityList = async () => {
-            let resp = await axios
-                .get("http://localhost:8080/amenity/list")
-                .catch((e) => {
-                    console.error("showAmenity console.log.error: " , e)
-                })
-
-            console.log("showAmenity console.log: " , resp.data.amenityList)
-            if (resp.status === 200 && resp.data.result === 'success') {
-                setAmenity(resp.data)
-            }
+        if (!isChecked && selectedAmenity.includes(value)) {
+            setSelectedAmenity(selectedAmenity.filter((amenity) => amenity !== value))
+            return;
         }
-        showAmenityList()*!/
-    }, []);*/
+        return;
+    }
+    const checkAHandler = (e, value) => {
+        setIsChecked(!isChecked)
+        checkedAmenityHandler(value, e.target.checked)
+    }
+    console.log("checkedAmenity: ", selectedAmenity)
 
-    /*const onCheckedAll = useCallback(
-        (checked) => {
-            if (checked) {
-                const checkedListArray = []
-                amenity.forEach((list) => checkedListArray.push(list))
-                setSelectedAmenity(checkedListArray)
-            } else {
-                setSelectedAmenity([])
-            }
-        },
-        [amenity]
-    )
+    // 2. town
+    const checkedTownHandler = (value, isChecked) => {
+        if (isChecked) {
+            setSelectedTown((prev) => [...prev, value])
+            return;
+        }
 
-    // 개별 체크 클릭 시 발생하는 함수
-    const onCheckedElement = useCallback(
-        (checked, list) => {
-            if (checked) {
-                setSelectedAmenity([...selectedAmenity, list]);
-            } else {
-                setSelectedAmenity(selectedAmenity.filter((el) => el !== list));
-            }
-        },
-        [selectedAmenity]
-    );*/
+        if (!isChecked && selectedTown.includes(value)) {
+            setSelectedTown(selectedTown.filter((town) => town !== value))
+            return;
+        }
+        return;
+    }
+    const checkTHandler = (e, value) => {
+        setIsChecked(!isChecked)
+        checkedTownHandler(value, e.target.checked)
+    }
+    console.log("checkedTown: ", selectedTown)
+
 
     // dormList
     const [data, setData] = useState({dormList: []})
@@ -86,6 +72,9 @@ function SearchResult(props) {
     }
 
     useEffect(() => {
+        setSelectedAmenity([])
+        setSelectedTown([])
+
         console.log('showTown')
         const showTownList = async () => {
             let resp = await axios
@@ -93,9 +82,9 @@ function SearchResult(props) {
                     withCredentials: true
                 })
                 .catch((e) => {
-                    console.error("showTown console.log.error: " , e)
+                    console.error("showTown console.log.error: ", e)
                 })
-            console.log("showTown console.log: " , resp.data)
+            // console.log("showTown console.log: ", resp.data)
             if (resp.status === 200 && resp.data.result === 'success') {
                 setTown(resp.data)
             }
@@ -106,10 +95,9 @@ function SearchResult(props) {
             let resp = await axios
                 .get("http://localhost:8080/amenity/list")
                 .catch((e) => {
-                    console.error("showAmenity console.log.error: " , e)
+                    console.error("showAmenity console.log.error: ", e)
                 })
-
-            console.log("showAmenity console.log: " , resp.data.amenityList)
+            // console.log("showAmenity console.log: ", resp.data.amenityList)
             if (resp.status === 200 && resp.data.result === 'success') {
                 setAmenity(resp.data)
             }
@@ -127,10 +115,28 @@ function SearchResult(props) {
 
             if (resp.status === 200 && resp.data.result === 'success') {
                 setData(resp.data)
+                console.log('searchList')
             }
         }
         selectList()
     }, [props]);
+
+    useEffect(() => {
+        let selectedAmenityList = async () => {
+            let resp = await axios
+                .post("http://localhost:8080/search/amenity", selectedAmenity, {
+                    withCredentials: true
+                })
+                .catch((e) => {
+                    console.error(e)
+                })
+
+            if (resp.status === 200 && resp.data.result === 'success') {
+                setData(resp.data)
+            }
+        }
+        selectedAmenityList()
+    }, [selectedAmenity]);
 
     return (
         <>
@@ -142,7 +148,9 @@ function SearchResult(props) {
                         <h3>{props.search.city} town</h3>
                         {town.townList.map((town) => (
                             <label>
-                                <input id={town} type={"checkbox"} checked={false}/>
+                                <input id={town} type={"checkbox"}
+                                       checked={selectedTown.includes(town)}
+                                       onChange={(e)=>checkTHandler(e, town)}/>
                                 {town}
                             </label>
                         ))}
@@ -151,7 +159,10 @@ function SearchResult(props) {
                         <h3>편의시설</h3>
                         {amenity.amenityList.map((amenity) => (
                             <label>
-                                <input id={amenity.id} type={"checkbox"} checked={false}/>
+                                <input id={amenity.id} type={"checkbox"}
+                                       checked={selectedAmenity.includes(amenity)}
+                                       onChange={(e) => checkAHandler(e, amenity)}
+                                />
                                 {amenity.name}
                             </label>
                         ))}
@@ -167,9 +178,6 @@ function SearchResult(props) {
                         <th>town</th>
                         <th>방 번호</th>
                         <th>가격</th>
-                        {/*<th>주소</th>*/}
-                        {/*<th>category</th>*/}
-                        {/*<th>user</th>*/}
                     </tr>
                     </thead>
                     <tbody>
@@ -193,9 +201,6 @@ let TableRow = ({dorm, moveToDorm}) => {
             <td>{dorm.town}</td>
             <td>{dorm.room.id}</td>
             <td>{dorm.room.price}</td>
-            {/*<td>{dorm.address}</td>*/}
-            {/*<td>{dorm.dcategory.name}</td>*/}
-            {/*<td>{dorm.user.name}</td>*/}
         </tr>
     )
 }
