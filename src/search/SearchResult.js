@@ -165,6 +165,8 @@ function SearchResult(props) {
                         <th>연락처</th>
                         <th>도시</th>
                         <th>town</th>
+                        <th>방 번호</th>
+                        <th>가격</th>
                         {/*<th>주소</th>*/}
                         {/*<th>category</th>*/}
                         {/*<th>user</th>*/}
@@ -189,6 +191,8 @@ let TableRow = ({dorm, moveToDorm}) => {
             <td>{dorm.contactNum}</td>
             <td>{dorm.city}</td>
             <td>{dorm.town}</td>
+            <td>{dorm.room.id}</td>
+            <td>{dorm.room.price}</td>
             {/*<td>{dorm.address}</td>*/}
             {/*<td>{dorm.dcategory.name}</td>*/}
             {/*<td>{dorm.user.name}</td>*/}
