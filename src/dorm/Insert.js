@@ -5,8 +5,8 @@ import { Button, Container, FormControl, Table } from 'react-bootstrap';
 import Header from "../Header";
 
 const Insert = (props) => {
-    const location = useLocation();  // 현재 URL의 위치 정보를 가져옵니다.
-    const userInfo = location.state.userInfo;  // URL 상태에서 사용자 정보를 가져옵니다.
+    const location = useLocation();
+    const userInfo = location.state.userInfo;
 
     const [inputs, setInputs] = useState({
         name: '',
@@ -171,7 +171,7 @@ const Insert = (props) => {
                                             id={`category-${category.id}`}
                                             name={'categoryId'}
                                             value={category.id}
-                                            checked={inputs.categoryId === category.id}
+                                            checked={inputs.categoryId === category.id.toString()}
                                             onChange={onChange}
                                         />
                                         <label htmlFor={`category-${category.id}`}>{category.name}</label>

@@ -6,7 +6,6 @@ import sellerCalendar from "./seller/SellerCalendar";
 
 function Header(props) {
     const navigate = useNavigate()
-    console.log(props)
 
     const SignUp = () => {
         navigate('/signUp')
