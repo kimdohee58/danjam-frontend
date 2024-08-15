@@ -35,14 +35,11 @@ function List() {
                 <tr>
                     <th>호텔번호</th>
                     <th>이름</th>
-                    {/*<th>설명</th>*/}
                     <th>연락처</th>
                     <th>도시</th>
                     <th>town</th>
-                    <th>주소</th>
-                    <th>category</th>
-                    <th>user</th>
-                    <th>price</th>
+                    <th>방 번호</th>
+                    <th>가격</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -65,13 +62,10 @@ let TableRow = ({dorm, moveToDorm}) => {
         <tr onClick={() => moveToDorm(dorm.id)}>
             <td>{dorm.id}</td>
             <td>{dorm.name}</td>
-            {/*<td>{dorm.description}</td>*/}
             <td>{dorm.contactNum}</td>
             <td>{dorm.city}</td>
             <td>{dorm.town}</td>
-            <td>{dorm.address}</td>
-            <td>{dorm.dcategory.name}</td>
-            <td>{dorm.user.name}</td>
+            <td>{dorm.room.id}</td>
             <td>{dorm.room.price}</td>
         </tr>
     )

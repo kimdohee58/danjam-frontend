@@ -4,29 +4,21 @@ import axios from "axios";
 import {format} from "date-fns";
 
 function SearchResult(props) {
-    const search = ({
+    let search = ({});
+    if (props.search.date.checkOut === null) {
+        props.search.date.checkOut = new Date()
+    } else if (props.search.date.checkIn === null) {
+        props.search.date.checkIn = new Date()
+    } else {
+        props.search.date.checkIn = new Date()
+        props.search.date.checkOut = new Date()
+    }
+    search = ({
         city: props.search.city,
         checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd 15:00:00'),
         checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd 11:00:00'),
         person: props.search.person,
     })
-    // 예외처리
-    /*let search={}
-    if (props.search.date.checkIn === null || props.search.date.checkOut === null) {
-        search = ({
-            city: props.search.city,
-            checkIn: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            checkOut: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            person: props.search.person,
-        })
-    } else if (props.search.person===0){
-        search = ({
-            city: props.search.city,
-            checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd HH:mm:ss'),
-            checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd HH:mm:ss'),
-            person: props.search.person,
-        })
-    }*/
     console.log('SearchResult: ', search)
 
     // filter
@@ -79,7 +71,6 @@ function SearchResult(props) {
         checkedTownHandler(value, e.target.checked)
     }
     // console.log("checkedTown: ", selectedTown)
-
 
     // dormList
     const [data, setData] = useState({dormList: []})
@@ -134,6 +125,14 @@ function SearchResult(props) {
             if (resp.status === 200 && resp.data.result === 'success') {
                 setData(resp.data)
             }
+
+            // if (resp.status === 200) {
+            //     if (resp.data.result === 'success') {
+            //         setData(resp.data)
+            //     } else if (resp.data.result === 'fail') {
+            //         setData(0)
+            //     }
+            // }
         }
         selectList()
     }, [props]);
@@ -145,9 +144,35 @@ function SearchResult(props) {
             cities: selectedTown,
         })
         console.log("filter: ", filter)
+
+        if (selectedAmenity.length === 0 && selectedTown.length === 0) {
+            let selectList = async () => {
+                let resp = await axios
+                    .post("http://localhost:8080/search", search, {
+                        withCredentials: true
+                    })
+                    .catch((e) => {
+                        console.error(e)
+                    })
+
+                if (resp.status === 200 && resp.data.result === 'success') {
+                    setData(resp.data)
+                }
+
+                // if (resp.status === 200) {
+                //     if (resp.data.result === 'success') {
+                //         setData(resp.data)
+                //     } else if (resp.data.result === 'fail') {
+                //         setData(0)
+                //     }
+                // }
+            }
+            selectList()
+        }
+
         let selectedAmenityList = async () => {
             let resp = await axios
-                .post("http://localhost:8080/search/amenity", filter, {
+                .post("http://localhost:8080/search/filter", filter, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': "application/json"
@@ -162,6 +187,14 @@ function SearchResult(props) {
             if (resp.status === 200 && resp.data.result === 'success') {
                 setData(resp.data)
             }
+
+            // if (resp.status === 200) {
+            //     if (resp.data.result === 'success') {
+            //         setData(resp.data)
+            //     } else if (resp.data.result === 'fail') {
+            //         setData(0)
+            //     }
+            // }
         }
         selectedAmenityList()
     }, [selectedAmenity, selectedTown]);
@@ -196,24 +229,27 @@ function SearchResult(props) {
                         ))}
                     </div>
                 </div>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>호텔번호</th>
-                        <th>이름</th>
-                        <th>연락처</th>
-                        <th>도시</th>
-                        <th>town</th>
-                        <th>방 번호</th>
-                        <th>가격</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {data.dormList.map((dorm) => (
-                        <TableRow dorm={dorm} key={dorm.id} moveToDorm={moveToDorm}/>
-                    ))}
-                    </tbody>
-                </table>
+                {data.dormList === 0 ?
+                    <div>조건에 해당하는 호텔이 없습니다.</div> :
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>호텔번호</th>
+                            <th>이름</th>
+                            <th>연락처</th>
+                            <th>도시</th>
+                            <th>town</th>
+                            <th>방 번호</th>
+                            <th>가격</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {data.dormList.map((dorm) => (
+                            <TableRow dorm={dorm} key={dorm.id} moveToDorm={moveToDorm}/>
+                        ))}
+                        </tbody>
+                    </table>
+                }
             </div>
         </>
     )

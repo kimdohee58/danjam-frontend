@@ -15,24 +15,16 @@ function Search() {
         city: '',
         checkIn: '',
         checkOut: '',
-        person: '',
-        /*city: '선택',
-        checkIn: '',
-        checkOut: '',
-        person: '0',*/
+        person: 0,
     })
 
     // logo 누르면 main으로 돌아가기
     const toMain = () => {
-        setSelectedCity('선택')
+        setSelectedCity('')
         setSelectedDate({
             checkIn: new Date(),
-            checkOut: null,
+            checkOut: new Date(),
         })
-        // setSelDate({
-        //     checkIn: '',
-        //     checkOut: '',
-        // })
         setSelectedPerson(0)
         onSubmit()
     }
@@ -48,19 +40,12 @@ function Search() {
     // calendar
     const [selectedDate, setSelectedDate] = useState({
         checkIn: new Date(),
-        checkOut: null,
-        // 예외처리
-        // checkIn: null,
-        // checkOut: null,
+        checkOut: new Date(),
     })
     const setChangeDate = (dates) => {
         const [start, end] = dates
         setSelectedDate({
             // format https://steemit.com/hive-101145/@realmankwon/react
-            // checkIn: format(start.setHours(15).setMinutes(0).setSeconds(0).toString(), 'yyyy-MM-dd HH:mm:ss'),
-            // checkIn: format(start.setHours(15).setMinutes(0).setSeconds(0), 'yyyy-MM-dd HH:mm:ss'),
-            // checkOut: format(end.setHours(15).setMinutes(0).setSeconds(0), 'yyyy-MM-dd HH:mm:ss'),
-
             checkIn: start,
             checkOut: end,
 
@@ -85,35 +70,17 @@ function Search() {
         setSelectedPerson(selectedPerson + 1);
     }
 
-    // const [selDate, setSelDate] = useState({
-    //     checkIn: '',
-    //     checkOut: '',
-    // })
-
     // submit
     // const navigate = useNavigate()
     const onSubmit = () => {
-        // setSelDate({
-        //     checkIn: format(selectedDate.checkIn, 'yyyy-MM-dd HH:mm:ss'),
-        //     checkOut: format(selectedDate.checkOut, 'yyyy-MM-dd HH:mm:ss'),
-        // })
-        // console.log(selDate.checkIn, selDate.checkOut)
-        // console.log("selDate", selDate)
-
         setSearch({
             city: selectedCity,
             date: selectedDate,
-            // date: selDate,
             person: selectedPerson,
         })
         console.log("onSubmit", search)
         // navigate('/search')
     }
-
-    // let makeFalse = false;
-    // useEffect(() => {
-    //     makeFalse = false
-    // }, [selectedCity, selectedDate, selectedPerson]);
 
     // https://ityranno.tistory.com/entry/react-Spring-Boot-Spring-Boot-%EB%8D%B0%EC%9D%B4%ED%84%B0-react%EC%97%90-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0
 
@@ -156,7 +123,7 @@ function Search() {
                 <Button onClick={onSubmit}>검색</Button>
             </div>
             <div>
-                {search.city === '선택' || search.city === '' ?
+                {search.city === '' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
                     <List/> : <SearchResult search={search}/>}
             </div>
         </>
