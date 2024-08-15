@@ -12,7 +12,7 @@ function Search() {
     const navigate = useNavigate();
 
     const [search, setSearch] = useState({
-        city: '',
+        city: '선택',
         checkIn: '',
         checkOut: '',
         person: 0,
@@ -20,7 +20,7 @@ function Search() {
 
     // logo 누르면 main으로 돌아가기
     const toMain = () => {
-        setSelectedCity('')
+        setSelectedCity('선택')
         setSelectedDate({
             checkIn: new Date(),
             checkOut: new Date(),
@@ -123,7 +123,7 @@ function Search() {
                 <Button onClick={onSubmit}>검색</Button>
             </div>
             <div>
-                {search.city === '' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
+                {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
                     <List/> : <SearchResult search={search}/>}
             </div>
         </>
