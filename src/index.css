@@ -1,0 +1,10 @@
+.header.title{
+    text-align: center;
+}
+
+.header.title p {
+    font-size: 40px;
+    color: burlywood;
+    letter-spacing: 0.2em;
+    margin-bottom: 0;
+}
