@@ -47,6 +47,7 @@ function Header(props) {
 
     return (
         <>
+        <div style={{display: "flex", justifyContent: "end"}}>
             {props.userInfo.name !== '' ? (<h3>{props.userInfo.name}</h3>) : (<h3>비회원</h3>)}
             <div hidden={props.userInfo.name !== '' ? true : false}>
                 <Button onClick={LogIn}>{'로그인'}</Button>
@@ -58,6 +59,7 @@ function Header(props) {
             <Button onClick={Home}>{'home'}</Button>
             <Button onClick={handleMyPage}>{'My Page'}</Button>
             <Button onClick={handleBookings}>{'Bookings'}</Button>
+        </div>
         </>
     )
 }
