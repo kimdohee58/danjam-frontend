@@ -132,5 +132,4 @@ function PaymentWidget({ bookingInfo }) {
     )
 }
 
-
 export default PaymentWidget

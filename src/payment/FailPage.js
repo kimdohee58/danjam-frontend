@@ -3,7 +3,6 @@ import { Link, useSearchParams } from 'react-router-dom'
 function FailPage() {
     const [searchParams] = useSearchParams();
 
-
     return (
         <div id="info" className="box_section" style={{ width: "600px" }}>
             <img width="100px" src="https://static.toss.im/lotties/error-spot-no-loop-space-apng.png" alt="에러 이미지" />

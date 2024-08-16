@@ -19,5 +19,4 @@ const BookingList = ({ booking }) => {
     )
 }
 
-
 export default BookingList

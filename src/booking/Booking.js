@@ -27,7 +27,6 @@ const Booking = () => {
     const bookingInfo = {
         ...location.state,
     }
-
     console.log('bookingInfo', bookingInfo)
 
 
