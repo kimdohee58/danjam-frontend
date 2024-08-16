@@ -1,6 +1,7 @@
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {useState} from "react";
 
 function Header(props) {
     const navigate = useNavigate()
@@ -31,6 +32,19 @@ function Header(props) {
         navigate('/')
     }
 
+    const handleMyPage = () => {
+        const { userInfo } = props
+        navigate(`/my-page/${userInfo.id}`)
+    }
+
+    const handleBookings = () => {
+        const { userInfo } = props
+        navigate(`/bookings/${userInfo.id}`)
+    }
+
+    const [isLogin, setIsLogin] = useState(false)
+    const [isLogOut, setInLogOut] = useState(true)
+
     return (
         <div style={{display: "flex", justifyContent: "end"}}>
             {props.userInfo.name !== '' ? (<h3>{props.userInfo.name}</h3>) : (<h3>비회원</h3>)}
@@ -42,6 +56,8 @@ function Header(props) {
                 <Button onClick={LogOut}>{'로그아웃'}</Button>
             </div>
             <Button onClick={Home}>{'home'}</Button>
+            <Button onClick={handleMyPage}>{'My Page'}</Button>
+            <Button onClick={handleBookings}>{'Bookings'}</Button>
         </div>
     )
 }
