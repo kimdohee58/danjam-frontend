@@ -1,5 +1,3 @@
-// import {useState} from "react";
-
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
@@ -45,11 +43,6 @@ function List() {
                 <tbody>
                 {data.dormList.map((dorm) => (
                     <TableRow dorm={dorm} key={dorm.id} moveToDorm={moveToDorm}/>
-                    /*<tr onClick={() => moveToDorm(dorm.id)}>
-                        <td>{dorm.id}</td>
-                        <td>{dorm.name}</td>
-                        <td>{dorm.price}</td>
-                    </tr>*/
                 ))}
                 </tbody>
             </table>

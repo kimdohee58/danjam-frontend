@@ -2,11 +2,9 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import List from "./List";
 import DatePicker from "react-datepicker";
-import {ko} from "date-fns/locale";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "./SearchResult";
-import {format} from "date-fns";
 
 function Search() {
     const navigate = useNavigate();
