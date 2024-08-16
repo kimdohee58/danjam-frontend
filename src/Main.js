@@ -18,7 +18,6 @@ function Main() {
     return (
         <>
             <Header userInfo={userInfo}/>
-            <h1>{'여기가 메인 페이지 입니다.'}</h1>
             <Search/>
         </>
     )

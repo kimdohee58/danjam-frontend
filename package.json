@@ -12,6 +12,8 @@
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "moment": "^2.30.1",
+    "eslint": "^8.57.0",
+    "nam": "^0.0.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-calendar": "^5.0.0",
