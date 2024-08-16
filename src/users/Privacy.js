@@ -135,7 +135,7 @@ function Privacy () {
 
                 <div className="email">
                     <div>
-                        이메일 주소
+                    이메일 주소
                     </div>
                     <div>
                         {user.email}
