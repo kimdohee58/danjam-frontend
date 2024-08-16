@@ -1,99 +1,13 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import styled from 'styled-components';
-import { Button, Container, FormControl, Table } from 'react-bootstrap';
-
-// Styled Components
-const FormContainer = styled(Container)`
-    margin-top: 3rem;
-    max-width: 900px;
-`;
-
-const FormTitle = styled.h1`
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #333;
-`;
-
-const StyledForm = styled.form`
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const InputGroup = styled.tr`
-    td {
-        padding: 1rem;
-    }
-    input, select, textarea {
-        width: 100%;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        padding: 0.5rem;
-        font-size: 1rem;
-    }
-    textarea {
-        resize: vertical;
-        height: 100px;
-    }
-`;
-
-const SubmitButton = styled(Button)`
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1.1rem;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
-
-    &:hover {
-        background-color: #0056b3;
-    }
-
-    &:disabled {
-        background-color: #c0c0c0;
-        cursor: not-allowed;
-    }
-`;
-
-const FilePreviewContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-`;
-
-const FilePreview = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5px;
-    
-    img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-    
-    p {
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: #333;
-    }
-`;
+import { useParams } from "react-router-dom";
+import { Button, Container, FormControl, Table } from "react-bootstrap";
+import { useState } from "react";
+import axios from "axios";
 
 const RInsert = () => {
-    const location = useLocation();
-    const userInfo = location.state.userInfo;
     const params = useParams();
     const id = parseInt(params.id);
 
-    const [roomID, setRoomId] = useState(null);
+    const [roomid, setRoomId] = useState(null);
     const [inputs, setInputs] = useState({
         name: '',
         description: '',
@@ -102,8 +16,8 @@ const RInsert = () => {
         type: '',
         dormId: ''
     });
-    const [file, setFile] = useState(null);
-    const [filePreviews, setFilePreviews] = useState([]);
+    const [file, setFile] = useState(null); // File state
+    const [filePreviews, setFilePreviews] = useState([]); // To store file previews
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -122,14 +36,17 @@ const RInsert = () => {
         };
 
         try {
-            const resp = await axios.post('http://localhost:8080/room/insert', dataToSend, {
-                withCredentials: true
-            });
+            const resp = await axios.post('http://localhost:8080/room/insert', dataToSend);
             const roomId = resp.data.resultId;
-            setRoomId(roomId);
+
+            console.log('roomId', roomId);
+            setRoomId(roomId); // Store roomId in state
+
+            // Call Send function after getting roomId
             if (file) {
                 Send(roomId, file);
             }
+
         } catch (error) {
             console.error('Error submitting form:', error);
         }
@@ -139,94 +56,93 @@ const RInsert = () => {
         const files = event.target.files;
         setFile(files);
 
+        // Create URLs for file previews
         const previews = Array.from(files).map(file => URL.createObjectURL(file));
         setFilePreviews(previews);
     };
 
-    const navigate = useNavigate();
+    function Send(roomId, files) {
+        console.log('Sending files with roomId:', roomId);
+        console.log('Files:', files);
 
-    const moveToNext = () => {
-        navigate('/seller/SellerList', { state: { userInfo } });
-    };
-
-    const Send = (roomID, files) => {
         const fd = new FormData();
         Array.from(files).forEach((fileItem) => fd.append("file", fileItem));
-        fd.append("roomId", roomID);
 
+        fd.append("roomId", roomId);
+        console.log('roomId:', roomId);
+        console.log('fd:', fd);
         axios.post('/roomImg/insert', fd, {
             baseURL: 'http://localhost:8080'
         })
             .then((response) => {
                 console.log('Response:', response.data);
-                moveToNext();
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-    };
+    }
 
     return (
-        <FormContainer>
-            <FormTitle>숙소 방 작성</FormTitle>
-            <StyledForm onSubmit={onSubmit}>
+        <Container className={"mt-3"}>
+            <form onSubmit={onSubmit}>
                 <Table striped hover bordered>
                     <thead>
                     <tr>
-                        <td colSpan={2} className="text-center">방 작성</td>
+                        <td colSpan={2} className={"text-center"}>숙소 방 작성</td>
                     </tr>
                     </thead>
                     <tbody>
-                    <InputGroup>
+                    <tr>
                         <td>방이름</td>
                         <td>
                             <FormControl
-                                type='text'
+                                type={'text'}
                                 value={inputs.name}
-                                name='name'
+                                name={'name'}
                                 onChange={onChange}
                             />
                         </td>
-                    </InputGroup>
-                    <InputGroup>
+                    </tr>
+                    <tr>
                         <td>방내용</td>
                         <td>
                                 <textarea
-                                    name='description'
+                                    name={'description'}
                                     value={inputs.description}
+                                    className={"form-control"}
                                     onChange={onChange}
                                 />
                         </td>
-                    </InputGroup>
-                    <InputGroup>
+                    </tr>
+                    <tr>
                         <td>수용인원</td>
                         <td>
                             <FormControl
-                                type='number'
+                                type={'number'}
                                 value={inputs.person}
-                                name='person'
+                                name={'person'}
                                 onChange={onChange}
                             />
                         </td>
-                    </InputGroup>
-                    <InputGroup>
+                    </tr>
+                    <tr>
                         <td>방가격</td>
                         <td>
                             <FormControl
-                                type='number'
+                                type={'number'}
                                 value={inputs.price}
-                                name='price'
+                                name={'price'}
                                 onChange={onChange}
                             />
                         </td>
-                    </InputGroup>
-                    <InputGroup>
+                    </tr>
+                    <tr>
                         <td>방종류</td>
                         <td>
                             <FormControl
-                                as='select'
+                                as="select"
                                 value={inputs.type}
-                                name='type'
+                                name={'type'}
                                 onChange={onChange}
                             >
                                 <option value="">Choose...</option>
@@ -243,41 +159,47 @@ const RInsert = () => {
                                 <option value="프레지덴셜스위트">프레지덴셜스위트</option>
                             </FormControl>
                         </td>
-                    </InputGroup>
-                    <InputGroup>
-                        <td colSpan={2} className="text-center">
-                            <SubmitButton type='submit'>방저장</SubmitButton>
+                    </tr>
+                    <tr>
+                        <td colSpan={2} className={'text-center'}>
+                            <Button type={'submit'}>
+                                방저장
+                            </Button>
                         </td>
-                    </InputGroup>
+                    </tr>
                     </tbody>
                 </Table>
-            </StyledForm>
-
-            {roomID && (
+            </form>
+            <div>
+                <h5>File Data</h5>
+                <input type="file" id="file" onChange={handleChangeFile} multiple />
                 <div>
-                    <h5>파일 업로드</h5>
-                    <input type="file" id="file" onChange={handleChangeFile} multiple />
-                    <FilePreviewContainer>
-                        {filePreviews.length > 0 && (
-                            filePreviews.map((preview, index) => (
-                                <FilePreview key={index}>
-                                    <img src={preview} alt={`Preview ${index}`} />
+                    <h5>Selected Files:</h5>
+                    {filePreviews.length > 0 && (
+                        <div>
+                            {filePreviews.map((preview, index) => (
+                                <div key={index} className="file-preview">
+                                    <img
+                                        src={preview}
+                                        alt={`Preview ${index}`}
+                                        style={{ width: '100px', height: '100px', objectFit: 'cover', margin: '5px' }}
+                                    />
                                     <p>{file[index]?.name}</p>
-                                </FilePreview>
-                            ))
-                        )}
-                    </FilePreviewContainer>
-                    <div className="text-center mt-3">
-                        <SubmitButton
-                            onClick={() => roomID && file && Send(roomID, file)}
-                            disabled={!roomID || !file}
-                        >
-                            Send
-                        </SubmitButton>
-                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
-            )}
-        </FormContainer>
+                <div className="text-center mt-3">
+                    <Button
+                        onClick={() => roomid && file && Send(roomid, file)}
+                        disabled={!roomid || !file}
+                    >
+                        Send
+                    </Button>
+                </div>
+            </div>
+        </Container>
     );
 };
 
