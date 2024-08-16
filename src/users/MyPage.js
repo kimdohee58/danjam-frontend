@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 const MyPage = () => {
     const params = useParams()
     const id = params.id
-
+    
     return (
         <>
             <Link to={`/my-page/${id}/privacy`}>개인 정보</Link>
