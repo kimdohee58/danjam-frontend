@@ -23,15 +23,6 @@ const AppWrapper = styled.div`
     background-color: ${colors.lightGray}; // Background color for the app
 `;
 
-// Container to center-align content
-const ContentContainer = styled.div`
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 24px;
-    position: relative;
-`;
-
 // Header Styling
 const Header = styled.header`
     background: ${colors.darkBlue};
@@ -43,14 +34,35 @@ const Header = styled.header`
     left: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between; // Distribute space between logo and buttons
     z-index: 1000;
     box-sizing: border-box;
+`;
+
+// ContentContainer Styling
+const ContentContainer = styled.div`
+    display: flex;
+    align-items: center; // Vertically center align items
+    gap: 16px; // Space between buttons
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 24px;
+    position: relative;
+    flex: 1; // Allow ContentContainer to take available space
+`;
+
+// ButtonsWrapper Styling
+const ButtonsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 16px; // Space between buttons
+    margin-left: auto; // Push buttons to the right
 `;
 
 // Logo Styling
 const Logo = styled.img`
     height: 40px; // Adjust height to fit well within the header
-    margin-right: 20px; // Add spacing between logo and dropdown button
     cursor: pointer;
 `;
 
@@ -64,13 +76,38 @@ const DropdownButton = styled(Button)`
     font-size: 16px;
     font-weight: 600; /* Slightly bolder text for emphasis */
     border-radius: 8px; /* Rounded corners */
-    margin-left: auto; /* Pushes button to the right */
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
     transition: background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effects */
-    
+
+    &:hover {
+        background: ${colors.mediumGrayBlue}; /* Hover color */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+    }
+
+    &:focus {
+        outline: none; /* Remove default focus outline */
+    }
+`;
+
+// BookingListButton Styling
+const BookingListButton = styled(Button)`
+    background: ${colors.darkBlue}; /* Consistent background color */
+    color: #ffffff; /* White text color */
+    border: none;
+    padding: 12px 24px; /* Adjust padding */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600; /* Slightly bolder text */
+    border-radius: 8px; /* Rounded corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effects */
+
     &:hover {
         background: ${colors.mediumGrayBlue}; /* Hover color */
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
@@ -199,8 +236,14 @@ const ModalClose = styled.button`
     color: ${colors.mediumGrayBlue};
 `;
 
+// BookingListModal Styling
+const BookingListModal = styled(ModalContent)`
+    max-width: 600px; // Adjust width for booking list modal
+`;
+
 function Layout() {
     const [showModal, setShowModal] = useState(false);
+    const [showBookingListModal, setShowBookingListModal] = useState(false);
     const [userInfo, setUserInfo] = useState({
         id: '',
         name: '',
@@ -257,8 +300,11 @@ function Layout() {
     const handleOverlayClick = (e) => {
         if (e.target.classList.contains('modal-overlay')) {
             setShowModal(false);
+            setShowBookingListModal(false);
         }
     };
+
+    const handleMyPage = () => navigate(`/users/${userInfo.id}/my-page`);
 
     const handleLoginSuccess = () => setShowModal(false);
 
@@ -266,34 +312,43 @@ function Layout() {
         <AppWrapper>
             <Header>
                 <Logo src={logo} alt="Company Logo" onClick={() => navigate('/')} />
-                <ContentContainer>
+                <ButtonsWrapper>
+                    {userInfo.role === 'ROLE_SELLER' && (
+                        <BookingListButton onClick={() => setShowBookingListModal(true)}>
+                            schedule
+                        </BookingListButton>
+                    )}
                     <DropdownButton onClick={() => setDropdownOpen(prev => !prev)}>
                         {userInfo.name ? userInfo.name : 'Menu'}
                     </DropdownButton>
-                    <DropdownMenu show={dropdownOpen} ref={dropdownRef}>
-                        {!userInfo.name ? (
-                            <>
-                                <DropdownMenuItem><Button onClick={LogIn}>Log In</Button></DropdownMenuItem>
-                                <DropdownMenuItem><Button onClick={SignUp}>Sign Up</Button></DropdownMenuItem>
-                            </>
-                        ) : (
-                            <>
-                                {/* Removed the Home button from the dropdown */}
-                                {userInfo.role === 'ROLE_SELLER' && (
-                                    <>
-                                        <DropdownMenuItem><Button onClick={REGIST}>Register Property</Button></DropdownMenuItem>
-                                        <DropdownMenuItem><Button onClick={RoomInser}>Property List</Button></DropdownMenuItem>
-                                        <DropdownMenuItem><Button onClick={SellerCalendar}>Booking List</Button></DropdownMenuItem>
-                                        <DropdownMenuItem><Button onClick={SellerCalendar2}>Extended Booking List</Button></DropdownMenuItem>
-                                    </>
-                                )}
-                                <DropdownMenuItem><Button onClick={Approve}>Hotel Approval</Button></DropdownMenuItem>
-                                <DropdownMenuItem><Button onClick={MemberList}>Member List</Button></DropdownMenuItem>
-                                <DropdownMenuItem><Button onClick={LogOut}>Log Out</Button></DropdownMenuItem>
-                            </>
-                        )}
-                    </DropdownMenu>
-                </ContentContainer>
+                </ButtonsWrapper>
+                <DropdownMenu show={dropdownOpen} ref={dropdownRef}>
+                    {!userInfo.name ? (
+                        <>
+                            <DropdownMenuItem><Button onClick={LogIn}>Log In</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={SignUp}>Sign Up</Button></DropdownMenuItem>
+                        </>
+                    ) : (
+                        <>
+                            {userInfo.role === 'ROLE_SELLER' && (
+                                <>
+                                    <DropdownMenuItem><Button onClick={REGIST}>Register Property</Button></DropdownMenuItem>
+                                    <DropdownMenuItem><Button onClick={RoomInser}>Property List</Button></DropdownMenuItem>
+                                    <DropdownMenuItem><Button onClick={SellerCalendar}>Booking List</Button></DropdownMenuItem>
+                                    <DropdownMenuItem><Button onClick={SellerCalendar2}>Extended Booking List</Button></DropdownMenuItem>
+                                </>
+                            )}
+                            {userInfo.role === 'ROLE_ADMIN' && (
+                                <>
+                                    <DropdownMenuItem><Button onClick={Approve}>Hotel Approval</Button></DropdownMenuItem>
+                                    <DropdownMenuItem><Button onClick={MemberList}>Member List</Button></DropdownMenuItem>
+                                </>
+                            )}
+                            <DropdownMenuItem><Button onClick={handleMyPage}>My Page</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={LogOut}>Log Out</Button></DropdownMenuItem>
+                        </>
+                    )}
+                </DropdownMenu>
             </Header>
             <Main>
                 <ContentContainer>
@@ -321,6 +376,18 @@ function Layout() {
                         </ModalClose>
                         <Auth onSuccess={handleLoginSuccess} />
                     </ModalContent>
+                </ModalOverlay>
+            )}
+
+            {showBookingListModal && (
+                <ModalOverlay onClick={handleOverlayClick}>
+                    <BookingListModal>
+                        <ModalClose onClick={() => setShowBookingListModal(false)}>
+                            &times;
+                        </ModalClose>
+                        <h2>Booking List</h2>
+                        {/*<SellerCalendar/>*/}
+                    </BookingListModal>
                 </ModalOverlay>
             )}
         </AppWrapper>
