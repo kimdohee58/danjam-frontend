@@ -36,6 +36,11 @@ function Header(props) {
         navigate(`/my-page/${userInfo.id}`)
     }
 
+    const handleBookings = () => {
+        const { userInfo } = props
+        navigate(`/bookings/${userInfo.id}`)
+    }
+
     const [isLogin, setIsLogin] = useState(false)
     const [isLogOut, setInLogOut] = useState(true)
 
@@ -50,6 +55,7 @@ function Header(props) {
                 <Button onClick={LogOut}>{'로그아웃'}</Button>
             </div>
             <Button onClick={handleMyPage}>{'My Page'}</Button>
+            <Button onClick={handleBookings}>{'Bookings'}</Button>
         </>
     )
 }

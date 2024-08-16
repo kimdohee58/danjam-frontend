@@ -38,6 +38,7 @@ const Bookings = () => {
                     <th>예약자</th>
                     <th>주문 번호</th>
                     <th>가격</th>
+                    <th>리뷰작성</th>
                 </tr>
                 </thead>
                 <tbody>
