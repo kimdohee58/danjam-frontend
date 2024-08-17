@@ -7,7 +7,6 @@ const ReviewCardContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 16px;
-    border: 1px solid #ddd;
     border-radius: 8px;
     max-width: 700px;
     background-color: white;
@@ -28,7 +27,6 @@ const UserName = styled.p`
 const ReviewDetails = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
 `;
 
 const ReviewDate = styled.p`
@@ -54,7 +52,7 @@ const MoreButton = styled.button`
 
 const ReviewCard = ({review, from = {}}) => {
 
-    const maxLength = 100;
+    const maxLength = 70;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
@@ -63,10 +61,8 @@ const ReviewCard = ({review, from = {}}) => {
     return (
             <ReviewCardContainer>
                 <UserInfo>
-                    <div>
                         <UserName>{review.username}</UserName>
                         <ReviewDate>{review.createdAt}</ReviewDate>
-                    </div>
                 </UserInfo>
                 <ReviewDetails>
                     <StarRating rate={review.rate}/>
@@ -81,7 +77,7 @@ const ReviewCard = ({review, from = {}}) => {
                         <MoreButton onClick={openModal}>더보기</MoreButton>
                     )}
                     {isModalOpen && (
-                        <ReviewListModal review={review} closeModal={closeModal} />
+                        <ReviewListModal from='fromModal' review={review} closeModal={closeModal} />
                     )}
                 </ReviewContent>
             </ReviewCardContainer>

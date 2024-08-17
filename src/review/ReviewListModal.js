@@ -126,7 +126,7 @@ const StyledImage = styled.img`
 
 
 
-const ReviewListModal = ({isOpen, onRequestClose, reviews, stats}) => {
+const ReviewListModal = ({isOpen, onRequestClose, reviews, stats, from = {}}) => {
 
     console.log("모달 stats 확인: ", stats);
 
@@ -192,5 +192,4 @@ const ReviewListModal = ({isOpen, onRequestClose, reviews, stats}) => {
         </StyledModal>
     );
 };
-
 export default ReviewListModal;

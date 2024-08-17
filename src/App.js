@@ -16,7 +16,12 @@ import MyPage from './users/MyPage';
 import Privacy from './users/Privacy';
 import Bookings from './users/Bookings';
 import WishPage from './users/WishPage';
-import Search from "./search/Search";
+import DormOne from "./dorm/DormOne";
+import ReviewCard from "./review/ReviewCard";
+import ReviewList from "./review/ReviewList";
+import ReviewWriteModal from "./review/ReviewWriteModal";
+import ReviewListModal from "./review/ReviewListModal";
+
 
 const router = createBrowserRouter(
         createRoutesFromElements(
@@ -27,6 +32,8 @@ const router = createBrowserRouter(
                     <Route index element={<Main/>}/>
                     {/*<Route path="search/Search" element={<Search/>}/>*/}
                 </Route>
+
+                <Route path="dorm/:id" element={<DormOne/>}/>
                 <Route path="dorm/insert" element={<Insert/>}/>
                 <Route path="amenity/AInsert/:id" element={<AInsert/>}/>
                 <Route path="room/RInsert/:id" element={<RInsert/>}/>
@@ -44,6 +51,12 @@ const router = createBrowserRouter(
                     <Route path="privacy" element={<Privacy />} />
                     <Route path="bookings" element={<Bookings />} />
                     <Route path="wishes" element={<WishPage />} />
+                </Route>
+
+                <Route path="review">
+                    <Route path="ReviewWriteModal" element={<ReviewWriteModal/>}/>
+                    <Route path="ReiviewList" element={<ReviewList/>}/>
+                    <Route path="ReviewListModal" element={<ReviewListModal/>}/>
                 </Route>
 
             </Route>

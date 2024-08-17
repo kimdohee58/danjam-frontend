@@ -1,6 +1,7 @@
 // import ReviewWriteButton from "./review/ReviewWriteButton"
 
 import moment from "moment";
+import ReviewWriteButton from "../review/ReviewWriteButton";
 
 const BookingList = ({ booking }) => {
     console.log(booking)
@@ -15,7 +16,7 @@ const BookingList = ({ booking }) => {
             <td>{booking.users.name}</td>
             <td>{booking.payment.orderId}</td>
             <td>{booking.room.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-            {/*{/<ReviewWriteButton />/}*/}
+            <ReviewWriteButton />
         </>
     )
 }

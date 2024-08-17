@@ -8,8 +8,10 @@ Modal.setAppElement('#root');
 
 const StyledModal = styled(Modal)`
     position: relative;
-    width: 400px;
-    margin: auto;
+    width: 600px;
+    height: 400px;
+    margin-top: 10%;
+    margin-left: 30%;
     background: white;
     border-radius: 10px;
     padding: 20px;
