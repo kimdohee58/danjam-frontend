@@ -1,0 +1,25 @@
+/* CSS 코드 */
+.map-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-controls button {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+    font-size: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+}
+
+.map-controls button:hover {
+    background-color: #f0f0f0;
+}
