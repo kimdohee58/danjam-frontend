@@ -7,7 +7,7 @@ function List() {
 
     let navigate = useNavigate()
     let moveToDorm = (id) => {
-        navigate('dorm/showOne/' + id)
+        navigate('dorm/' + id)
     }
 
     useEffect(() => {
