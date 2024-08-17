@@ -18,9 +18,11 @@ const Title = styled.h1`
 
 const CardGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
+    grid-template-columns: repeat(4, 1fr); /* Set to 4 columns */
     gap: 20px;
     justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 `;
 
 const StyledCard = styled.div`

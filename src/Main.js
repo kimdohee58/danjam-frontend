@@ -1,11 +1,10 @@
+import Search from "./search/Search";
+
 function Main() {
 
 
     return (
         <>
-            <div>
-                <h1>Tlvkf main1 18</h1>
-            </div>
             <Search/>
         </>
     )
