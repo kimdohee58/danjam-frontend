@@ -66,7 +66,7 @@ function Privacy () {
         })
         if (response.ok) {
             alert('비밀번호를 변경했습니다.')
-            navigate(`/users/${id}/my-page`)
+            navigate(`/users/${id}/my-page/privacy`)
         }
     }
 
@@ -83,7 +83,7 @@ function Privacy () {
         })
         if (response.ok) {
             alert('핸드폰 번호를 변경했습니다.')
-            navigate(`/users/${id}/my-page`)
+            navigate(`/users/${id}/my-page/privacy`)
         }
     }
 
