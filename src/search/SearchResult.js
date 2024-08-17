@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {format} from "date-fns";
+import DormCard from "./DormCard";
 
 function SearchResult(props) {
     let search = ({});
@@ -9,9 +10,6 @@ function SearchResult(props) {
         props.search.date.checkOut = new Date()
     } else if (props.search.date.checkIn === null) {
         props.search.date.checkIn = new Date()
-    } else {
-        props.search.date.checkIn = new Date()
-        props.search.date.checkOut = new Date()
     }
     search = ({
         city: props.search.city,
@@ -73,12 +71,7 @@ function SearchResult(props) {
     // console.log("checkedTown: ", selectedTown)
 
     // dormList
-    const [data, setData] = useState({dormList: []})
-
-    let navigate = useNavigate()
-    let moveToDorm = (id) => {
-        navigate('dorm/showOne/' + id)
-    }
+    const [dorms, setDorms] = useState([])
 
     useEffect(() => {
         setSelectedAmenity([])
@@ -121,10 +114,14 @@ function SearchResult(props) {
                 .catch((e) => {
                     console.error(e)
                 })
-
-            if (resp.status === 200 && resp.data.result === 'success') {
-                setData(resp.data)
+            try {
+                if (resp.status === 200 && resp.data.result === 'success') {
+                    setDorms(resp.data.dormList)
+                }
+            } catch (e) {
+                console.error("호텔 로드 중 오류 발생", e)
             }
+
 
             // if (resp.status === 200) {
             //     if (resp.data.result === 'success') {
@@ -156,7 +153,7 @@ function SearchResult(props) {
                     })
 
                 if (resp.status === 200 && resp.data.result === 'success') {
-                    setData(resp.data)
+                    setDorms(resp.data.dormList)
                 }
 
                 // if (resp.status === 200) {
@@ -185,7 +182,7 @@ function SearchResult(props) {
             console.log(resp)
 
             if (resp.status === 200 && resp.data.result === 'success') {
-                setData(resp.data)
+                setDorms(resp.data)
             }
 
             // if (resp.status === 200) {
@@ -198,6 +195,76 @@ function SearchResult(props) {
         }
         selectedAmenityList()
     }, [selectedAmenity, selectedTown]);
+
+    // 유정언니
+    // 위시한테 값 넘겨주기
+    // const location = useLocation();
+    // let userInfo = location.state.userInfo;
+    const navigate = useNavigate();
+
+
+    const [isWish, setIsWish] = useState(false);
+    const toggleWish = async (dormId) => {
+        try {
+            // 로그인
+            // if (!userInfo) {
+            //     navigate("/login", { state: { from: location } });
+            //     return;
+            // }
+
+            setDorms(prevDorms =>
+                prevDorms.map(dorm =>
+                    dorm.id === dormId
+                        ? {...dorm, isWish: !dorm.isWish}
+                        : dorm
+                )
+            );
+
+            const targetDorm = dorms.find(dorm => dorm.id === dormId);
+
+            if (targetDorm.isWish) {
+                await axios.delete(`http://localhost:8080/wish/${dormId}`, {withCredentials: true});
+            } else {
+                await axios.get(`http://localhost:8080/wish/${dormId}`, {}, {withCredentials: true});
+            } // 위시리스트 매핑 설정 @영우
+
+        } catch (e) {
+            console.error("찜 상태 변경 중 오류 발생", e);
+            setDorms(prevDorms =>
+                prevDorms.map(dorm =>
+                    dorm.id === dormId
+                        ? {...dorm, isWish: !dorm.isWish}
+                        : dorm
+                )
+            );
+        }
+    };
+
+    // 무한스크롤
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const size = 10; // 에어비앤비 기준
+
+    const loadMoreDorms = () => {
+        setPage((prevPage) => prevPage + 1);
+    }
+
+    /*useEffect(() => {
+        // setPage(1); //페이지 초기화
+        // setDorms([]); //호텔 초기화
+        getDorms();
+    }, []);*/
+
+    // 옵션 선택 정보 넘기기
+    const searchInfo = {
+        checkIn: search.checkIn,
+        checkOut: search.checkOut,
+        person: search.person,
+    }
+
+    let moveToDorm = (id) => {
+        navigate('dorm/' + id, {state: {searchInfo: searchInfo} })
+    }
 
     return (
         <>
@@ -229,43 +296,27 @@ function SearchResult(props) {
                         ))}
                     </div>
                 </div>
-                {data.dormList === 0 ?
-                    <div>조건에 해당하는 호텔이 없습니다.</div> :
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>호텔번호</th>
-                            <th>이름</th>
-                            <th>연락처</th>
-                            <th>도시</th>
-                            <th>town</th>
-                            <th>방 번호</th>
-                            <th>가격</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {data.dormList.map((dorm) => (
-                            <TableRow dorm={dorm} key={dorm.id} moveToDorm={moveToDorm}/>
-                        ))}
-                        </tbody>
-                    </table>
-                }
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+                    {dorms.map((dorm) => (
+                        <DormCard
+                            key={dorm.id}
+                            dorm={dorm}
+                            isWish={isWish}
+                            toggleWish={() => toggleWish(dorm.id)}
+                            onClick={() => moveToDorm(dorm.id)}
+                        />
+                    ))}
+                    {hasMore && (
+                        <button onClick={loadMoreDorms} style={{margin: '20px', padding: '10px'}}>
+                            더보기
+                        </button>
+                    )}
+                    {!hasMore && (
+                        <p>더 불러올 목록이 없습니다.</p>
+                    )}
+                </div>
             </div>
         </>
-    )
-}
-
-let TableRow = ({dorm, moveToDorm}) => {
-    return (
-        <tr onClick={() => moveToDorm(dorm.id)}>
-            <td>{dorm.id}</td>
-            <td>{dorm.name}</td>
-            <td>{dorm.contactNum}</td>
-            <td>{dorm.city}</td>
-            <td>{dorm.town}</td>
-            <td>{dorm.room.id}</td>
-            <td>{dorm.room.price}</td>
-        </tr>
     )
 }
 

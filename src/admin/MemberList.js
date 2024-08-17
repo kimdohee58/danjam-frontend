@@ -3,27 +3,45 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
+// Styled Components
 const Container = styled.div`
-    margin-top: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+`;
+
+const Heading = styled.h1`
+    color: #4a4a4a;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
 `;
 
 const Table = styled.table`
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    border: 1px solid #ddd;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 `;
 
 const TableHeader = styled.th`
     background-color: #f4f4f4;
-    padding: 12px;
+    padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
 `;
 
 const TableCell = styled.td`
-    padding: 12px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
+    text-align: left;
+    color: #555;
 `;
 
 const TableRow = styled.tr`
@@ -35,19 +53,14 @@ const TableRow = styled.tr`
     }
 `;
 
-const Heading = styled.h1`
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-`;
-
 const NoMembersCell = styled(TableCell)`
     text-align: center;
     colspan: 8;
     font-style: italic;
+    color: #888;
 `;
 
+// Main Component
 const MemberList = () => {
     const [members, setMembers] = useState([]);
 
@@ -60,7 +73,6 @@ const MemberList = () => {
                 const response = await axios.get('http://localhost:8080/users/UsersList', {
                     withCredentials: true
                 });
-                console.log('userList_response.data:', response.data);
                 setMembers(response.data);
             } catch (error) {
                 console.error('Error fetching user lists:', error);
@@ -75,24 +87,24 @@ const MemberList = () => {
     const getStatusLabel = (status) => {
         switch (status) {
             case 'Y':
-                return '사용중';
+                return '사용중'; // Active
             case 'N':
-                return '휴면중';
+                return '휴면중'; // Inactive
             default:
-                return '알 수 없음';
+                return '알 수 없음'; // Unknown
         }
     };
 
     const getRoleLabel = (role) => {
         switch (role) {
             case 'ROLE_ADMIN':
-                return '관리자';
+                return '관리자'; // Admin
             case 'ROLE_USER':
-                return '사용자';
+                return '사용자'; // User
             case 'ROLE_SELLER':
-                return '판매자';
+                return '판매자'; // Seller
             default:
-                return '알 수 없음';
+                return '알 수 없음'; // Unknown
         }
     };
 
@@ -100,7 +112,6 @@ const MemberList = () => {
         <Container>
             <Heading>회원 관리 리스트</Heading>
 
-            {/* 회원 리스트 테이블 */}
             <Table>
                 <thead>
                 <tr>

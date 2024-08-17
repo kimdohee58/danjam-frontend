@@ -5,7 +5,17 @@ import styled from 'styled-components';
 
 const FlexContainer = styled.div`
     display: flex;
-    gap: 20px; /* Adjust space between ButtonList and OutletContainer */
+    height: 100vh; /* Full viewport height */
+    background-color: #f7f7f7; /* Light background color for the entire page */
+`;
+
+const Sidebar = styled.div`
+    width: 250px; /* Sidebar width */
+    background-color: #fff; /* White background for sidebar */
+    border-right: 1px solid #e0e0e0; /* Light border for separation */
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* Padding inside sidebar */
 `;
 
 const ButtonList = styled.ul`
@@ -14,18 +24,16 @@ const ButtonList = styled.ul`
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Adjust spacing between buttons */
-    width: 200px; /* Adjust width as needed */
+    gap: 15px; /* Space between buttons */
 `;
 
-const ButtonItem = styled.li`
-    /* Optional: Add any custom styles for button items here */
-`;
+const ButtonItem = styled.li``;
 
-const OutletContainer = styled.div`
-    flex: 1; /* Allows the OutletContainer to take up remaining space */
-    padding: 10px; /* Add padding if needed */
-    border: 1px solid #ddd; /* Optional: Add border for visual separation */
+const MainContent = styled.div`
+    flex: 1;
+    padding: 20px; /* Padding around content */
+    background-color: #fff; /* White background for content area */
+    overflow-y: auto; /* Allow scrolling if content overflows */
 `;
 
 const MyPage = () => {
@@ -41,20 +49,22 @@ const MyPage = () => {
 
     return (
         <FlexContainer>
-            <ButtonList>
-                <ButtonItem>
-                    <Button onClick={() => goTo('privacy')}>Privacy</Button>
-                </ButtonItem>
-                <ButtonItem>
-                    <Button onClick={() => goTo('bookings')}>Bookings</Button>
-                </ButtonItem>
-                <ButtonItem>
-                    <Button onClick={() => goTo('wishes')}>Wishes</Button>
-                </ButtonItem>
-            </ButtonList>
-            <OutletContainer>
+            <Sidebar>
+                <ButtonList>
+                    <ButtonItem>
+                        <Button onClick={() => goTo('privacy')} variant="outline-primary">Privacy</Button>
+                    </ButtonItem>
+                    <ButtonItem>
+                        <Button onClick={() => goTo('bookings')} variant="outline-primary">Bookings</Button>
+                    </ButtonItem>
+                    <ButtonItem>
+                        <Button onClick={() => goTo('wishes')} variant="outline-primary">Wishes</Button>
+                    </ButtonItem>
+                </ButtonList>
+            </Sidebar>
+            <MainContent>
                 <Outlet /> {/* This will render the nested routes */}
-            </OutletContainer>
+            </MainContent>
         </FlexContainer>
     );
 };

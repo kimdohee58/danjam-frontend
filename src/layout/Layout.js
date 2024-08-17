@@ -5,7 +5,8 @@ import axios from 'axios';
 import Auth from '../users/Auth';
 import styled from 'styled-components';
 import logo from '../images/danjam-logo.png'; // Import the logo image
-import SellerCalendar from '../seller/SellerCalendar'; // Import the SellerCalendar component
+import SellerCalendar from '../seller/SellerCalendar';
+import Search from "../search/Search"; // Import the SellerCalendar component
 
 // Colors
 const colors = {
@@ -39,10 +40,11 @@ const Header = styled.header`
     z-index: 1000;
     box-sizing: border-box;
 `;
+
 const HrLine = styled.hr`
-background: rgb(240, 240, 240);
-height: 1px;
-border: 0;
+    background: rgb(240, 240, 240);
+    height: 1px;
+    border: 0;
 `;
 
 // ContentContainer Styling
@@ -219,6 +221,7 @@ const ModalOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 `;
 
 const ModalContent = styled.div`
@@ -226,7 +229,6 @@ const ModalContent = styled.div`
     padding: 20px;
     border-radius: 8px;
     position: relative;
-    width: 80%;
     max-width: 400px;
 `;
 
@@ -243,7 +245,8 @@ const ModalClose = styled.button`
 
 // BookingListModal Styling
 const BookingListModal = styled(ModalContent)`
-    max-width: 600px; // Adjust width for booking list modal
+    overflow: auto; // Allow scrolling if content overflows
+    padding: 20px; // Ensure padding for better spacing
 `;
 
 function Layout() {
@@ -321,7 +324,10 @@ function Layout() {
     return (
         <AppWrapper>
             <Header>
-                <Logo src={logo} alt="Company Logo" onClick={() => navigate('/')} />
+                <Logo src={logo} alt="Company Logo" onClick={(toMain) => navigate('/')} />
+
+                {/*<Search/>*/}
+
                 <ButtonsWrapper>
                     {userInfo.role === 'ROLE_SELLER' && (
                         <BookingListButton onClick={() => setShowBookingListModal(true)}>
@@ -403,6 +409,7 @@ function Layout() {
                     </BookingListModal>
                 </ModalOverlay>
             )}
+
         </AppWrapper>
     );
 }

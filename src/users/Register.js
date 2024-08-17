@@ -1,7 +1,69 @@
-import {useState} from 'react'
-import {Button, Container} from 'react-bootstrap'
-import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import styled from 'styled-components';
+
+const FormContainer = styled.div`
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+`;
+
+const Title = styled.h2`
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+`;
+
+const Button = styled.button`
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    &:hover {
+        background-color: #0056b3;
+    }
+    &:disabled {
+        background-color: #b0b0b0;
+        cursor: not-allowed;
+    }
+`;
+
+const RadioGroup = styled.div`
+    display: flex;
+    gap: 20px;
+    align-items: center;
+`;
+
+const Label = styled.label`
+    font-size: 16px;
+    cursor: pointer;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    font-size: 14px;
+    text-align: center;
+`;
 
 function Register() {
     const [user, setUser] = useState({
@@ -10,126 +72,114 @@ function Register() {
         name: '',
         phoneNum: '',
         role: '',
-    })
+    });
 
-    const navigate = useNavigate()
+    const [isValid, setIsValid] = useState(true);
+    const navigate = useNavigate();
+
     const moveToNext = () => {
-        navigate('/login')
-    }
+        navigate('/login');
+    };
 
     const onChange = (e) => {
-        const {name, value} = e.target
+        const { name, value } = e.target;
         setUser({
             ...user,
             [name]: value,
-        })
-    }
+        });
+    };
 
-    const [isValid, setIsValid] = useState(true)
-
-    const onCheck = async (e) => {
-        console.log(user)
+    const onCheck = async () => {
         try {
-            const resp = await axios.post('http://localhost:8080/users/validate', user.email)
-            console.log(resp)
-
+            const resp = await axios.post('http://localhost:8080/users/validate', user.email);
             if (resp.data.result === 'success') {
-                alert('사용 가능한 메일입니다.')
-                setIsValid(false)
+                alert('사용 가능한 메일입니다.');
+                setIsValid(false);
             } else {
-                alert('이미 가입된 이메일입니다.')
+                alert('이미 가입된 이메일입니다.');
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
     const onSubmit = async (e) => {
-        console.log(email, password, name, phoneNum, role)
-        e.preventDefault()
+        e.preventDefault();
         try {
-            const resp = await axios.post('http://localhost:8080/users/signUp', user)
-            console.log(resp)
-
+            const resp = await axios.post('http://localhost:8080/users/signUp', user);
             if (resp.data.result === 'success') {
-                moveToNext()
+                moveToNext();
             } else {
-                alert('회원가입 실패')
+                alert('회원가입 실패');
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
-    const {email, password, name, phoneNum, role} = user
-
-    // 핸드폰 번호 하이픈 넣기, https://fedev-kim.medium.com/react-%EC%A0%95%EA%B7%9C%EC%8B%9D%EC%9C%BC%EB%A1%9C-%ED%9C%B4%EB%8C%80%EC%A0%84%ED%99%94-%EB%B2%88%ED%98%B8-input-%EB%A7%8C%EB%93%A4%EA%B8%B0-1a67f28855d2
-    /*const [phoneNumber, setPhoneNum] = useState('')
-
-    const parsingPhoneNum = (num) => {
-        return num
-            .replace(/[^0-9]/g, '')
-            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-            .replace(/(-{1,2})$/g, '')
-    }
-
-    const onChangeNum = (e) =>
-        setPhoneNum(parsingPhoneNum(e.currentTarget.value))*/
+    const { email, password, name, phoneNum, role } = user;
 
     return (
-        <Container className={'mt-3'}>
+        <FormContainer>
+            <Title>회원가입</Title>
             <form onSubmit={onSubmit}>
-                <div>
-                    <input
-                        type={'email'}
-                        name={'email'}
-                        value={email}
-                        onChange={onChange}
-                        placeholder={'email'}
-                    />
-                    <Button onClick={onCheck}>중복확인</Button></div>
-                <input
-                    type={'password'}
-                    name={'password'}
+                <Input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={onChange}
+                    placeholder="이메일 주소"
+                />
+                <Button type="button" onClick={onCheck}>중복 확인</Button>
+                <Input
+                    type="password"
+                    name="password"
                     value={password}
                     maxLength={18}
                     onChange={onChange}
-                    placeholder={'password'}
+                    placeholder="비밀번호"
                 />
-                <input
-                    type={'text'}
-                    name={'name'}
+                <Input
+                    type="text"
+                    name="name"
                     value={name}
                     onChange={onChange}
-                    placeholder={'name'}
+                    placeholder="이름"
                 />
-                <input
-                    type={'tel'}
-                    name={'phoneNum'}
+                <Input
+                    type="tel"
+                    name="phoneNum"
                     value={phoneNum}
-                    minLength={11}
-                    maxLength={11}
                     onChange={onChange}
-                    placeholder={'phoneNumber'}
+                    placeholder="전화번호 (하이픈 없이 입력)"
                 />
-                {/* 핸드폰번호 하이픈 */}
-                {/*<input
-                    type={'tel'}
-                    name={'phoneNumber'}
-                    value={phoneNumber}
-                    minLength={13}
-                    maxLength={13}
-                    onChange={onChangeNum}
-                    placeholder={'phoneNumber'}
-                />*/}
-                <input type={'radio'} id={'ROLE_USER'} name={'role'} value={'ROLE_USER'} onChange={onChange}/>
-                <label htmlFor={'ROLE_USER'}>일반회원</label>
-                <input type={'radio'} id={'ROLE_SELLER'} name={'role'} value={'ROLE_SELLER'} onChange={onChange}/>
-                <label htmlFor={'ROLE_SELLER'}>판매자</label>
-                <button type={'submit'} disabled={isValid}>{'회원가입'}</button>
+                <RadioGroup>
+                    <Label>
+                        <Input
+                            type="radio"
+                            id="ROLE_USER"
+                            name="role"
+                            value="ROLE_USER"
+                            onChange={onChange}
+                        />
+                        일반회원
+                    </Label>
+                    <Label>
+                        <Input
+                            type="radio"
+                            id="ROLE_SELLER"
+                            name="role"
+                            value="ROLE_SELLER"
+                            onChange={onChange}
+                        />
+                        판매자
+                    </Label>
+                </RadioGroup>
+                <Button type="submit" disabled={isValid}>회원가입</Button>
+                {isValid && <ErrorText>이메일 중복 확인이 필요합니다.</ErrorText>}
             </form>
-        </Container>
-    )
+        </FormContainer>
+    );
 }
 
-export default Register
+export default Register;

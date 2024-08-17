@@ -1,57 +1,118 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
-function Privacy () {
+const Container = styled.div`
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+`;
+
+const Header = styled.div`
+    margin-bottom: 20px;
+`;
+
+const Section = styled.div`
+    margin-bottom: 20px;
+`;
+
+const Title = styled.h1`
+    font-size: 24px;
+    margin: 0;
+`;
+
+const FieldLabel = styled.div`
+    font-weight: bold;
+    margin-bottom: 8px;
+`;
+
+const FieldValue = styled.div`
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #333;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+`;
+
+const Button = styled.button`
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
+
+const LinkButton = styled(Button)`
+    background-color: #dc3545;
+    &:hover {
+        background-color: #c82333;
+    }
+`;
+
+function Privacy() {
     const [inputs, setInputs] = useState({
         password: '',
         phoneNum: '',
-    })
+    });
     const [user, setUser] = useState({
         id: '',
         email: '',
         name: '',
         phoneNum: '',
-    })
+    });
     const [userInfo, setUserInfo] = useState({
         id: '',
         name: '',
-        role: ''
+        role: '',
     });
 
-    const navigate = useNavigate()
-    const params = useParams()
-
-    const id = params.id
-
-    const fetchUserUrl = 'http://localhost:8080/users'
+    const navigate = useNavigate();
+    const params = useParams();
+    const id = params.id;
+    const fetchUserUrl = 'http://localhost:8080/users';
 
     useEffect(() => {
         const fetchUsers = async () => {
             const response = await fetch(`${fetchUserUrl}/${id}`, {
                 method: 'GET',
                 credentials: 'include',
-            })
-
-            return await response.json()
-        }
+            });
+            return await response.json();
+        };
 
         fetchUsers()
             .then((data) => {
-                setUser(data)
+                setUser(data);
                 setInputs({
                     ...inputs,
                     phoneNum: data.phoneNum,
-                })
-            })
-    }, [id])
+                });
+            });
+    }, [id]);
 
     const handleChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
         setInputs({
             ...inputs,
             [name]: value,
-        })
-    }
+        });
+    };
 
     const handleUpdate = async () => {
         const response = await fetch(`${fetchUserUrl}/${id}`, {
@@ -61,14 +122,14 @@ function Privacy () {
             },
             credentials: 'include',
             body: JSON.stringify({
-                password: inputs.password
-            })
-        })
+                password: inputs.password,
+            }),
+        });
         if (response.ok) {
-            alert('비밀번호를 변경했습니다.')
-            navigate(`/users/${id}/my-page/privacy`)
+            alert('비밀번호를 변경했습니다.');
+            navigate(`/users/${id}/my-page/privacy`);
         }
-    }
+    };
 
     const handleUpdatePhone = async () => {
         const response = await fetch(`${fetchUserUrl}/${id}/phone`, {
@@ -79,118 +140,78 @@ function Privacy () {
             credentials: 'include',
             body: JSON.stringify({
                 phoneNum: inputs.phoneNum,
-            })
-        })
+            }),
+        });
         if (response.ok) {
-            alert('핸드폰 번호를 변경했습니다.')
-            navigate(`/users/${id}/my-page/privacy`)
+            alert('핸드폰 번호를 변경했습니다.');
+            navigate(`/users/${id}/my-page/privacy`);
         }
-    }
+    };
 
     const handleCancel = async () => {
         const response = await fetch(`${fetchUserUrl}/${id}/cancel`, {
             method: 'PATCH',
             credentials: 'include',
-        })
+        });
 
         if (response.status === 200) {
-            alert('휴면 계정으로 전환됐습니다.')
+            alert('휴면 계정으로 전환됐습니다.');
             const resp = await fetch(`${fetchUserUrl}/logout`, {
                 method: 'POST',
-                withCredentials: true,
-            })
+                credentials: 'include',
+            });
             if (resp.status === 200) {
-                navigate('/', { state: { userInfo }})
+                navigate('/', { state: { userInfo } });
             }
         }
-    }
+    };
 
     return (
-        <div>
-            <div className="head">
-                <h1>개인 정보</h1>
-            </div>
+        <Container>
+            <Header>
+                <Title>개인 정보</Title>
+            </Header>
 
-            <div className="content">
-                <div className='realName'>
-                    <div>
-                        실명
-                    </div>
-                    <div>
-                        {user.name}
-                    </div>
-                </div>
-                <hr/>
+            <Section>
+                <FieldLabel>실명</FieldLabel>
+                <FieldValue>{user.name}</FieldValue>
+            </Section>
 
-                <div className="password">
-                    <div>
-                        비밀번호
-                    </div>
-                    <div>
-                        <input type="password"
-                               name='password'
-                               placeholder="Input Password"
-                               value={inputs.password}
-                               onChange={handleChange}
-                        />
-                    </div>
-                    <div>
-                        <button type="button"
-                                onClick={handleUpdate}
-                        >
-                            수정
-                        </button>
-                    </div>
-                </div>
-                <hr/>
+            <Section>
+                <FieldLabel>비밀번호</FieldLabel>
+                <Input
+                    type="password"
+                    name="password"
+                    placeholder="Input Password"
+                    value={inputs.password}
+                    onChange={handleChange}
+                />
+                <Button onClick={handleUpdate}>수정</Button>
+            </Section>
 
-                <div className="email">
-                    <div>
-                        이메일 주소
-                    </div>
-                    <div>
-                        {user.email}
-                    </div>
-                </div>
-                <hr/>
+            <Section>
+                <FieldLabel>이메일 주소</FieldLabel>
+                <FieldValue>{user.email}</FieldValue>
+            </Section>
 
-                <div className='phone-number'>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        +82
-                        <input type="tel"
-                               name='phoneNum'
-                               minLength={11}
-                               maxLength={13}
-                               value={inputs.phoneNum}
-                               onChange={handleChange}
-                        />
-                    </div>
-                    <div>
-                        <button type="button"
-                                onClick={handleUpdatePhone}
-                        >
-                            수정
-                        </button>
-                    </div>
-                </div>
-                <hr/>
+            <Section>
+                <FieldLabel>전화번호</FieldLabel>
+                <Input
+                    type="tel"
+                    name="phoneNum"
+                    minLength={11}
+                    maxLength={13}
+                    value={inputs.phoneNum}
+                    onChange={handleChange}
+                />
+                <Button onClick={handleUpdatePhone}>수정</Button>
+            </Section>
 
-                <div className='cancel-member'>
-                    <div>
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                        >
-                            회원 탈퇴
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
+            <Section>
+                <LinkButton onClick={handleCancel}>회원 탈퇴</LinkButton>
+            </Section>
+        </Container>
+    );
 }
 
-export default Privacy
+export default Privacy;
