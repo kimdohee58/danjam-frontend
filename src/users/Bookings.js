@@ -41,11 +41,11 @@ const Bookings = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {data ? (data.map(booking => (
+                {data.length !== 0 ? (data.map(booking => (
                     <tr>
                         <BookingList booking={booking} />
                     </tr>
-                ))) : <h1>'예약 내역이 없습니다.'</h1>}
+                ))) : (<tr><td style={{textAlign: 'center'}} colSpan="8"><h3>예약 내역이 없습니다.</h3></td></tr>)}
                 </tbody>
             </table>
         </div>

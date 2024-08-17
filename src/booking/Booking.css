@@ -1,0 +1,12 @@
+.req-booking-btn {
+    background: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-size: 1.75rem;
+    padding: 16px 32px;
+    outline: none;
+    width: auto;
+}

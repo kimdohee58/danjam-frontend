@@ -12,6 +12,11 @@ function Privacy () {
         name: '',
         phoneNum: '',
     })
+    const [userInfo, setUserInfo] = useState({
+        id: '',
+        name: '',
+        role: ''
+    });
 
     const navigate = useNavigate()
     const params = useParams()
@@ -27,7 +32,7 @@ function Privacy () {
                 credentials: 'include',
             })
 
-            return await response.json();
+            return await response.json()
         }
 
         fetchUsers()
@@ -61,7 +66,7 @@ function Privacy () {
         })
         if (response.ok) {
             alert('비밀번호를 변경했습니다.')
-            navigate(`/my-page/${id}`)
+            navigate(`/users/${id}/my-page`)
         }
     }
 
@@ -78,7 +83,7 @@ function Privacy () {
         })
         if (response.ok) {
             alert('핸드폰 번호를 변경했습니다.')
-            navigate(`/my-page/${id}`)
+            navigate(`/users/${id}/my-page`)
         }
     }
 
@@ -90,14 +95,20 @@ function Privacy () {
 
         if (response.status === 200) {
             alert('휴면 계정으로 전환됐습니다.')
-            navigate('/')
+            const resp = await fetch(`${fetchUserUrl}/logout`, {
+                method: 'POST',
+                withCredentials: true,
+            })
+            if (resp.status === 200) {
+                navigate('/', { state: { userInfo }})
+            }
         }
     }
 
     return (
         <div>
             <div className="head">
-                <h1>개인정보</h1>
+                <h1>개인 정보</h1>
             </div>
 
             <div className="content">
@@ -135,7 +146,7 @@ function Privacy () {
 
                 <div className="email">
                     <div>
-                    이메일 주소
+                        이메일 주소
                     </div>
                     <div>
                         {user.email}

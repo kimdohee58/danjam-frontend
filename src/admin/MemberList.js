@@ -1,7 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    margin-top: 20px;
+`;
+
+const Table = styled.table`
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+`;
+
+const TableHeader = styled.th`
+    background-color: #f4f4f4;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+`;
+
+const TableCell = styled.td`
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+`;
+
+const TableRow = styled.tr`
+    &:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    &:hover {
+        background-color: #f1f1f1;
+    }
+`;
+
+const Heading = styled.h1`
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+`;
+
+const NoMembersCell = styled(TableCell)`
+    text-align: center;
+    colspan: 8;
+    font-style: italic;
+`;
 
 const MemberList = () => {
     const [members, setMembers] = useState([]);
@@ -15,10 +60,8 @@ const MemberList = () => {
                 const response = await axios.get('http://localhost:8080/users/UsersList', {
                     withCredentials: true
                 });
-                console.log('userList_response.data:',response.data);
-                const userList = response.data;
-                console.log('userList',userList);
-                setMembers( userList);
+                console.log('userList_response.data:', response.data);
+                setMembers(response.data);
             } catch (error) {
                 console.error('Error fetching user lists:', error);
                 setMembers([]);
@@ -28,41 +71,66 @@ const MemberList = () => {
         fetchData();
     }, []);
 
+    // Helper functions to map values
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'Y':
+                return '사용중';
+            case 'N':
+                return '휴면중';
+            default:
+                return '알 수 없음';
+        }
+    };
+
+    const getRoleLabel = (role) => {
+        switch (role) {
+            case 'ROLE_ADMIN':
+                return '관리자';
+            case 'ROLE_USER':
+                return '사용자';
+            case 'ROLE_SELLER':
+                return '판매자';
+            default:
+                return '알 수 없음';
+        }
+    };
+
     return (
-        <Container className="mt-3">
-            <h1>회원 관리 리스트</h1>
+        <Container>
+            <Heading>회원 관리 리스트</Heading>
 
             {/* 회원 리스트 테이블 */}
-            <Table striped bordered hover>
+            <Table>
                 <thead>
                 <tr>
-                    <th>회원 ID</th>
-                    <th>이름</th>
-                    <th>이메일</th>
-                    <th>전화번호</th>
-                    <th>가입일</th>
-                    <th>수정일</th>
-                    <th>상태</th>
-                    <th>권한</th>
+                    <TableHeader>회원 ID</TableHeader>
+                    <TableHeader>이름</TableHeader>
+                    <TableHeader>이메일</TableHeader>
+                    <TableHeader>전화번호</TableHeader>
+                    <TableHeader>가입일</TableHeader>
+                    <TableHeader>수정일</TableHeader>
+                    <TableHeader>상태</TableHeader>
+                    <TableHeader>권한</TableHeader>
                 </tr>
                 </thead>
                 <tbody>
                 {members.length > 0 ? (
                     members.map((member) => (
-                        <tr key={member.id}>
-                            <td>{member.id}</td>
-                            <td>{member.name}</td>
-                            <td>{member.email}</td>
-                            <td>+82 {member.phoneNum}</td>
-                            <td>{new Date(member.createAt).toLocaleDateString()}</td>
-                            <td>{new Date(member.updateAt).toLocaleDateString()}</td>
-                            <td>{member.status}</td>
-                            <td>{member.role}</td>
-                        </tr>
+                        <TableRow key={member.id}>
+                            <TableCell>{member.id}</TableCell>
+                            <TableCell>{member.name}</TableCell>
+                            <TableCell>{member.email}</TableCell>
+                            <TableCell>+82 {member.phoneNum}</TableCell>
+                            <TableCell>{new Date(member.createAt).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(member.updateAt).toLocaleDateString()}</TableCell>
+                            <TableCell>{getStatusLabel(member.status)}</TableCell>
+                            <TableCell>{getRoleLabel(member.role)}</TableCell>
+                        </TableRow>
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="7" className="text-center">회원이 없습니다.</td>
+                        <NoMembersCell>회원이 없습니다.</NoMembersCell>
                     </tr>
                 )}
                 </tbody>

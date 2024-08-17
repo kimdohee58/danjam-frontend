@@ -139,88 +139,88 @@ const SellerCalendar = () => {
     };
 
     return (
-            <div style={{padding: '20px'}}>
-                <h1>{userInfo.name} Seller Calendar</h1>  {/* 사용자 이름을 제목으로 표시 */}
+        <div style={{padding: '20px'}}>
+            <h1>{userInfo.name} 판매자 예약리스트</h1>  {/* 사용자 이름을 제목으로 표시 */}
 
-                <div style={{marginBottom: '20px'}}>
-                    <input
-                        type="date"
-                        value={searchDate}
-                        onChange={handleSearchDateChange}
-                        placeholder="Select or enter a date"
-                    />
+            <div style={{marginBottom: '20px'}}>
+                <input
+                    type="date"
+                    value={searchDate}
+                    onChange={handleSearchDateChange}
+                    placeholder="Select or enter a date"
+                />
+            </div>
+
+            <div className="datepicker-container">
+                <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
+                    isClearable
+                    showYearDropdown
+                    scrollableYearDropdown
+                    dayClassName={getDayClassName}
+                    inline  // 캘린더를 항상 보이도록 설정
+                    placeholderText="Select a date"  // DatePicker의 플레이스홀더 텍스트
+                />
+            </div>
+
+            {selectedDate && (
+                <div style={{marginTop: '20px'}}>
+                    <h2>Events for {formatDateString(selectedDate)}:</h2>
+                    <ul>
+                        {events.length > 0 ? (
+                            events.map((event, index) => (
+                                <li key={index}>
+                                    <button onClick={() => openModal(event)}>
+                                        {event.type}: {event.userName}
+                                    </button>
+                                </li>
+                            ))
+                        ) : (
+                            <li>No events for this date.</li>
+                        )}
+                    </ul>
                 </div>
+            )}
 
-                <div className="datepicker-container">
-                    <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDateChange}
-                        dateFormat="yyyy-MM-dd"
-                        isClearable
-                        showYearDropdown
-                        scrollableYearDropdown
-                        dayClassName={getDayClassName}
-                        inline  // 캘린더를 항상 보이도록 설정
-                        placeholderText="Select a date"  // DatePicker의 플레이스홀더 텍스트
-                    />
-                </div>
-
-                {selectedDate && (
-                    <div style={{marginTop: '20px'}}>
-                        <h2>Events for {formatDateString(selectedDate)}:</h2>
-                        <ul>
-                            {events.length > 0 ? (
-                                events.map((event, index) => (
-                                    <li key={index}>
-                                        <button onClick={() => openModal(event)}>
-                                            {event.type}: {event.userName}
-                                        </button>
-                                    </li>
-                                ))
-                            ) : (
-                                <li>No events for this date.</li>
-                            )}
-                        </ul>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Event Details"
+                style={{
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '80%',
+                        maxWidth: '600px',
+                    },
+                }}
+            >
+                <h2>Event Details</h2>
+                {selectedEventDetails ? (
+                    <div>
+                        <p><strong>Type:</strong> {selectedEventDetails.type}</p>
+                        <p><strong>Reservation Name:</strong> {selectedEventDetails.userName}</p>
+                        <p><strong>Check-in Date:</strong> {selectedEventDetails.details.checkIn}</p>
+                        <p><strong>Check-out Date:</strong> {selectedEventDetails.details.checkOut}</p>
+                        <p><strong>Hotel Name:</strong> {selectedEventDetails.details.hotelName || 'N/A'}</p>
+                        <p><strong>Address:</strong> {selectedEventDetails.details.address || 'N/A'}</p>
+                        <p><strong>Room Name:</strong> {selectedEventDetails.details.room?.name || 'N/A'}</p>
+                        <p><strong>Room Type:</strong> {selectedEventDetails.details.room?.type || 'N/A'}</p>
                     </div>
+                ) : (
+                    <p>No details available.</p>
                 )}
+                <button onClick={closeModal}>Close</button>
+            </Modal>
 
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Event Details"
-                    style={{
-                        content: {
-                            top: '50%',
-                            left: '50%',
-                            right: 'auto',
-                            bottom: 'auto',
-                            marginRight: '-50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '80%',
-                            maxWidth: '600px',
-                        },
-                    }}
-                >
-                    <h2>Event Details</h2>
-                    {selectedEventDetails ? (
-                        <div>
-                            <p><strong>Type:</strong> {selectedEventDetails.type}</p>
-                            <p><strong>Reservation Name:</strong> {selectedEventDetails.userName}</p>
-                            <p><strong>Check-in Date:</strong> {selectedEventDetails.details.checkIn}</p>
-                            <p><strong>Check-out Date:</strong> {selectedEventDetails.details.checkOut}</p>
-                            <p><strong>Hotel Name:</strong> {selectedEventDetails.details.hotelName || 'N/A'}</p>
-                            <p><strong>Address:</strong> {selectedEventDetails.details.address || 'N/A'}</p>
-                            <p><strong>Room Name:</strong> {selectedEventDetails.details.room?.name || 'N/A'}</p>
-                            <p><strong>Room Type:</strong> {selectedEventDetails.details.room?.type || 'N/A'}</p>
-                        </div>
-                    ) : (
-                        <p>No details available.</p>
-                    )}
-                    <button onClick={closeModal}>Close</button>
-                </Modal>
-
-                <style>
-                    {`
+            <style>
+                {`
                     .highlighted-date {
                         background-color: red; /* 이벤트가 있는 날짜를 빨간색으로 강조 */
                         border-radius: 50%;
@@ -237,8 +237,8 @@ const SellerCalendar = () => {
                         margin: 20px 0;
                     }
                 `}
-                </style>
-            </div>
+            </style>
+        </div>
     );
 };
 
