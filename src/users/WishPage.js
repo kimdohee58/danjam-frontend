@@ -41,21 +41,26 @@ const WishPage = () => {
     }, [page])
 
     return (
-        <div ref={listRef} style={{ height: '80vh', overflowY: 'scroll'}}>
-            {items && items.map(item => (
-                <div key={item.id} style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                    {/*TODO : 상세보기 들어가는 링크 확인 후 넣기*/}
-                    <Link to={`/dorms/${item.dormId}`} >
-                        <h3>{item.dormName}</h3>
-                    </Link>
-                    <p>{item.dormDescription}</p>
+        <>
+            {items.length !== 0 ? (
+                <div className="wishcontainer" ref={listRef}>
+                    {items.map(item => (
+                        <div className="wishbox" key={item.id}>
+                            {/TODO : 상세보기 들어가는 링크 확인 후 넣기/}
+                            <Link to={`/dorms/${item.dormId}`} >
+                                <h3>{item.dormName}</h3>
+                            </Link>
+                            <p>{item.dormDescription}</p>
+                        </div>
+                    ))}
+                    {hasNext && !loading &&
+                        <button onClick={loadMoreItems}>더보기</button>
+                    }
                 </div>
-            ))}
-            {loading && <p>Loading...</p>}
-            {hasNext && !loading &&
-                <button onClick={loadMoreItems}>더보기</button>
-            }
-        </div>
+            ) : (
+                <h2>찜한 숙소가 없습니다.</h2>
+            )}
+        </>
     )
 }
 

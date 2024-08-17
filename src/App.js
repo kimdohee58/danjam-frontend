@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from 'react-router-dom';
 import Insert from './dorm/Insert';
 import AInsert from './amenity/AInsert';
 import RInsert from './room/RInsert';
@@ -16,39 +16,43 @@ import MyPage from './users/MyPage';
 import Privacy from './users/Privacy';
 import Bookings from './users/Bookings';
 import WishPage from './users/WishPage';
+import Search from "./search/Search";
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={<Layout />}>
-            <Route path="login" element={<Auth />} />
-            <Route path="signUp" element={<Register />} />
-            <Route index element={<Main />} />
-            <Route path="dorm/insert" element={<Insert />} />
-            <Route path="amenity/AInsert/:id" element={<AInsert />} />
-            <Route path="room/RInsert/:id" element={<RInsert />} />
-            <Route path="seller">
-                <Route path="SellerList" element={<SellerList />} />
-                <Route path="SellerCalendar" element={<SellerCalendar />} />
-                <Route path="SellerCalendar2" element={<SellerCalendar2 />} />
-            </Route>
-            <Route path="admin">
-                <Route path="Approve" element={<Approve />} />
-                <Route path="MemberList" element={<MemberList />} />
-            </Route>
-            <Route path="users">
-                <Route path=":id/my-page" element={<MyPage />}>
+        createRoutesFromElements(
+            <Route path="/" element={<Layout/>}>
+                <Route path="login" element={<Auth/>}/>
+                <Route path="signUp" element={<Register/>}/>
+                <Route path="/">
+                    <Route index element={<Main/>}/>
+                    {/*<Route path="search/Search" element={<Search/>}/>*/}
+                </Route>
+                <Route path="dorm/insert" element={<Insert/>}/>
+                <Route path="amenity/AInsert/:id" element={<AInsert/>}/>
+                <Route path="room/RInsert/:id" element={<RInsert/>}/>
+                <Route path="seller">
+                    <Route path="SellerList" element={<SellerList/>}/>
+                    <Route path="SellerCalendar" element={<SellerCalendar/>}/>
+                    <Route path="SellerCalendar2" element={<SellerCalendar2/>}/>
+                </Route>
+                <Route path="admin">
+                    <Route path="Approve" element={<Approve/>}/>
+                    <Route path="MemberList" element={<MemberList/>}/>
+                </Route>
+
+                <Route path="users/:id/my-page" >
                     <Route path="privacy" element={<Privacy />} />
                     <Route path="bookings" element={<Bookings />} />
                     <Route path="wishes" element={<WishPage />} />
-                    <Route path="reservations" element={<SellerCalendar2 />} />
                 </Route>
+
             </Route>
-        </Route>
+        )
     )
-);
+;
 
 function App() {
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={router}/>;
 }
 
 export default App;
