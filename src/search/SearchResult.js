@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {format} from "date-fns";
 import DormCard from "./DormCard";
+import {dateFormat} from "react-big-calendar/lib/utils/propTypes";
 
 function SearchResult(props) {
     let search = ({});
@@ -18,6 +19,7 @@ function SearchResult(props) {
         person: props.search.person,
     })
     console.log('SearchResult: ', search)
+    console.log('userInfo', props.userInfo)
 
     // filter
     const [isChecked, setIsChecked] = useState(false)
@@ -263,7 +265,7 @@ function SearchResult(props) {
     }
 
     let moveToDorm = (id) => {
-        navigate('dorm/' + id, {state: {searchInfo: searchInfo} })
+        navigate('dorm/' + id, {state: {searchInfo: searchInfo, userInfo: props.userInfo} })
     }
 
     return (

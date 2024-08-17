@@ -136,7 +136,7 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const DormDetails = () => {
+const DormDetails = (props) => {
     const [dorm, setDorm] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [user, setUser] = useState(null);
@@ -237,7 +237,7 @@ const DormDetails = () => {
             }
         };
         navigate(`/bookings/${user.id}?dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${room.person}&checkIn=${room.checkIn}&checkOut=${room.checkOut}&roomImg=${room.img}&reviewAvg=${room.reviewAvg}&price=${room.price}&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.name)}&phoneNumber=${user.phoneNumber}`, {
-            state: { bookingInfo }
+            state: { bookingInfo: bookingInfo, userInfo: props.userInfo }
         });
     };
 
