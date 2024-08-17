@@ -5,6 +5,62 @@ import DatePicker from "react-datepicker";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "./SearchResult";
+import TestList from "./TestList";
+import styled from 'styled-components';
+
+// Styled components
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+`;
+
+const Header = styled.h1`
+    cursor: pointer;
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+`;
+
+const FormContainer = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+`;
+
+const Select = styled.select`
+    padding: 10px;
+    font-size: 1rem;
+`;
+
+const DatePickerWrapper = styled(DatePicker)`
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+`;
+
+const PersonSelector = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+`;
+
+const PersonButton = styled(Button)`
+    margin: 0 5px;
+`;
+
+const SearchButton = styled(Button)`
+    background-color: #007bff;
+    border: none;
+    margin-left: 10px;
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
 
 function Search() {
     const navigate = useNavigate();
@@ -83,11 +139,10 @@ function Search() {
     // https://ityranno.tistory.com/entry/react-Spring-Boot-Spring-Boot-%EB%8D%B0%EC%9D%B4%ED%84%B0-react%EC%97%90-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0
 
     return (
-        <>
-            <h1 onClick={toMain}>{'단잠'}</h1>
-            <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                {/* https://wazacs.tistory.com/31 */}
-                <select onChange={handleSelect} value={selectedCity}>
+        <Container>
+            <Header onClick={toMain}>{'단잠'}</Header>
+            <FormContainer>
+                <Select onChange={handleSelect} value={selectedCity}>
                     <option value={'선택'} key={'선택'}>
                         도시 선택
                     </option>
@@ -96,36 +151,31 @@ function Search() {
                             {item}
                         </option>
                     ))}
-                </select>
+                </Select>
 
-                {/* calendar */}
-                <DatePicker
+                <DatePickerWrapper
                     selectsRange={true}
-                    className="datepicker"
-                    // locale={ko}
                     dateFormat="MM월 dd일"
-                    // selected={selectedDate.checkIn}
                     startDate={selectedDate.checkIn}
                     endDate={selectedDate.checkOut}
-                    minDate={new Date()} // minDate 이전 날짜 선택 불가
-                    maxDate={new Date('2025-12-31')} // maxDate 이후 날짜 선택 불가
-                    onChange={setChangeDate}/>
+                    minDate={new Date()}
+                    maxDate={new Date('2025-12-31')}
+                    onChange={setChangeDate} />
 
-                {/* person */}
-                <div>
+                <PersonSelector>
                     인원 선택
-                    <Button onClick={onMinus}>-</Button>
+                    <PersonButton onClick={onMinus}>-</PersonButton>
                     {selectedPerson}
-                    <Button onClick={onPlus}>+</Button>
-                </div>
-                <Button onClick={onSubmit}>검색</Button>
-            </div>
+                    <PersonButton onClick={onPlus}>+</PersonButton>
+                    <SearchButton onClick={onSubmit}>검색</SearchButton>
+                </PersonSelector>
+            </FormContainer>
             <div>
                 {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
-                    <List/> : <SearchResult search={search}/>}
+                    <List /> : <SearchResult search={search} />}
             </div>
-        </>
+        </Container>
     );
 }
 
-export default Search
+export default Search;
