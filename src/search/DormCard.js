@@ -72,7 +72,7 @@ const DormCard = ({dorm, isWish, toggleWish}) => {
     let navigate = useNavigate();
 
     const moveToDorm = () => {
-        navigate('dorm/showOne/' + dorm.id)
+        navigate('dorm/' + dorm.id)
     };
 
     const nextImage = (e) => {

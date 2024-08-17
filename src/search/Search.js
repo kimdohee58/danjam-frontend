@@ -191,7 +191,7 @@ const SubmitButton = styled(Button)`
     }
 `;
 
-function Search() {
+function Search(props) {
     const navigate = useNavigate();
 
     const [search, setSearch] = useState({
@@ -203,7 +203,7 @@ function Search() {
 
     const [selectedCity, setSelectedCity] = useState('선택');
     const [selectedDate, setSelectedDate] = useState({
-        checkIn: null,
+        checkIn: new Date(),
         checkOut: null,
     });
     const [selectedPerson, setSelectedPerson] = useState(0);
@@ -313,7 +313,7 @@ function Search() {
 
             <div style={{ marginTop: '20px', width: '100%', maxWidth: '1400px' }}>
                 {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
-                    <List /> : <SearchResult search={search} />}
+                    <List userInfo={props.userInfo}/> : <SearchResult search={search} userInfo={props.userInfo} />}
             </div>
         </Container>
     );
