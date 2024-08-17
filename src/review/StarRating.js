@@ -19,4 +19,5 @@ const StarRating = ({ rate }) => {
     );
 };
 
+
 export default StarRating;

@@ -16,7 +16,8 @@ import MyPage from './users/MyPage';
 import Privacy from './users/Privacy';
 import Bookings from './users/Bookings';
 import WishPage from './users/WishPage';
-import Search from "./search/Search";
+import DormOne from "./dorm/DormOne";
+
 
 const router = createBrowserRouter(
         createRoutesFromElements(
@@ -27,6 +28,8 @@ const router = createBrowserRouter(
                     <Route index element={<Main/>}/>
                     {/*<Route path="search/Search" element={<Search/>}/>*/}
                 </Route>
+
+                <Route path="dorm/:id" element={<DormOne/>}/>
                 <Route path="dorm/insert" element={<Insert/>}/>
                 <Route path="amenity/AInsert/:id" element={<AInsert/>}/>
                 <Route path="room/RInsert/:id" element={<RInsert/>}/>

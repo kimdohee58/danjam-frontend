@@ -192,5 +192,4 @@ const ReviewListModal = ({isOpen, onRequestClose, reviews, stats, from = {}}) =>
         </StyledModal>
     );
 };
-
 export default ReviewListModal;

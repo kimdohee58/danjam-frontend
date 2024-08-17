@@ -1,0 +1,137 @@
+/*
+.shadow-common {
+    box-shadow:
+            -1px -1px 20px 1px rgba(255, 255, 255, 1),
+            -4px -4px 5px 2px rgba(255, 255, 255, 1),
+            7px 7px 20px 3px rgba(0, 0, 0, 0.4),
+            4px 4px 5px 4px rgba(0, 0, 0, 0.3); !*원래 여기 px 다 0으로 고정 되어 있었음.*!
+}
+
+.transition-common {
+    transition: all 500ms ease;
+}
+
+!* .btn-6 스타일링  구글에서 갖고 온 코드임.  예약하기 버튼에 다 넣기.*!
+.btn-6 {
+    background: rgb(247, 150, 192);
+    background: radial-gradient(circle, rgba(247, 150, 192, 1) 0%, rgba(118, 174, 241, 1) 100%);
+    line-height: 42px;
+    padding: 0;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-6 span {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-6:before,
+.btn-6:after,
+.btn-6 span:before,
+.btn-6 span:after {
+    position: absolute;
+    content: "";
+    background-color: transparent;
+}
+
+.btn-6:before,
+.btn-6:after {
+    width: 1px;
+    height: 0%;
+}
+
+.btn-6:before {
+    right: 0;
+    top: 0;
+}
+
+.btn-6:after {
+    left: 0;
+    bottom: 0;
+}
+
+.btn-6 span:before,
+.btn-6 span:after {
+    width: 0%;
+    height: 0.5px;
+}
+
+.btn-6 span:before {
+    left: 0;
+    top: 0;
+}
+
+.btn-6 span:after {
+    right: 0;
+    bottom: 0;
+}
+
+.btn-6:hover {
+    background: transparent;
+    color: #76aef1;
+    box-shadow: none;
+}
+
+.btn-6:hover:before,
+.btn-6:hover:after,
+.btn-6 span:hover:before,
+.btn-6 span:hover:after {
+    width: 100%;
+    height: 100%;
+}
+
+!* 추가적인 공통 속성 적용 *!
+.btn-6:before,
+.btn-6:after,
+.btn-6 span:before,
+.btn-6 span:after {
+}
+
+
+.container {
+    font-family: arial;
+    font-size: 24px;
+    margin: 25px;
+    width: 350px;
+    height: 200px;
+    outline: dashed 1px black;
+    !* 설정 *!
+    position: relative;
+}
+
+.child {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    !* 수직 중앙 정렬하기 *!
+    position: absolute;
+    top: 50%;
+    margin-top: -25px; !* 이 요소 높이의 절반 *!
+}
+
+
+
+!*Flexbox*!
+!*부모 태그인 .container가 Flexbox를 사용하여 자식 요소들을 수평 및 수직 중앙에 배치할 수 있음. *!
+.container {
+    display: flex;
+    justify-content: center; !* 수평 중앙 정렬 *!
+    align-items: center; !* 수직 중앙 정렬 *!
+    font-family: arial;
+    font-size: 24px;
+    margin: 25px;
+    width: 350px;
+    height: 200px;
+    outline: dashed 1px black;
+    position: relative;
+}
+
+
+h1 {
+    text-align: center;  !* 텍스트 중앙 정렬 *!
+    font-weight: normal; !* 글꼴 두께를 normal로 설정 엄청 두꺼움. *!
+}
+*/
