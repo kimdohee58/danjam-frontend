@@ -1,82 +1,87 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import axios from 'axios'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function Auth() {
+function Auth({ onSuccess }) { // Accept onSuccess as a prop
     const [user, setUser] = useState({
         email: '',
         password: '',
-    })
+    });
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const onSignUp = () => {
-        navigate('/signUp')
-    }
+        navigate('/signUp');
+    };
 
     const onChange = (e) => {
-        const {name, value} = e.target
+        const { name, value } = e.target;
         setUser({
             ...user,
             [name]: value,
-        })
-    }
+        });
+    };
 
     const onSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            // security에서 formLogin으로 받기 때문에 우리도 form 형식으로 데이터를 보내야 함
-            const formData = new FormData()
-            formData.append('username', user.email)
-            formData.append('password', user.password)
+            // Security requires formLogin, so we use FormData
+            const formData = new FormData();
+            formData.append('username', user.email);
+            formData.append('password', user.password);
 
             const resp = await axios({
                 url: 'http://localhost:8080/users/auth',
                 method: 'POST',
                 data: formData,
                 withCredentials: true,
-            })
+            });
 
-            console.log(resp.data.result)
-            // if (resp.status === 200) {
-                if (resp.status === 200 && resp.data.result === 'success') {
-                /*const userInfo = {
-                          id: resp.data.id,
-                          role: resp.data.role,
-                          nickname: resp.data.nickname,
-                        }
-                        navigate('/', { state: { userInfo: userInfo } })*/
-                navigate('/')
+            console.log(resp.data.result);
+            if (resp.status === 200 && resp.data.result === 'success') {
+                const userInfo = {
+                    id: resp.data.id,
+                    role: resp.data.role,
+                    name: resp.data.name,
+                };
+
+                // Navigate and pass userInfo in the state
+                navigate('/', { state: { userInfo: userInfo } });
+
+                // Call onSuccess prop function if provided
+                if (onSuccess) {
+                    onSuccess();
+                }
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
-    const {email, password} = user
+    const { email, password } = user;
 
     return (
         <form onSubmit={onSubmit}>
             <input
-                type={'email'}
-                name={'email'}
-                value={user.email}
+                type='email'
+                name='email'
+                value={email}
                 onChange={onChange}
-                placeholder={'email'}
+                placeholder='email'
             />
             <input
-                type={'password'}
-                name={'password'}
-                value={user.password}
+                type='password'
+                name='password'
+                value={password}
                 onChange={onChange}
-                placeholder={'password'}
+                placeholder='password'
             />
-            <button type={'submit'}>{'로그인'}</button>
-            <button type={'button'} onClick={onSignUp}>
-                {'회원가입'}
+            <button type='submit'>로그인</button>
+            <button type='button' onClick={onSignUp}>
+                회원가입
             </button>
         </form>
-    )
+    );
 }
 
-export default Auth
+export default Auth;

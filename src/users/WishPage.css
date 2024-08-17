@@ -1,0 +1,14 @@
+.wishcontainer {
+    height: 80vh;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.wishcontainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.wishbox {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
