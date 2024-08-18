@@ -9,17 +9,22 @@ const Button = styled.div`
     right: 10px;
     font-size: 20px;
     cursor: pointer;
-    color: ${props => (props.isWish ? 'red' : 'gray')};
     transition: transform 0.2s ease-in-out;
 
     &:hover {
         transform: scale(1.2);
     }
+
+    svg {
+        color: ${props => (props.isWish ? 'red' : 'gray')};
+    }
 `;
 
-
 const WishButton = ({ isWish, toggleWish }) => (
-    <Button onClick={toggleWish} className={isWish ? 'wish-active' : 'wish-inactive'}>
+    <Button onClick={(e) => {
+        e.stopPropagation();
+        toggleWish();
+    }} isWish={isWish}>
         {isWish ? <FaHeart /> : <FaRegHeart />}
     </Button>
 );

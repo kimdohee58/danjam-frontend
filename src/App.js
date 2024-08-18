@@ -21,6 +21,9 @@ import ReviewCard from "./review/ReviewCard";
 import ReviewList from "./review/ReviewList";
 import ReviewWriteModal from "./review/ReviewWriteModal";
 import ReviewListModal from "./review/ReviewListModal";
+import FailPage from "./payment/FailPage";
+import SuccessPage from "./payment/SuccessPage";
+import Booking from "./booking/Booking";
 
 
 const router = createBrowserRouter(
@@ -52,6 +55,10 @@ const router = createBrowserRouter(
                     <Route path="bookings" element={<Bookings />} />
                     <Route path="wishes" element={<WishPage />} />
                 </Route>
+
+                <Route path="bookings/:id" element={<Booking />} />
+                <Route path="payments-success" element={<SuccessPage />} />
+                <Route path="payments-fail" element={<FailPage />} />
 
                 <Route path="review">
                     <Route path="ReviewWriteModal" element={<ReviewWriteModal/>}/>
