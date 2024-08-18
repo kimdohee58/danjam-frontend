@@ -259,10 +259,12 @@ function SearchResult(props) {
 
     // 옵션 선택 정보 넘기기
     const searchInfo = {
+        city: search.city,
         checkIn: search.checkIn,
         checkOut: search.checkOut,
         person: search.person,
     }
+    console.log(searchInfo)
 
     let moveToDorm = (id) => {
         navigate('dorm/' + id, {state: {searchInfo: searchInfo, userInfo: props.userInfo} })
@@ -305,7 +307,7 @@ function SearchResult(props) {
                             dorm={dorm}
                             isWish={isWish}
                             toggleWish={() => toggleWish(dorm.id)}
-                            onClick={() => moveToDorm(dorm.id)}
+                            goToDorm={() => moveToDorm(dorm.id)}
                         />
                     ))}
                     {hasMore && (

@@ -203,7 +203,7 @@ function Search(props) {
 
     const [selectedCity, setSelectedCity] = useState('선택');
     const [selectedDate, setSelectedDate] = useState({
-        checkIn: new Date(),
+        checkIn: null,
         checkOut: null,
     });
     const [selectedPerson, setSelectedPerson] = useState(0);
