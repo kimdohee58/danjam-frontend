@@ -6,13 +6,7 @@ import DormCard from "./DormCard";
 import {dateFormat} from "react-big-calendar/lib/utils/propTypes";
 
 function SearchResult(props) {
-    let search = ({});
-    if (props.search.date.checkOut === null) {
-        props.search.date.checkOut = new Date()
-    } else if (props.search.date.checkIn === null) {
-        props.search.date.checkIn = new Date()
-    }
-    search = ({
+    const search = ({
         city: props.search.city,
         checkIn: format(props.search.date.checkIn, 'yyyy-MM-dd 15:00:00'),
         checkOut: format(props.search.date.checkOut, 'yyyy-MM-dd 11:00:00'),

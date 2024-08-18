@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import List from './List';
 import SearchResult from './SearchResult';
 import styled from 'styled-components';
+import {addDays} from "date-fns";
 
 // Styled components
 const Container = styled.div`
@@ -44,15 +45,15 @@ const SelectWrapper = styled.div`
     min-width: 200px; /* 최소 가로 크기 지정 */
 `;
 
-const DatePickerWrapper = styled.div`
+/*const DatePickerWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 2;
     position: relative;
     margin: 0 10px;
-    min-width: 200px; /* 최소 가로 크기 지정 */
-`;
+    min-width: 200px; /!* 최소 가로 크기 지정 *!/
+`;*/
 
 const PersonSelector = styled.div`
     position: relative;
@@ -115,8 +116,61 @@ const CityButton = styled.div`
         background-color: #f8f8f8;
     }
 `;
+const DatePickerWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
 
 const DatePickerLabel = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2em;
+    //color: #333;
+    font-colz;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    padding: 12px 20px;
+    background-color: #283544;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+    user-select: none;
+    margin-bottom: 5px;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    &:hover {
+        background-color: #f8f8f8;
+    }
+`;
+
+const StyledDatePicker = styled(DatePicker)`
+  background-color: #fff; /* 흰색 배경 */
+  color: #000; /* 검정색 글자 */
+  border: 1px solid #ccc; /* 회색 테두리 */
+  border-radius: 5px;
+  padding: 10px;
+
+  .react-datepicker__header {
+    background-color: #007a75; /* 검정색 배경 */
+    color: #fff; /* 흰색 글자 */
+  }
+
+  .react-datepicker__day--selected {
+    background-color: #007a75; /* 검정색 배경 */
+    color: #fff; /* 흰색 글자 */
+  }
+
+  .react-datepicker__day--in-selecting-range {
+    background-color: #ccc; /* 연한 회색 배경 */
+  }
+
+  .react-datepicker__triangle {
+    display: none; /* 삼각형 숨기기 */
+  }
+`;
+/*const DatePickerLabel = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,7 +191,7 @@ const DatePickerLabel = styled.div`
     &:hover {
         background-color: #f8f8f8;
     }
-`;
+`;*/
 
 const PersonLabel = styled.div`
     display: flex;
@@ -262,6 +316,12 @@ function Search(props) {
     };
 
     const onSubmit = () => {
+        if (selectedDate.checkIn === '' && selectedDate.checkOut === '') {
+            setSelectedDate({
+                checkIn: new Date(),
+                checkout: addDays(new Date(), 1),
+            })
+        }
         setSearch({
             city: selectedCity,
             date: selectedDate,
@@ -296,7 +356,9 @@ function Search(props) {
                             : '체크인 / 체크아웃'}
                     </DatePickerLabel>
                     {datePickerVisible && (
-                        <DatePicker
+                        <StyledDatePicker
+                        // <DatePicker
+                            shouldCloseOnSelect
                             selectsRange={true}
                             dateFormat="MM월 dd일"
                             startDate={selectedDate.checkIn}
@@ -306,6 +368,7 @@ function Search(props) {
                             onChange={setChangeDate}
                             className="datepicker"
                             inline
+                            autoClose={true}
                         />
                     )}
                 </DatePickerWrapper>

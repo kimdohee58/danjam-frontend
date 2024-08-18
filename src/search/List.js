@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import DormCard from "./DormCard";
-import { format } from "date-fns";
+import {addDays, format} from "date-fns";
 import styled from "styled-components";
 
 const LoadMoreButton = styled.button`
