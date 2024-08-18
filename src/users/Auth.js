@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styled from 'styled-components';
 
-function Auth({ onSuccess }) { // Accept onSuccess as a prop
+function Auth({ onSuccess }) {
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -25,7 +26,6 @@ function Auth({ onSuccess }) { // Accept onSuccess as a prop
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Security requires formLogin, so we use FormData
             const formData = new FormData();
             formData.append('username', user.email);
             formData.append('password', user.password);
@@ -45,10 +45,8 @@ function Auth({ onSuccess }) { // Accept onSuccess as a prop
                     role: resp.data.role,
                 };
 
-                // Navigate and pass userInfo in the state
                 navigate('/', { state: { userInfo: userInfo } });
 
-                // Call onSuccess prop function if provided
                 if (onSuccess) {
                     onSuccess();
                 }
@@ -61,27 +59,73 @@ function Auth({ onSuccess }) { // Accept onSuccess as a prop
     const { email, password } = user;
 
     return (
-        <form onSubmit={onSubmit}>
-            <input
+        <Form onSubmit={onSubmit}>
+            <Input
                 type='email'
                 name='email'
                 value={email}
                 onChange={onChange}
-                placeholder='email'
+                placeholder='Email'
             />
-            <input
+            <Input
                 type='password'
                 name='password'
                 value={password}
                 onChange={onChange}
-                placeholder='password'
+                placeholder='Password'
             />
-            <button type='submit'>로그인</button>
-            <button type='button' onClick={onSignUp}>
+            <Button type='submit'>로그인</Button>
+            <Button type='button' onClick={onSignUp}>
                 회원가입
-            </button>
-        </form>
+            </Button>
+        </Form>
     );
 }
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+`;
+
+const Input = styled.input`
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    &::placeholder {
+        color: #888;
+    }
+`;
+
+const Button = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+    &:last-of-type {
+        background-color: #28a745;
+    }
+
+    &:hover {
+        background-color: #0056b3;
+    }
+
+    &:last-of-type:hover {
+        background-color: #218838;
+    }
+`;
 
 export default Auth;

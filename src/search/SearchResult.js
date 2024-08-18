@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {format} from "date-fns";
+import {addDays, format, isSameDay} from "date-fns";
 import DormCard from "./DormCard";
 import {dateFormat} from "react-big-calendar/lib/utils/propTypes";
 
@@ -259,9 +259,8 @@ function SearchResult(props) {
 
     // 옵션 선택 정보 넘기기
     const searchInfo = {
-        city: search.city,
         checkIn: search.checkIn,
-        checkOut: search.checkOut,
+        checkOut: isSameDay(search.checkIn, search.checkOut) ? format(addDays(search.checkOut, 1), 'yyyy-MM-dd 11:00:00') : search.checkOut,
         person: search.person,
     }
     console.log(searchInfo)

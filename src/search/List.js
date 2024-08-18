@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import DormCard from "./DormCard";
 import * as dorms from "react-bootstrap/ElementChildren";
-import {format} from "date-fns";
+import {addDays, format} from "date-fns";
 
 function List(props) {
     // 리스트
@@ -95,7 +95,7 @@ function List(props) {
     const searchInfo = {
         city: '선택',
         checkIn: format(new Date(), 'yyyy-MM-dd 15:00:00'),
-        checkOut: format(new Date(), 'yyyy-MM-dd 11:00:00'),
+        checkOut: format(addDays(new Date(), 1), 'yyyy-MM-dd 11:00:00'),
         person: 2,
     }
 
