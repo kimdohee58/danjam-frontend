@@ -254,8 +254,10 @@ function Layout() {
     const [showBookingListModal, setShowBookingListModal] = useState(false);
     const [userInfo, setUserInfo] = useState({
         id: '',
+        email: '',
         name: '',
-        role: ''
+        phoneNum: '',
+        role: '',
     });
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -324,7 +326,7 @@ function Layout() {
     return (
         <AppWrapper>
             <Header>
-                <Logo src={logo} alt="Company Logo" onClick={(toMain) => navigate('/')} />
+                <Logo src={logo} alt="Company Logo" onClick={(toMain) => navigate('/', { state: userInfo })} />
 
                 {/*<Search/>*/}
 

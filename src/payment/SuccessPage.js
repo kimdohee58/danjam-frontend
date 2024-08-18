@@ -33,14 +33,14 @@ function SuccessPage() {
             if (data && !response.ok) {
                 throw { message: data.message, code: data.code }
             }
-            
+
             return data
         }
-        
+
         confirm()
             .then((data) => {
                 setResponseData(data)
-                navigate(`/my-page/${userId}/bookings`);
+                navigate(`/users/${userId}/my-page/bookings`);
             })
             .catch((error) => {
                 navigate(`/payments-fail?code=${error.code}&message=${error.message}`)
