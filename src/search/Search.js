@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import List from './List';
 import SearchResult from './SearchResult';
 import styled from 'styled-components';
@@ -193,6 +193,18 @@ const SubmitButton = styled(Button)`
 
 function Search(props) {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    let userInfo = {
+        id: '',
+        email: '',
+        name: '',
+        phoneNum: '',
+        role: '',
+    }
+    if (location.state != null) {
+        userInfo = location.state.userInfo
+    }
 
     const [search, setSearch] = useState({
         city: '선택',
@@ -313,7 +325,7 @@ function Search(props) {
 
             <div style={{ marginTop: '20px', width: '100%', maxWidth: '1400px' }}>
                 {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
-                    <List userInfo={props.userInfo}/> : <SearchResult search={search} userInfo={props.userInfo} />}
+                    <List userInfo={userInfo}/> : <SearchResult search={search} userInfo={userInfo} />}
             </div>
         </Container>
     );

@@ -1,44 +1,108 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Button, Col, Row, Carousel, Card } from 'react-bootstrap';
+import {Button, Col, Row} from 'react-bootstrap';
 import ReviewList from "../review/ReviewList";
+import Modal from "react-modal";
+import Auth from "../users/Auth";
 
-// Polly Pocket 테마 색상
+
 const colors = {
-    primary: '#FFB6C1', // 연한 핑크
-    secondary: '#FFD700', // 밝은 금색
-    background: '#FFF0F5', // 라벤더 블러쉬
-    text: '#FF69B4', // 핫핑크
-    button: '#FF69B4', // 버튼 색상
-    buttonHover: '#FF1493', // 버튼 호버 색상
+    primary: '#020D1D', // Dark Blue Black
+    secondary: '#96A1AA', // Light Gray Blue
+    background: '#DFE2E4', // Light Gray
+    text: '#5D6976', // Medium Gray Blue
+    button: '#283544', // Dark Blue
+    buttonHover: '#020D1D', // Dark Blue Black
+    buttonActive: '#283544', // Dark Blue
 };
+
 
 // 스타일드 컴포넌트
 const StyledContainer = styled.div`
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 0 auto;
     padding: 20px;
     background-color: ${colors.background};
-    border-radius: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-const Title = styled.h2`
-    text-align: center;
-    margin: 40px 0;
-    font-weight: bold;
+
+const TitleContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+`;
+
+const Title = styled.h4`
+    margin: 0;
+    font-size: 1.2rem;
     color: ${colors.text};
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+`;
+
+
+const ButtonGroup = styled.div`
+    margin: 0;
+`;
+
+const FeaturedImageContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 500px; // 크게 설정
+    overflow: hidden;
+    border-radius: 16px;
+    margin-bottom: 20px;
+`;
+
+const FeaturedImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // 이미지가 컨테이너를 꽉 채우도록 설정
+`;
+
+const HorizontalScrollContainer = styled.div`
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    scrollbar-width: thin; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+
+    ::-webkit-scrollbar {
+        width: 8px; /* For Chrome, Safari, and Opera */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: ${colors.primary};
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: ${colors.background};
+    }
+`;
+
+const ImageContainer = styled.div`
+    width: 100%;
+    height: 60%; // Adjust height for the image to take up more space
+    overflow: hidden;
+`;
+
+const Image = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // Ensure the image covers the container
 `;
 
 const DetailsGrid = styled.div`
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 10px 20px;
-    padding: 10px 0;
+    gap: 20px;
+    padding: 15px 0;
     border-bottom: 1px solid ${colors.primary};
+    margin-bottom: 20px;
 
     &:last-child {
         border-bottom: none;
@@ -46,7 +110,7 @@ const DetailsGrid = styled.div`
 `;
 
 const Label = styled.div`
-    font-weight: bold;
+    font-weight: 600;
     color: ${colors.text};
 `;
 
@@ -54,29 +118,10 @@ const Value = styled.div`
     color: ${colors.primary};
 `;
 
-const ButtonGroup = styled.div`
-    text-align: center;
-    margin-top: 40px;
-`;
-
-const StyledCarousel = styled(Carousel)`
-    margin-top: 20px;
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        filter: invert(100%);
-    }
-`;
-
-const CarouselImage = styled.img`
-    height: 350px;
-    object-fit: cover;
-    border-radius: 20px;
-`;
-
 const MapContainer = styled.div`
     width: 100%;
     height: 450px;
-    border-radius: 20px;
+    border-radius: 16px;
     position: relative;
     margin-top: 20px;
     background-color: ${colors.primary};
@@ -87,89 +132,165 @@ const MapControls = styled.div`
     top: 10px;
     right: 10px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 `;
 
-const RoomList = styled.div`
+const RoomListContainer = styled.div`
     margin-top: 40px;
+    overflow-x: auto; // Enable horizontal scrolling
+    display: flex;
+    padding-bottom: 20px; // Ensure there's space for the scrollbar
 `;
 
-const RoomCard = styled(Card)`
-    border-radius: 20px;
-    height: 100%;
-    border: 2px solid ${colors.primary};
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+const RoomCardContainer = styled.div`
+    position: relative;
+    border: 1px solid ${colors.primary};
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-right: 20px; // Space between cards
+    cursor: pointer;
+    width: 600px;
+    height: 500px;
+    display: flex; // Use flexbox to align children
+    flex-direction: column; // Arrange children vertically
 `;
 
-const RoomCardImage = styled(Card.Img)`
-    height: 180px;
-    object-fit: cover;
-    border-radius: 20px 20px 0 0;
-`;
-
-const RoomCardBody = styled(Card.Body)`
+const InfoContainer = styled.div`
+    padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 40%; // Ensure height is adjusted for the remaining space
+    box-sizing: border-box;
+    overflow: hidden; // Hide any overflowed content
 `;
 
 const StyledButton = styled(Button)`
-    background-color: ${colors.button}; 
+    background: linear-gradient(135deg, ${colors.button} 0%, ${colors.buttonHover} 100%);
     border: none;
     color: white;
-    padding: 12px 24px;
+    padding: 10px 20px;
     font-size: 16px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10px;
-    border-radius: 20px;
-    transition: background-color 0.3s, transform 0.3s;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
 
     &:hover {
-        background-color: ${colors.buttonHover};
+        background: linear-gradient(135deg, ${colors.buttonHover} 0%, ${colors.button} 100%);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         transform: translateY(-2px);
     }
 
     &:active {
-        background-color: ${colors.buttonHover};
+        background: ${colors.buttonActive};
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transform: translateY(0);
     }
 `;
 
-const DormDetails = () => {
+const iconMap = {
+    '금연': '🚭',
+    '냉장고': '🧊',
+    '다리미': '🧹',
+    '라운지': '🛋️',
+    '반려동물 동반 가능': '🐶',
+    '세탁기': '🧺',
+    '셀프 체크인/아웃': '🔑',
+    '수영장': '🏊',
+    '에어컨': '❄️',
+    '와이파이': '📶',
+    '욕조': '🛁',
+    '전기차': '🔋',
+    '조리 가능': '🍳',
+    '조식': '🥐',
+    '주방': '🍽️',
+    '주차 가능': '🅿️',
+    '헤어드라이어': '💇',
+    '헬스장': '🏋️',
+    '화재경보기': '🚨',
+    '흡연 가능': '🚬'
+};
+
+const AmenitiesList = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+`;
+
+const AmenityItem = styled.li`
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: ${colors.text};
+
+    &:before {
+        content: "${props => iconMap[props.name] || '❓'}"; // 기본 아이콘
+        margin-right: 10px;
+    }
+`;
+
+const customStyles = {
+    overlay: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 1,
+    },
+    content: {
+        width: "500px",
+        height: "350px",
+        margin: "auto",
+        borderRadius: "12px",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+        padding: "20px",
+    },
+};
+const DormDetails = (props) => {
+    const [showModal, setShowModal] = useState(false);
     const location = useLocation()
     const searchInfo = location.state.searchInfo
     const userInfo = location.state.userInfo
-    console.log(searchInfo, userInfo)
 
     const [dorm, setDorm] = useState(null);
     const [rooms, setRooms] = useState([]);
-    const [user, setUser] = useState(null);
-    const { id } = useParams();
+    //const [user, setUser] = useState(null);
+    const [amenities, setAmenities] = useState(null);
+
+    const [featuredImage, setFeaturedImage] = useState(null); // 최상단 사진 상태 추가
+    const {id} = useParams();
     const navigate = useNavigate();
 
+    const IMAGE_BASE_URL = 'http://localhost:8080/uploads/';
+    const getImageUrl = (imgDto) => `${IMAGE_BASE_URL}${imgDto.name}.${imgDto.ext}`;
+
+    console.log(amenities)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dormResponse = await axios.post(`http://localhost:8080/dorms/${id}`, searchInfo, {withCredentials:true});
-
-                // const dormResponse = await axios.get(`http://localhost:8080/dorms/${id}`, {withCredentials:true});
+                const dormResponse = await axios.post(`http://localhost:8080/dorms/${id}`, searchInfo, {withCredentials: true});
 
                 if (dormResponse.data.result === 'success') {
+                    // Transform rooms data to include image URLs
+                    const transformedRooms = dormResponse.data.rooms.map(room => ({
+                        ...room,
+                        images: room.images.map(imgDto => getImageUrl(imgDto))
+                    }));
+                    setAmenities(dormResponse.data.amenities)
                     setDorm(dormResponse.data);
-                    setRooms(dormResponse.data.rooms);
-                    console.log(dorm)
-                    console.log(rooms)
+                    setRooms(transformedRooms); // Set transformed rooms with image URLs
+                    setFeaturedImage(dormResponse.data.dormImages[0]); // 최상단 사진 초기화
                 } else {
                     console.error('숙소 정보를 가져오는 데 실패했습니다.');
                 }
-
-                const userResponse = await axios.get(`http://localhost:8080/users/1`);
-                if (userResponse.status === 200) {
-                    setUser(userResponse.data);
-                } else {
-                    console.error('유저 정보를 가져오는 데 실패했습니다.');
-                }
+                // const userResponse = await axios.get(`http://localhost:8080/users/1`);
+                // if (userResponse.status === 200) {
+                //     setUser(userResponse.data);
+                // } else {
+                //     console.error('유저 정보를 가져오는 데 실패했습니다.');
+                // }
             } catch (error) {
                 console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
             }
@@ -177,6 +298,7 @@ const DormDetails = () => {
 
         fetchData();
     }, [id]);
+
 
     useEffect(() => {
         if (dorm) {
@@ -233,121 +355,161 @@ const DormDetails = () => {
         }
     }, [dorm]);
 
-    if (!dorm || !user) {
+    if (!dorm) {
         return <div>로딩 중...</div>;
     }
 
     const handleBooking = (room) => {
-        const bookingInfo = {
-            user: {
-                email: user.email,
-                name: user.name,
-                phoneNumber: user.phoneNum
-            }
-        };
-        navigate(`/bookings/${user.id}?dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${room.person}&checkIn=${room.checkIn}&checkOut=${room.checkOut}&roomImg=${room.img}&reviewAvg=${room.reviewAvg}&price=${room.price}&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.name)}&phoneNumber=${user.phoneNumber}`, {
-            state: { bookingInfo: bookingInfo, userInfo: userInfo }
-        });
+        if (!userInfo || userInfo.id === '') {
+            handleOpenModal();
+        } else {
+            navigate(`/bookings/${userInfo.id}?dormId=${id}&dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${searchInfo.person}&checkIn=${searchInfo.checkIn}&checkOut=${searchInfo.checkOut}&roomImg=${room.img}&reviewAvg=${room.reviewAvg}&price=${room.price}`,
+                {state: {userInfo}}
+            );
+        }
+    };
+    const handleOpenModal = () => {
+        setShowModal(true);
+    }
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
+    const handleLoginSuccess = () => {
+        setShowModal(false);
+    }
+
+    const handleImageClick = (newImage) => {
+        setFeaturedImage(newImage); // 클릭된 이미지로 최상단 이미지 변경
     };
 
+
+    const BackButton = () => (
+        <StyledButton variant="secondary" onClick={() => window.history.back()}>
+            Back
+        </StyledButton>
+    );
+
     return (
-        <StyledContainer>
-            <Row className="justify-content-center">
-                <Col xs={12} md={10} lg={8}>
-                    <Title>호텔 상세 정보</Title>
+        <>
+            <StyledContainer>
+                <Row className="justify-content-center">
+                    <Col xs={12} md={10} lg={8}>
+                        <TitleContainer>
+                            <ButtonGroup>
+                                <BackButton/>
+                            </ButtonGroup>
+                            <Title>숙소 사진</Title>
+                        </TitleContainer>
+                        <FeaturedImageContainer>
+                            {featuredImage ? (
+                                <FeaturedImage src={`${featuredImage}`} alt="Featured Image"/>
+                            ) : (
+                                <FeaturedImage src="/default-placeholder-image.jpg" alt="No image available"/>
+                            )}
+                        </FeaturedImageContainer>
 
-                    {/* Details Grid */}
-                    <DetailsGrid>
-                        <Label>이름:</Label>
-                        <Value>{dorm.name}</Value>
-                    </DetailsGrid>
-                    <DetailsGrid>
-                        <Label>설명:</Label>
-                        <Value>{dorm.description}</Value>
-                    </DetailsGrid>
-                    <DetailsGrid>
-                        <Label>연락처:</Label>
-                        <Value>{dorm.contactNum}</Value>
-                    </DetailsGrid>
-                    <DetailsGrid>
-                        <Label>도시:</Label>
-                        <Value>{dorm.city}</Value>
-                    </DetailsGrid>
-                    <DetailsGrid>
-                        <Label>구/읍:</Label>
-                        <Value>{dorm.town}</Value>
-                    </DetailsGrid>
-                    <DetailsGrid>
-                        <Label>주소:</Label>
-                        <Value>{dorm.address}</Value>
-                    </DetailsGrid>
-
-                    <ButtonGroup>
-                        <Button variant="secondary" onClick={() => window.history.back()} style={{marginRight: '10px'}}>뒤로 가기</Button>
-                    </ButtonGroup>
-
-                    <h2 style={{fontWeight: 'bold', marginTop: '20px', color: colors.text}}>Images</h2>
-                    <StyledCarousel interval={3000} indicators={false}>
-                        {dorm.dormImages && dorm.dormImages.length > 0 ? (
-                            dorm.dormImages.map((imgName, index) => (
-                                <Carousel.Item key={index}>
-                                    <CarouselImage
-                                        src={`http://localhost:8080/uploads/${imgName}`}
-                                        alt={`Slide ${index + 1}`}
-                                    />
-                                </Carousel.Item>
-                            ))
-                        ) : (
-                            <Carousel.Item>
-                                <CarouselImage
-                                    src="/default-placeholder-image.jpg"
-                                    alt="No image available"
-                                />
-                            </Carousel.Item>
-                        )}
-                    </StyledCarousel>
-
-                    <h3 style={{ fontWeight: 'bold', color: colors.text, marginTop: '40px' }}>호텔 위치</h3>
-                    <MapContainer id="map">
-                        <MapControls>
-                            <Button id="btnZoomIn" variant="outline-primary">+</Button>
-                            <Button id="btnZoomOut" variant="outline-primary">-</Button>
-                        </MapControls>
-                    </MapContainer>
-
-                    {/* 리뷰 섹션 */}
-                    <ReviewList dormId={id} domrmId="review-section" />
-
-                    <RoomList>
-                        <h3 className="my-4" style={{ fontWeight: 'bold', color: colors.text }}>방 정보</h3>
-                        <Row>
-                            {rooms && rooms.length > 0 ? (
-                                rooms.map((room, index) => (
-                                    <Col md={4} key={index} className="mb-4">
-                                        <RoomCard>
-                                            <RoomCardImage
-                                                variant="top"
-                                                src={`http://localhost:8080/uploads/${room.name}`}
-                                                alt={room.name}
-                                            />
-                                            <RoomCardBody>
-                                                <Card.Title style={{ fontWeight: 'bold', color: colors.text }}>{room.name}</Card.Title>
-                                                <Card.Text style={{ color: colors.primary }}>{room.description}</Card.Text>
-                                                <Card.Text style={{ color: colors.primary }}><strong>가격:</strong> {room.price.toLocaleString()} 원/박</Card.Text>
-                                                <StyledButton variant="primary" onClick={() => handleBooking(room)}>예약하기</StyledButton>
-                                            </RoomCardBody>
-                                        </RoomCard>
-                                    </Col>
+                        <HorizontalScrollContainer>
+                            {dorm.dormImages && dorm.dormImages.length > 1 ? (
+                                dorm.dormImages.slice(1).map((imgName, index) => (
+                                    <ImageContainer key={index} onClick={() => handleImageClick(imgName)}>
+                                        <Image src={`${imgName}`} alt={`Slide ${index + 1}`}/>
+                                    </ImageContainer>
                                 ))
                             ) : (
-                                <p style={{ color: colors.text }}>이 호텔에는 방 정보가 없습니다.</p>
+                                <ImageContainer>
+                                    <Image src="/default-placeholder-image.jpg" alt="No image available"/>
+                                </ImageContainer>
                             )}
-                        </Row>
-                    </RoomList>
-                </Col>
-            </Row>
-        </StyledContainer>
+                        </HorizontalScrollContainer>
+
+                        <Title>숙소 정보</Title>
+                        <DetailsGrid>
+                            <Label>이름:</Label>
+                            <Value>{dorm.name}</Value>
+                        </DetailsGrid>
+                        <DetailsGrid>
+                            <Label>설명:</Label>
+                            <Value>{dorm.description}</Value>
+                        </DetailsGrid>
+                        <DetailsGrid>
+                            <Label>연락처:</Label>
+                            <Value>{dorm.contactNum}</Value>
+                        </DetailsGrid>
+                        <DetailsGrid>
+                            <Label>도시:</Label>
+                            <Value>{dorm.city}</Value>
+                        </DetailsGrid>
+                        <DetailsGrid>
+                            <Label>구/읍:</Label>
+                            <Value>{dorm.town}</Value>
+                        </DetailsGrid>
+                        <DetailsGrid>
+                            <Label>주소:</Label>
+                            <Value>{dorm.address}</Value>
+                        </DetailsGrid>
+
+                        {/* Amenities Section */}
+                        <Title>편의시설</Title>
+                        {amenities && amenities.length > 0 ? (
+                            <AmenitiesList>
+                                {amenities.map(amenity => (
+                                    <AmenityItem key={amenity.id} name={amenity.name}>
+                                        {amenity.name}
+                                    </AmenityItem>
+                                ))}
+                            </AmenitiesList>
+                        ) : (
+                            <p>편의시설 정보가 없습니다.</p>
+                        )}
+
+                        <hr/>
+                        <Title>호텔 위치</Title>
+                        <MapContainer id="map">
+                            <MapControls>
+                                <Button id="btnZoomIn" variant="outline-primary">+</Button>
+                                <Button id="btnZoomOut" variant="outline-primary">-</Button>
+                            </MapControls>
+                        </MapContainer>
+
+                        <hr/>
+                        <Title>방 정보</Title>
+                        <RoomListContainer>
+                            {rooms && rooms.length > 0 ? (
+                                rooms.map((room, index) => (
+                                    <RoomCardContainer key={index}>
+                                        <ImageContainer>
+                                            {room.images.length > 0 ? (
+                                                <Image src={`${room.images[0]}`} alt={room.name}/>
+                                            ) : (
+                                                <Image src="/default-placeholder-image.jpg" alt="No image available"/>
+                                            )}
+                                        </ImageContainer>
+                                        <InfoContainer>
+                                            <Title>{room.name}</Title>
+                                            <p>{room.description}</p>
+                                            <p><strong>가격:</strong> {room.price.toLocaleString()} 원/박</p>
+                                            <StyledButton variant="primary"
+                                                          onClick={() => handleBooking(room)}>예약하기</StyledButton>
+                                        </InfoContainer>
+                                    </RoomCardContainer>
+                                ))
+                            ) : (
+                                <p style={{color: colors.text}}>이 호텔에는 방 정보가 없습니다.</p>
+                            )}
+                        </RoomListContainer>
+
+                        <hr/>
+                        <ReviewList dormId={id} domrmId="review-section"/>
+                    </Col>
+                </Row>
+            </StyledContainer>
+
+            <Modal isOpen={showModal} onRequestClose={handleCloseModal} style={customStyles}>
+                <Auth onSuccess={handleLoginSuccess}/>
+            </Modal>
+        </>
     );
 };
 
 export default DormDetails;
+
