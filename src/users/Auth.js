@@ -41,8 +41,10 @@ function Auth({ onSuccess }) { // Accept onSuccess as a prop
             if (resp.status === 200 && resp.data.result === 'success') {
                 const userInfo = {
                     id: resp.data.id,
-                    role: resp.data.role,
                     name: resp.data.name,
+                    email: resp.date.email,
+                    phoneNum: resp.data.phoneNum,
+                    role: resp.data.role,
                 };
 
                 // Navigate and pass userInfo in the state
