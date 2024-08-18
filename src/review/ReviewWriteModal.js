@@ -1,8 +1,9 @@
 import Modal from "react-modal";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import {FaTimes} from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import StarRating from "./StarRating";
 
 Modal.setAppElement('#root');
 
@@ -24,12 +25,8 @@ const ModalHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     margin-bottom: 20px;
-`;
-
-const SelectedButton = styled.button`
-    
 `;
 
 const CloseButton = styled.button`
@@ -40,9 +37,26 @@ const CloseButton = styled.button`
 `;
 
 const TextArea = styled.textarea`
-    width: 100%;
+    width: 95%;
     height: 100px;
     margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    line-height: 1;
+    resize: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &:focus {
+        border-color: #2D3543;
+        box-shadow: 0 0 10px rgba(35, 44, 62, 0.74);
+        outline: none;
+    }
+
+    &::placeholder {
+        color: #aaa;
+    }
 `;
 
 const SubmitButton = styled.button`
@@ -63,11 +77,6 @@ const StarRatingContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-
-    .rate-display {
-        margin-top: 10px;
-        font-size: 18px;
-    }
 `;
 
 const TagContainer = styled.div`
@@ -89,43 +98,43 @@ const Overlay = styled.div`
 const TagButton = styled.button`
     padding: 10px 15px;
     border-radius: 20px;
-    border: 2px solid ${props => (props.$selected ? '#007bff' : '#ddd')};
-    background-color: ${props => (props.$selected ? '#007bff' : 'white')};
+    border: 2px solid ${props => (props.$selected ? 'black' : '#ddd')};
+    background-color: ${props => (props.$selected ? 'black' : 'white')};
     color: ${props => (props.$selected ? 'white' : 'black')};
     cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     opacity: ${props => (props.$disabled ? 0.5 : 1)};
 
     &:hover {
-        background-color: ${props => (props.$selected ? '#0056b3' : '#f0f0f0')};
-        border-color: ${props => (props.$selected ? '#0056b3' : '#ccc')};
+        background-color: ${props => (props.$selected ? 'black' : '#f0f0f0')};
+        border-color: ${props => (props.$selected ? 'black' : '#ccc')};
     }
 `;
 
-const ReviewWriteModal = ({isOpen, onRequestClose, bookingId, userId}) => {
+const ReviewWriteModal = ({ isOpen, onRequestClose, bookingId, userId }) => {
     const [content, setContent] = useState('');
     const [rate, setRate] = useState(0);
     const [selectedTags, setSelectedTags] = useState([]);
 
     const contentChange = (e) => {
-        setContent(e.target.value)
+        setContent(e.target.value);
     }
 
     const tags = [
-        {id: 1, topic: "위생", name: "위생이 좋아요", type: "P"},
-        {id: 2, topic: "위생", name: "위생이 나빠요", type: "N"},
-        {id: 3, topic: "소통", name: "소통이 잘돼요", type: "P"},
-        {id: 4, topic: "소통", name: "소통이 안돼요", type: "N"},
-        {id: 5, topic: "위치", name: "위치가 좋아요", type: "P"},
-        {id: 6, topic: "위치", name: "위치가 별로예요", type: "N"},
-        {id: 7, topic: "정보", name: "정보가 정확해요", type: "P"},
-        {id: 8, topic: "정보", name: "정보와 달라요", type: "N"},
-        {id: 9, topic: "체크인", name: "체크인이 수월해요", type: "P"},
-        {id: 10, topic: "체크인", name: "체크인이 불편해요", type: "N"},
-        {id: 11, topic: "가격", name: "가격대비 만족해요", type: "P"},
-        {id: 12, topic: "가격", name: "가격대비 불만족해요", type: "N"},
-        {id: 13, topic: "친절", name: "친절해요", type: "P"},
-        {id: 14, topic: "친절", name: "불친절해요", type: "N"}
+        { id: 1, topic: "위생", name: "위생이 좋아요", type: "P" },
+        { id: 2, topic: "위생", name: "위생이 나빠요", type: "N" },
+        { id: 3, topic: "소통", name: "소통이 잘돼요", type: "P" },
+        { id: 4, topic: "소통", name: "소통이 안돼요", type: "N" },
+        { id: 5, topic: "위치", name: "위치가 좋아요", type: "P" },
+        { id: 6, topic: "위치", name: "위치가 별로예요", type: "N" },
+        { id: 7, topic: "정보", name: "정보가 정확해요", type: "P" },
+        { id: 8, topic: "정보", name: "정보와 달라요", type: "N" },
+        { id: 9, topic: "체크인", name: "체크인이 수월해요", type: "P" },
+        { id: 10, topic: "체크인", name: "체크인이 불편해요", type: "N" },
+        { id: 11, topic: "가격", name: "가격대비 만족해요", type: "P" },
+        { id: 12, topic: "가격", name: "가격대비 불만족해요", type: "N" },
+        { id: 13, topic: "친절", name: "친절해요", type: "P" },
+        { id: 14, topic: "친절", name: "불친절해요", type: "N" }
     ];
 
     const handleTagClick = (clickedTag) => {
@@ -155,7 +164,6 @@ const ReviewWriteModal = ({isOpen, onRequestClose, bookingId, userId}) => {
                     user_id: userId
                 },
                 tags: selectedTags.map(tag => tag.id)
-
             };
 
             const resp = await axios.post('http://localhost:8080/review/write', requestBody, {
@@ -169,13 +177,9 @@ const ReviewWriteModal = ({isOpen, onRequestClose, bookingId, userId}) => {
         }
     };
 
-    const handleRateChange = (e) => {
-        let value = parseFloat(e.target.value);
-        if (value < 0) value = 0;
-        if (value > 5) value = 5;
-        setRate(value);
+    const handleRateChange = (newRate) => {
+        setRate(newRate);
     };
-
 
     return (
         <StyledModal
@@ -186,20 +190,12 @@ const ReviewWriteModal = ({isOpen, onRequestClose, bookingId, userId}) => {
             overlayElement={(props, contentElement) => <Overlay {...props}>{contentElement}</Overlay>}
         >
             <ModalHeader>
-                <h2>리뷰 작성</h2>
+                <p>리뷰 작성</p>
                 <CloseButton onClick={onRequestClose}><FaTimes /></CloseButton>
             </ModalHeader>
             <StarRatingContainer>
-                <div className="rate-display">별점 (0.0 ~ 5.0):</div>
-                <input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="5"
-                    value={rate}
-                    onChange={handleRateChange}
-                    className="rate-input"
-                />
+                <StarRating size={30} rate={rate} onRateChange={handleRateChange} />
+                <p>현재 별점 (0.5 ~ 5.0) : {rate.toFixed(1)}</p>
             </StarRatingContainer>
             <TextArea
                 value={content}
@@ -226,6 +222,7 @@ const ReviewWriteModal = ({isOpen, onRequestClose, bookingId, userId}) => {
                 })}
             </TagContainer>
             <SubmitButton onClick={handleSubmit}>제출</SubmitButton>
+            <button onClick={onRequestClose}>닫기</button>
         </StyledModal>
     );
 };
