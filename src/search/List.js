@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import DormCard from "./DormCard";
 import * as dorms from "react-bootstrap/ElementChildren";
-import {format} from "date-fns";
+import {addDays, format} from "date-fns";
 
 function List(props) {
     // 리스트
@@ -33,8 +33,9 @@ function List(props) {
 
 
     // 위시한테 값 넘겨주기
-    // const location = useLocation();
+    const location = useLocation();
     // let userInfo = location.state.userInfo;
+    // console.log("location userInfo", userInfo)
     const navigate = useNavigate();
 
 
@@ -92,8 +93,9 @@ function List(props) {
 
     // 호텔 상세보기-옵션 선택 정보 넘기기
     const searchInfo = {
+        city: '선택',
         checkIn: format(new Date(), 'yyyy-MM-dd 15:00:00'),
-        checkOut: format(new Date(), 'yyyy-MM-dd 11:00:00'),
+        checkOut: format(addDays(new Date(), 1), 'yyyy-MM-dd 11:00:00'),
         person: 2,
     }
 
@@ -110,7 +112,7 @@ function List(props) {
                         dorm={dorm}
                         isWish={isWish}
                         toggleWish={() => toggleWish(dorm.id)}
-                        onClick={() => moveToDorm(dorm.id)}
+                        goToDorm={() => moveToDorm(dorm.id)}
                     />
                 ))}
                 {hasMore && (
