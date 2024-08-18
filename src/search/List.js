@@ -5,7 +5,7 @@ import DormCard from "./DormCard";
 import * as dorms from "react-bootstrap/ElementChildren";
 import {format} from "date-fns";
 
-function List() {
+function List(props) {
     // 리스트
     const [dorms, setDorms] = useState([])
     const getDorms = async () => {
@@ -98,7 +98,7 @@ function List() {
     }
 
     let moveToDorm = (id) => {
-        navigate('dorm/' + id, {state: {searchInfo: searchInfo}})
+        navigate('dorm/' + id, {state: {searchInfo: searchInfo, userInfo: props.userInfo}})
     }
 
     return (
