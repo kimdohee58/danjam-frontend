@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Button, Col, Row, Carousel, Card } from 'react-bootstrap';
@@ -137,6 +137,11 @@ const StyledButton = styled(Button)`
 `;
 
 const DormDetails = () => {
+    const location = useLocation()
+    const searchInfo = location.state.searchInfo
+    const userInfo = location.state.userInfo
+    console.log(searchInfo, userInfo)
+
     const [dorm, setDorm] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [user, setUser] = useState(null);
@@ -146,11 +151,15 @@ const DormDetails = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dormResponse = await axios.get(`http://localhost:8080/dorms/${id}`);
+                const dormResponse = await axios.post(`http://localhost:8080/dorms/${id}`, searchInfo, {withCredentials:true});
+
+                // const dormResponse = await axios.get(`http://localhost:8080/dorms/${id}`, {withCredentials:true});
 
                 if (dormResponse.data.result === 'success') {
                     setDorm(dormResponse.data);
                     setRooms(dormResponse.data.rooms);
+                    console.log(dorm)
+                    console.log(rooms)
                 } else {
                     console.error('숙소 정보를 가져오는 데 실패했습니다.');
                 }
@@ -237,7 +246,7 @@ const DormDetails = () => {
             }
         };
         navigate(`/bookings/${user.id}?dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${room.person}&checkIn=${room.checkIn}&checkOut=${room.checkOut}&roomImg=${room.img}&reviewAvg=${room.reviewAvg}&price=${room.price}&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.name)}&phoneNumber=${user.phoneNumber}`, {
-            state: { bookingInfo }
+            state: { bookingInfo: bookingInfo, userInfo: userInfo }
         });
     };
 

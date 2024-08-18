@@ -64,7 +64,7 @@ const InfoContainer = styled.div`
     padding-top: 5px;
 `;
 
-const DormCard = ({dorm, isWish, toggleWish}) => {
+const DormCard = ({dorm, isWish, toggleWish, goToDorm}) => {
     const maxLength = 30;
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
@@ -72,7 +72,7 @@ const DormCard = ({dorm, isWish, toggleWish}) => {
     let navigate = useNavigate();
 
     const moveToDorm = () => {
-        navigate('dorm/showOne/' + dorm.id)
+        goToDorm()
     };
 
     const nextImage = (e) => {

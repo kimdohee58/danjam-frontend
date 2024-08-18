@@ -195,6 +195,12 @@ const SellerList = () => {
     };
 
     const onDormDelete = async (dormId) => {
+        // Show confirmation dialog
+        const confirmed = window.confirm("해당 단잠을 삭제 하시겠습니까?");
+        if (!confirmed) {
+            return; // Do nothing if user cancels
+        }
+
         try {
             const response = await axios.delete(`http://localhost:8080/dorm/delete/${dormId}`, {
                 withCredentials: true
@@ -202,7 +208,7 @@ const SellerList = () => {
 
             if (response.status === 200) {
                 alert("Dorm deleted successfully!");
-                await fetchDormList();
+                await fetchDormList(); // Refresh the list after deletion
             } else {
                 alert("Failed to delete dorm.");
             }
@@ -240,7 +246,7 @@ const SellerList = () => {
 
     return (
         <StyledContainer>
-            <Title>Dorms List for Seller name: {userInfo.name}</Title>
+            <Title>단잠 리스트 판매자 이름: {userInfo.name}</Title>
             <CardGrid>
                 {dorms.map((dorm) => (
                     <StyledCard key={dorm.id}>

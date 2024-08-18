@@ -1,22 +1,103 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import {useLocation} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Modal from 'react-modal';
+import styled from 'styled-components';
 
+const Container = styled.div`
+    padding: 20px;
+    background-color: #f7f7f7; /* Light background similar to Airbnb's */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
 
-// 접근성 향상을 위해 모달의 루트 엘리먼트를 설정
-Modal.setAppElement('#root');
+const Title = styled.h1`
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+`;
+
+const InputWrapper = styled.div`
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+`;
+
+const StyledInput = styled.input`
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    margin-right: 10px;
+    flex: 1;
+`;
+
+const StyledButton = styled.button`
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    background-color: #ff5a5f; /* Airbnb red */
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #ff4d4f; /* Darker red on hover */
+    }
+`;
+
+const DatePickerContainer = styled.div`
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+`;
+
+const EventList = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+`;
+
+const EventItem = styled.li`
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+
+    &:last-child {
+        border-bottom: none;
+    }
+`;
+
+// Global CSS for DatePicker highlights
+const globalStyles = `
+    .highlighted-date {
+        background-color: #ffeb3b !important; /* Airbnb yellow */
+        border-radius: 50%;
+        color: #333;
+    }
+    .react-datepicker__day--highlighted-date {
+        background-color: #ffeb3b !important; /* Airbnb yellow */
+        border-radius: 50%;
+        color: #333;
+    }
+    .react-datepicker__day--highlighted-date:hover {
+        background-color: #fdd835 !important; /* Slightly darker yellow on hover */
+    }
+    .react-datepicker__day {
+        border-radius: 50%; /* Ensure round shape for highlighted days */
+    }
+`;
 
 const SellerCalendar = () => {
     const location = useLocation();  // 현재 URL의 위치 정보를 가져옵니다.
     const userInfo = location.state.userInfo;  // URL 상태에서 사용자 정보를 가져옵니다.
+    const navigate = useNavigate();  // 페이지 네비게이션을 위한 훅
     const [selectedDate, setSelectedDate] = useState(null);  // 선택된 날짜 상태
     const [events, setEvents] = useState([]);  // 선택된 날짜의 이벤트 상태
     const [eventsData, setEventsData] = useState({});  // 모든 날짜의 이벤트 데이터 상태
-    const [modalIsOpen, setModalIsOpen] = useState(false);  // 모달 열림 상태
-    const [selectedEventDetails, setSelectedEventDetails] = useState(null);  // 선택된 이벤트 세부 정보 상태
     const [searchDate, setSearchDate] = useState('');  // 검색 날짜 상태
 
     // 날짜를 YYYY-MM-DD 형식으로 포맷팅
@@ -45,18 +126,6 @@ const SellerCalendar = () => {
     const getDayClassName = (date) => {
         const dateString = formatDateString(date);
         return eventsData[dateString] ? 'highlighted-date' : '';  // 이벤트가 있는 날에 클래스 적용
-    };
-
-    // 선택된 이벤트 세부 정보를 가진 모달 열기
-    const openModal = (eventDetails) => {
-        setSelectedEventDetails(eventDetails);
-        setModalIsOpen(true);
-    };
-
-    // 모달 닫기
-    const closeModal = () => {
-        setModalIsOpen(false);
-        setSelectedEventDetails(null);
     };
 
     // 북킹 데이터를 가져오고 이벤트 데이터 처리
@@ -138,20 +207,28 @@ const SellerCalendar = () => {
         }
     };
 
-    return (
-        <div style={{padding: '20px'}}>
-            <h1>{userInfo.name} 판매자 예약리스트</h1>  {/* 사용자 이름을 제목으로 표시 */}
+    // Calendar 버튼 클릭 핸들러
+    const handleCalendarButtonClick = () => {
+        navigate('/seller/SellerCalendar2', { state: { userInfo } });
+    };
 
-            <div style={{marginBottom: '20px'}}>
-                <input
+    return (
+        <Container>
+            <Title>{userInfo.name}의 스케쥴</Title>
+
+            <InputWrapper>
+                <StyledInput
                     type="date"
                     value={searchDate}
                     onChange={handleSearchDateChange}
                     placeholder="Select or enter a date"
                 />
-            </div>
+                <StyledButton onClick={handleCalendarButtonClick}>
+                    Calendar
+                </StyledButton>
+            </InputWrapper>
 
-            <div className="datepicker-container">
+            <DatePickerContainer>
                 <DatePicker
                     selected={selectedDate}
                     onChange={handleDateChange}
@@ -163,82 +240,29 @@ const SellerCalendar = () => {
                     inline  // 캘린더를 항상 보이도록 설정
                     placeholderText="Select a date"  // DatePicker의 플레이스홀더 텍스트
                 />
-            </div>
+            </DatePickerContainer>
 
             {selectedDate && (
-                <div style={{marginTop: '20px'}}>
+                <div style={{ marginTop: '20px' }}>
                     <h2>Events for {formatDateString(selectedDate)}:</h2>
-                    <ul>
+                    <EventList>
                         {events.length > 0 ? (
                             events.map((event, index) => (
-                                <li key={index}>
-                                    <button onClick={() => openModal(event)}>
-                                        {event.type}: {event.userName}
-                                    </button>
-                                </li>
+                                <EventItem key={index}>
+                                    {event.type}: {event.userName}
+                                </EventItem>
                             ))
                         ) : (
-                            <li>No events for this date.</li>
+                            <EventItem>No events for this date.</EventItem>
                         )}
-                    </ul>
+                    </EventList>
                 </div>
             )}
 
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Event Details"
-                style={{
-                    content: {
-                        top: '50%',
-                        left: '50%',
-                        right: 'auto',
-                        bottom: 'auto',
-                        marginRight: '-50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '80%',
-                        maxWidth: '600px',
-                    },
-                }}
-            >
-                <h2>Event Details</h2>
-                {selectedEventDetails ? (
-                    <div>
-                        <p><strong>Type:</strong> {selectedEventDetails.type}</p>
-                        <p><strong>Reservation Name:</strong> {selectedEventDetails.userName}</p>
-                        <p><strong>Check-in Date:</strong> {selectedEventDetails.details.checkIn}</p>
-                        <p><strong>Check-out Date:</strong> {selectedEventDetails.details.checkOut}</p>
-                        <p><strong>Hotel Name:</strong> {selectedEventDetails.details.hotelName || 'N/A'}</p>
-                        <p><strong>Address:</strong> {selectedEventDetails.details.address || 'N/A'}</p>
-                        <p><strong>Room Name:</strong> {selectedEventDetails.details.room?.name || 'N/A'}</p>
-                        <p><strong>Room Type:</strong> {selectedEventDetails.details.room?.type || 'N/A'}</p>
-                    </div>
-                ) : (
-                    <p>No details available.</p>
-                )}
-                <button onClick={closeModal}>Close</button>
-            </Modal>
-
             <style>
-                {`
-                    .highlighted-date {
-                        background-color: red; /* 이벤트가 있는 날짜를 빨간색으로 강조 */
-                        border-radius: 50%;
-                        color: black;
-                    }
-                    .react-datepicker__day--highlighted-date {
-                        background-color: #ffeb3b !important; /* 강조된 날짜를 노란색으로 설정 */
-                        border-radius: 50%;
-                        color: black;
-                    }
-                    .datepicker-container {
-                        display: flex;
-                        // justify-content: center; /* 가운데 정렬 */
-                        margin: 20px 0;
-                    }
-                `}
+                {globalStyles}
             </style>
-        </div>
+        </Container>
     );
 };
 
