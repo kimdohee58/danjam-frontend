@@ -5,6 +5,8 @@ function Main() {
     let userInfo={
         id: '',
         name: '',
+        email: '',
+        phoneNum: '',
         role: ''
     }
     const location = useLocation();

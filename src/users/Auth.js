@@ -36,13 +36,13 @@ function Auth({ onSuccess }) { // Accept onSuccess as a prop
                 data: formData,
                 withCredentials: true,
             });
-
-            console.log(resp.data.result);
             if (resp.status === 200 && resp.data.result === 'success') {
                 const userInfo = {
                     id: resp.data.id,
-                    role: resp.data.role,
                     name: resp.data.name,
+                    email: resp.data.email,
+                    phoneNum: resp.data.phoneNum,
+                    role: resp.data.role,
                 };
 
                 // Navigate and pass userInfo in the state
