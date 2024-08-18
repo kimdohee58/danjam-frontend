@@ -1,18 +1,22 @@
 import {useLocation, useNavigate, useParams, useSearchParams} from 'react-router-dom'
 import './Booking.css'
-import {useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import Modal from 'react-modal'
 import PaymentWidget from "../payment/PaymentWidget";
 import moment from "moment";
+import styled from "styled-components";
 
 Modal.setAppElement('#root');
 
 const Booking = () => {
+    const [isOpen, setIsOpen] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation()
     const navigate = useNavigate()
     const params = useParams()
     const id = params.id
+
+    const dormId = searchParams.get("dormId")
     const roomId = searchParams.get("roomId")
     const price = searchParams.get("price")
     const roomImg = searchParams.get("roomImg")
@@ -22,15 +26,24 @@ const Booking = () => {
     const checkIn = searchParams.get("checkIn")
     const checkOut = searchParams.get("checkOut")
     const duration = moment(checkOut).diff(moment(checkIn), 'days')
-    const totalPrice = price * duration
+    const totalPrice = (duration !== 0) ? (price * duration) : price;
 
-    const bookingInfo = {
-        ...location.state,
+    const bookingData = {
+        dormName,
+        roomId,
+        price,
+        person,
+        checkIn,
+        checkOut,
     }
-    console.log('bookingInfo', bookingInfo)
 
-
-    const [isOpen, setIsOpen] = useState(false)
+    const [userInfo, setUserInfo] = useState({
+        id: '',
+        email: '',
+        name: '',
+        phoneNum: '',
+        role: '',
+    })
     const handleOpenModal = () => {
         setIsOpen(true);
     }
@@ -52,8 +65,15 @@ const Booking = () => {
     }
 
     const handleClick = () => {
-        navigate(`/dorms/${id}`)
+        navigate(`/dorm/${dormId}`, { state: { userInfo }})
     }
+
+    useEffect(() => {
+        console.log('booking', location.state)
+        if (location.state && location.state.userInfo) {
+            setUserInfo(location.state.userInfo);
+        }
+    }, [location.state])
 
     return (
         <>
@@ -76,7 +96,7 @@ const Booking = () => {
                             </div>
                             <div>
                                 <span>
-                                    {`${moment(checkIn, 'MM월 dd일')} ~ ${moment(checkOut, 'MM월 dd일')}`}
+                                    {`${moment(checkIn, 'YYYY-MM-DD HH:mm:ss').format('MM월 DD일')} ~ ${moment(checkOut, 'YYYY-MM-DD HH:mm:ss').format('MM월 DD일')}`}
                                 </span>
                             </div>
                         </div>
@@ -109,11 +129,10 @@ const Booking = () => {
                                             <span>{'요금 세부정보'}</span>
                                         </div>
                                         <div>
-                                            <span>{'총 합계(KRW)'}</span>
-                                            <span>{`￦${price} x ${duration}박`}</span>
-                                            <span>{`￦${totalPrice}`}</span>
+                                            <p>{`￦${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} x ${duration ? duration : ''}박`}</p>
+                                            <p>{'총 합계(KRW)'}</p>
+                                            <p>{`￦${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                                         </div>
-                                        <hr />
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +150,7 @@ const Booking = () => {
                     </button>
 
                     <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
-                        <PaymentWidget bookingInfo={bookingInfo} />
+                        <PaymentWidget bookingData={bookingData} userInfo={userInfo} />
                     </Modal>
                 </div>
             </div>

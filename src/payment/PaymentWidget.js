@@ -11,7 +11,7 @@ function generateUUID() {
     return uuidv4()
 }
 
-function PaymentWidget({ bookingInfo }) {
+function PaymentWidget({ bookingData, userInfo }) {
     const [searchParams, setSearchParams] = useSearchParams()
     const params = useParams()
     const id = params.id
@@ -19,11 +19,11 @@ function PaymentWidget({ bookingInfo }) {
     const successUrl = window.location.origin + '/payments-success'
     const failUrl = window.location.origin + '/payments-fail'
 
-    const { user, dormName, roomId, person, checkIn, checkOut } = bookingInfo
+    const { dormName, roomId, price, person, checkIn, checkOut } = bookingData
 
     const [amount, setAmount] = useState({
         currency: 'KRW',
-        value: 100,
+        value: parseInt(price),
     })
     const [ready, setReady] = useState(false)
     const [widgets, setWidgets] = useState(null)
@@ -93,9 +93,9 @@ function PaymentWidget({ bookingInfo }) {
                     orderName: dormName,
                     successUrl: `${successUrl}?${searchParams}`,
                     failUrl: failUrl,
-                    customerEmail: user.email,
-                    customerName: user.name,
-                    customerMobilePhone: user.phoneNumber,
+                    customerEmail: userInfo.email,
+                    customerName: userInfo.name,
+                    customerMobilePhone: `${userInfo.phoneNum}`,
                 })
             }
         } catch (error) {
