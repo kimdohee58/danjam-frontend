@@ -72,7 +72,7 @@ const NoItemsMessage = styled.h2`
 `;
 
 const WishPage = () => {
-    const fetchWishUrl = 'http://localhost:8080/wishes';
+    const fetchWishUrl = `${process.env.REACT_APP_API_SERVER_URL}/wishes`;
     const params = useParams();
     const id = params.id;
 
@@ -116,7 +116,7 @@ const WishPage = () => {
                 <WishContainer ref={listRef}>
                     {items.map(item => (
                         <WishBox key={item.id}>
-                            <Link to={`/dorms/${item.dormId}`} style={{ textDecoration: 'none' }}>
+                            <Link to={`/dorm/${item.dormId}`} style={{ textDecoration: 'none' }}>
                                 <WishTitle>{item.dormName}</WishTitle>
                             </Link>
                             <WishDescription>{item.dormDescription}</WishDescription>

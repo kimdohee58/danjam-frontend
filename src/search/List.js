@@ -57,8 +57,10 @@ function List(props) {
             size: size,
         };
 
+        console.log("API Server URL:", process.env.REACT_APP_API_SERVER_URL);
+
         try {
-            const resp = await axios.get("http://localhost:8080/showAll", {
+            const resp = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/showAll`, {
                 params: pageable,
                 withCredentials: true,
             });
@@ -92,13 +94,16 @@ function List(props) {
     const getWishList = async () => {
         if (userInfo.id != null) {
             try {
-                const resp = await axios.get(`http://localhost:8080/wishes/wish/${userInfo.id}`, {
+                const resp = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/wishes/wish/${userInfo.id}`, {
                     withCredentials: true,
                 });
                 console.log("위시리스트 성공적으로 로드: ", resp.data);
                 const dormIds = resp.data.map(wish => wish.dormId);
-                setWishList(dormIds);
 
+                // 상태 변경 조건 추가
+                if (JSON.stringify(wishList) !== JSON.stringify(dormIds)) {
+                    setWishList(dormIds);
+                }
             } catch (e) {
                 console.error("위시리스트 가져오는 도중 오류 발생", e);
             }
@@ -125,10 +130,10 @@ function List(props) {
             console.log("targetDorm?: " + targetDorm.isWish)
 
             if (targetDorm.isWish) {
-                await axios.delete(`http://localhost:8080/wishes/${userInfo.id}/${dormId}`, { withCredentials: true });
+                await axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/wishes/${userInfo.id}/${dormId}`, { withCredentials: true });
 
             } else {
-                await axios.post(`http://localhost:8080/wishes/${userInfo.id}/${dormId}`, {}, { withCredentials: true });
+                await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/wishes/${userInfo.id}/${dormId}`, {}, { withCredentials: true });
             }
 
         } catch (e) {
@@ -168,9 +173,11 @@ function List(props) {
                 ...dorm,
                 isWish: false // 모든 도미토리의 isWish를 false로 설정
             }));
-            setDorms(resetDorms);
+            if (JSON.stringify(dorms) !== JSON.stringify(resetDorms)) {
+                setDorms(resetDorms);
+            }
         }
-    }, [userInfo]);
+    }, [userInfo, dorms]);
 
     const searchInfo = {
         checkIn: format(new Date(), 'yyyy-MM-dd 15:00:00'),

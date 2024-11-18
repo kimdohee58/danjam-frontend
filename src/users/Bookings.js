@@ -6,7 +6,7 @@ const Bookings = () => {
     const params = useParams()
     const id = params.id
 
-    const fetchBookingUrl = 'http://localhost:8080/bookings'
+    const fetchBookingUrl = `${process.env.REACT_APP_API_SERVER_URL}/bookings`
 
     const [data, setData] = useState([])
 

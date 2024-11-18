@@ -138,7 +138,7 @@ const SellerCalendar2 = () => {
             if (!userInfo || !userInfo.id) return;
 
             try {
-                const response = await axios.get(`http://localhost:8080/SellerCalendar/${userInfo.id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/SellerCalendar/${userInfo.id}`, {
                     withCredentials: true
                 });
 

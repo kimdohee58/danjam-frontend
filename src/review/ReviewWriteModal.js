@@ -166,7 +166,7 @@ const ReviewWriteModal = ({ isOpen, onRequestClose, bookingId, userId }) => {
                 tags: selectedTags.map(tag => tag.id)
             };
 
-            const resp = await axios.post('http://localhost:8080/review/write', requestBody, {
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/review/write`, requestBody, {
                 withCredentials: true
             });
 
@@ -194,7 +194,7 @@ const ReviewWriteModal = ({ isOpen, onRequestClose, bookingId, userId }) => {
                 <CloseButton onClick={onRequestClose}><FaTimes /></CloseButton>
             </ModalHeader>
             <StarRatingContainer>
-                <StarRating size={30} rate={rate} onRateChange={handleRateChange} />
+                <StarRating width={30} size={30} rate={rate} onRateChange={handleRateChange} />
                 <p>현재 별점 (0.5 ~ 5.0) : {rate.toFixed(1)}</p>
             </StarRatingContainer>
             <TextArea

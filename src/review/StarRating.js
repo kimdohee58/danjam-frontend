@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
-const StarRating = ({ rate, onRateChange, readonly = false , size}) => {
+const StarRating = ({ rate, onRateChange, readonly = false , size, width}) => {
     const totalStars = 5;
     const fullStars = Math.floor(rate);
     const halfStar = rate % 1 !== 0;
@@ -30,7 +30,7 @@ const StarRating = ({ rate, onRateChange, readonly = false , size}) => {
                         cursor: readonly ? 'default' : 'pointer',
                         position: 'relative',
                         display: 'inline-block',
-                        width: 30
+                        width: width
                     }}
                 >
                     <span

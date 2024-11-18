@@ -59,28 +59,28 @@ const ReviewCard = ({review, from = {}}) => {
     const closeModal = () => setIsModalOpen(false);
 
     return (
-            <ReviewCardContainer>
-                <UserInfo>
-                        <UserName>{review.username}</UserName>
-                        <ReviewDate>{review.createdAt}</ReviewDate>
-                </UserInfo>
-                <ReviewDetails>
-                    <StarRating rate={review.rate}/>
-                    <span>{review.rate}</span>
-                </ReviewDetails>
-                <ReviewContent>
-                    <p>{review.email}</p>
-                    {review.content.length > maxLength
+        <ReviewCardContainer>
+            <UserInfo>
+                <UserName>{review.username}</UserName>
+                <ReviewDate>{review.createdAt}</ReviewDate>
+            </UserInfo>
+            <ReviewDetails>
+                <StarRating width={15} rate={review.rate}/>
+                <span>{review.rate}</span>
+            </ReviewDetails>
+            <ReviewContent>
+                <p>{review.email}</p>
+                {review.content.length > maxLength
                     ? review.content.slice(0, maxLength) + "..."
                     : review.content}
-                    {from === 'fromList' && review.content.length > maxLength && (
-                        <MoreButton onClick={openModal}>더보기</MoreButton>
-                    )}
-                    {isModalOpen && (
-                        <ReviewListModal from='fromModal' review={review} closeModal={closeModal} />
-                    )}
-                </ReviewContent>
-            </ReviewCardContainer>
+                {from === 'fromList' && review.content.length > maxLength && (
+                    <MoreButton onClick={openModal}>더보기</MoreButton>
+                )}
+                {isModalOpen && (
+                    <ReviewListModal from='fromModal' review={review} closeModal={closeModal} />
+                )}
+            </ReviewContent>
+        </ReviewCardContainer>
     );
 };
 

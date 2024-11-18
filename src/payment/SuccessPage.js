@@ -20,7 +20,7 @@ function SuccessPage() {
                 checkOut: searchParams.get("checkOut"),
             }
 
-            const response = await fetch('http://localhost:8080/payments/confirm', {
+            const response = await fetch(`${process.env.REACT_APP_API_SERVER_URL}/payments/confirm`, {
                 method: 'POST',
                 // credentials: 'include',
                 headers: {

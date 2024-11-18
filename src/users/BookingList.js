@@ -16,7 +16,7 @@ const BookingList = ({ booking }) => {
             <td>{booking.users.name}</td>
             <td>{booking.payment.orderId}</td>
             <td>{booking.room.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-            <ReviewWriteButton />
+            <ReviewWriteButton bookingId={booking.id} userId={booking.users.id}/>
         </>
     )
 }

@@ -263,14 +263,14 @@ const DormDetails = (props) => {
     const {id} = useParams();
     const navigate = useNavigate();
 
-    const IMAGE_BASE_URL = 'http://localhost:8080/uploads/';
+    const IMAGE_BASE_URL = `${process.env.REACT_APP_API_SERVER_URL}/uploads/`;
     const getImageUrl = (imgDto) => `${IMAGE_BASE_URL}${imgDto.name}.${imgDto.ext}`;
 
     console.log(amenities)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dormResponse = await axios.post(`http://localhost:8080/dorms/${id}`, searchInfo, {withCredentials: true});
+                const dormResponse = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/dorms/${id}`, searchInfo, {withCredentials: true});
 
                 if (dormResponse.data.result === 'success') {
                     // Transform rooms data to include image URLs
@@ -285,7 +285,7 @@ const DormDetails = (props) => {
                 } else {
                     console.error('숙소 정보를 가져오는 데 실패했습니다.');
                 }
-                // const userResponse = await axios.get(`http://localhost:8080/users/1`);
+                // const userResponse = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/users/1`);
                 // if (userResponse.status === 200) {
                 //     setUser(userResponse.data);
                 // } else {
@@ -363,7 +363,7 @@ const DormDetails = (props) => {
         if (!userInfo || userInfo.id === '') {
             handleOpenModal();
         } else {
-            navigate(`/bookings/${userInfo.id}?dormId=${id}&dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${searchInfo.person}&checkIn=${searchInfo.checkIn}&checkOut=${searchInfo.checkOut}&roomImg=${room.img}&reviewAvg=${room.reviewAvg}&price=${room.price}`,
+            navigate(`/bookings/${userInfo.id}?dormId=${id}&dormName=${encodeURIComponent(dorm.name)}&roomId=${room.id}&person=${searchInfo.person}&checkIn=${searchInfo.checkIn}&checkOut=${searchInfo.checkOut}&roomImg=${featuredImage}&price=${room.price}`,
                 {state: {userInfo}}
             );
         }

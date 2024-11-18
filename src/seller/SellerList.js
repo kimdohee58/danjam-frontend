@@ -172,7 +172,7 @@ const SellerList = () => {
     const fetchDormList = async () => {
         try {
             const id = userInfo.id;
-            const response = await axios.get(`http://localhost:8080/dorm/Sellerlist/${id}`, {
+            const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/dorm/Sellerlist/${id}`, {
                 withCredentials: true
             });
             console.log(response.data);
@@ -202,7 +202,7 @@ const SellerList = () => {
         }
 
         try {
-            const response = await axios.delete(`http://localhost:8080/dorm/delete/${dormId}`, {
+            const response = await axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/dorm/delete/${dormId}`, {
                 withCredentials: true
             });
 
@@ -241,7 +241,7 @@ const SellerList = () => {
     }, [userInfo.id]);
 
     const getImageSrc = (imageName) => {
-        return `http://localhost:8080/uploads/${imageName}`;
+        return `${process.env.REACT_APP_API_SERVER_URL}/uploads/${imageName}`;
     };
 
     return (

@@ -91,7 +91,7 @@ function Register() {
 
     const onCheck = async () => {
         try {
-            const resp = await axios.post('http://localhost:8080/users/validate', user.email);
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/validate`, user.email);
             if (resp.data.result === 'success') {
                 alert('사용 가능한 메일입니다.');
                 setIsValid(false);
@@ -106,7 +106,7 @@ function Register() {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            const resp = await axios.post('http://localhost:8080/users/signUp', user);
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/signUp`, user);
             if (resp.data.result === 'success') {
                 moveToNext();
             } else {
@@ -149,6 +149,8 @@ function Register() {
                 <Input
                     type="tel"
                     name="phoneNum"
+                    minLength={11}
+                    maxLength={11}
                     value={phoneNum}
                     onChange={onChange}
                     placeholder="전화번호 (하이픈 없이 입력)"

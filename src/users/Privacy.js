@@ -85,7 +85,7 @@ function Privacy() {
     const navigate = useNavigate();
     const params = useParams();
     const id = params.id;
-    const fetchUserUrl = 'http://localhost:8080/users';
+    const fetchUserUrl = `${process.env.REACT_APP_API_SERVER_URL}/users`;
 
     useEffect(() => {
         const fetchUsers = async () => {

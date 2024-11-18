@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { Button } from 'react-bootstrap';
-import {useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import List from './List';
 import SearchResult from './SearchResult';
 import styled from 'styled-components';
-import {addDays} from "date-fns";
+import { addDays } from "date-fns";
 
 // Styled components
 const Container = styled.div`
@@ -27,7 +27,7 @@ const Title = styled.h1`
 
 const SearchBar = styled.div`
     display: flex;
-    justify-content: space-around; /* 요소들을 일정 간격으로 배치 */
+    justify-content: space-around;
     align-items: center;
     width: 100%;
     max-width: 1400px;
@@ -42,29 +42,30 @@ const SelectWrapper = styled.div`
     position: relative;
     flex: 1;
     margin-right: 10px;
-    min-width: 200px; /* 최소 가로 크기 지정 */
+    min-width: 200px;
 `;
 
-/*const DatePickerWrapper = styled.div`
+const DatePickerWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 2;
     position: relative;
     margin: 0 10px;
-    min-width: 200px; /!* 최소 가로 크기 지정 *!/
-`;*/
+    min-width: 200px;
+`;
 
 const PersonSelector = styled.div`
     position: relative;
     flex: 1;
     margin-left: 10px;
-    min-width: 200px; /* 최소 가로 크기 지정 */
+    min-width: 200px;
 `;
 
 const SelectLabel = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     font-size: 1.2em;
     color: #333;
@@ -111,66 +112,12 @@ const CityButton = styled.div`
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: background-color 0.3s;
     margin: 5px;
-    flex: 1;
     &:hover {
         background-color: #f8f8f8;
     }
-`;
-const DatePickerWrapper = styled.div`
-  position: relative;
-  display: inline-block;
 `;
 
 const DatePickerLabel = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2em;
-    //color: #333;
-    font-colz;
-    border: 1px solid #ddd;
-    border-radius: 30px;
-    padding: 12px 20px;
-    background-color: #283544;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    position: relative;
-    user-select: none;
-    margin-bottom: 5px;
-    width: 100%;
-    max-width: 250px;
-    text-align: center;
-    &:hover {
-        background-color: #f8f8f8;
-    }
-`;
-
-const StyledDatePicker = styled(DatePicker)`
-  background-color: #fff; /* 흰색 배경 */
-  color: #000; /* 검정색 글자 */
-  border: 1px solid #ccc; /* 회색 테두리 */
-  border-radius: 5px;
-  padding: 10px;
-
-  .react-datepicker__header {
-    background-color: #007a75; /* 검정색 배경 */
-    color: #fff; /* 흰색 글자 */
-  }
-
-  .react-datepicker__day--selected {
-    background-color: #007a75; /* 검정색 배경 */
-    color: #fff; /* 흰색 글자 */
-  }
-
-  .react-datepicker__day--in-selecting-range {
-    background-color: #ccc; /* 연한 회색 배경 */
-  }
-
-  .react-datepicker__triangle {
-    display: none; /* 삼각형 숨기기 */
-  }
-`;
-/*const DatePickerLabel = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,11 +138,12 @@ const StyledDatePicker = styled(DatePicker)`
     &:hover {
         background-color: #f8f8f8;
     }
-`;*/
+`;
 
 const PersonLabel = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     font-size: 1.2em;
     color: #333;
@@ -257,7 +205,7 @@ function Search(props) {
         role: '',
     }
     if (location.state != null) {
-        userInfo = location.state.userInfo
+        userInfo = location.state.userInfo;
     }
 
     const [search, setSearch] = useState({
@@ -269,8 +217,8 @@ function Search(props) {
 
     const [selectedCity, setSelectedCity] = useState('선택');
     const [selectedDate, setSelectedDate] = useState({
-        checkIn: null,
-        checkOut: null,
+        checkIn: new Date(),
+        checkOut: addDays(new Date(), 1),
     });
     const [selectedPerson, setSelectedPerson] = useState(0);
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -316,19 +264,13 @@ function Search(props) {
     };
 
     const onSubmit = () => {
-        if (selectedDate.checkIn === '' && selectedDate.checkOut === '') {
-            setSelectedDate({
-                checkIn: new Date(),
-                checkout: addDays(new Date(), 1),
-            })
-        }
         setSearch({
             city: selectedCity,
             date: selectedDate,
             person: selectedPerson,
         });
         console.log("onSubmit", search);
-        // navigate('/search')
+        // navigate('/search');
     };
 
     return (
@@ -356,9 +298,7 @@ function Search(props) {
                             : '체크인 / 체크아웃'}
                     </DatePickerLabel>
                     {datePickerVisible && (
-                        <StyledDatePicker
-                        // <DatePicker
-                            shouldCloseOnSelect
+                        <DatePicker
                             selectsRange={true}
                             dateFormat="MM월 dd일"
                             startDate={selectedDate.checkIn}
@@ -368,7 +308,6 @@ function Search(props) {
                             onChange={setChangeDate}
                             className="datepicker"
                             inline
-                            autoClose={true}
                         />
                     )}
                 </DatePickerWrapper>
@@ -387,8 +326,9 @@ function Search(props) {
             </SearchBar>
 
             <div style={{ marginTop: '20px', width: '100%', maxWidth: '1400px' }}>
-                {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0 ?
-                    <List userInfo={userInfo}/> : <SearchResult search={search} userInfo={userInfo} />}
+                {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0
+                    ? <List userInfo={userInfo} />
+                    : <SearchResult search={search} userInfo={userInfo} />}
             </div>
         </Container>
     );

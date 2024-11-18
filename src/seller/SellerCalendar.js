@@ -133,7 +133,7 @@ const SellerCalendar = () => {
         const fetchBookings = async () => {
             try {
                 const id = userInfo.id;  // 사용자 ID 가져오기
-                const response = await axios.get(`http://localhost:8080/SellerCalendar/${id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/SellerCalendar/${id}`, {
                     withCredentials: true
                 });
                 console.log(response.data);  // 응답 데이터 확인

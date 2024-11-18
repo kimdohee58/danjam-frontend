@@ -91,7 +91,7 @@ const AInsert = () => {
     useEffect(() => {
         const fetchAmenities = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/amenity/list');
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/amenity/list`);
                 const { amenityList } = response.data;
                 setAmenities(amenityList);
             } catch (error) {
@@ -122,7 +122,7 @@ const AInsert = () => {
         };
             console.log(dataToSend)
         try {
-            await axios.post('http://localhost:8080/damenity/insert', dataToSend, {
+            await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/damenity/insert`, dataToSend, {
                 withCredentials: true
             });
             moveToNext(id);

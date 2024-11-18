@@ -122,7 +122,7 @@ const RInsert = () => {
         };
 
         try {
-            const resp = await axios.post('http://localhost:8080/room/insert', dataToSend, {
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/room/insert`, dataToSend, {
                 withCredentials: true
             });
             const roomId = resp.data.resultId;
@@ -155,7 +155,7 @@ const RInsert = () => {
         fd.append("roomId", roomID);
 
         axios.post('/roomImg/insert', fd, {
-            baseURL: 'http://localhost:8080'
+            baseURL: `${process.env.REACT_APP_API_SERVER_URL}`
         })
             .then((response) => {
                 console.log('Response:', response.data);

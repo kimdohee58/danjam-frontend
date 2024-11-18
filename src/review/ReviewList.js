@@ -115,7 +115,7 @@ const ReviewList = ({ dormId }) => {
 
     const getReviews = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/review/${dormId}`, { withCredentials: true });
+            const resp = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/review/${dormId}`, { withCredentials: true });
             if (resp.status === 200) {
                 console.log("응답 데이터 확인: ", resp.data);
                 setReviews(resp.data.reviews);

@@ -101,7 +101,7 @@ const Approve = () => {
     // Fetch dorm list function
     const fetchDormList = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/dorm/Approvelist`, {
+            const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/dorm/Approvelist`, {
                 withCredentials: true
             });
             const { dormList } = response.data;
@@ -125,7 +125,7 @@ const Approve = () => {
 
     const Send = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/dorm/Update', Array.from(selectedDorms), {
+            const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/dorm/Update`, Array.from(selectedDorms), {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -143,7 +143,7 @@ const Approve = () => {
     }, [userInfo.id]);
 
     const getImageSrc = (imageName) => {
-        return `http://localhost:8080/uploads/${imageName}`;
+        return `${process.env.REACT_APP_API_SERVER_URL}/uploads/${imageName}`;
     };
 
     return (

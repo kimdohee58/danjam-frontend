@@ -144,7 +144,7 @@ const Insert = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/dcategory/list');
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/dcategory/list`);
                 const { dcategoryList } = response.data;
                 setCategories(dcategoryList);
             } catch (error) {
@@ -178,7 +178,7 @@ const Insert = () => {
         };
 
         try {
-            const resp = await axios.post('http://localhost:8080/dorm/insert', dataToSend, {
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/dorm/insert`, dataToSend, {
                 withCredentials: true
             });
 

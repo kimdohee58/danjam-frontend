@@ -21,11 +21,10 @@ const Booking = () => {
     const price = searchParams.get("price")
     const roomImg = searchParams.get("roomImg")
     const dormName = searchParams.get("dormName")
-    const reviewAvg = searchParams.get("reviewAvg")
     const person = searchParams.get("person")
     const checkIn = searchParams.get("checkIn")
     const checkOut = searchParams.get("checkOut")
-    const duration = moment(checkOut).diff(moment(checkIn), 'days')
+    const duration = moment(checkOut, 'YYYY-MM-DD').diff(moment(checkIn, 'YYYY-MM-DD'), 'days')
     const totalPrice = (duration !== 0) ? (price * duration) : price;
 
     const bookingData = {
@@ -119,7 +118,6 @@ const Booking = () => {
                                         </div>
                                         <div>
                                             <p>{dormName}</p>
-                                            <p>{reviewAvg}</p>
                                         </div>
                                         <hr />
                                     </div>

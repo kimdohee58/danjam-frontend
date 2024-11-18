@@ -14,7 +14,7 @@ const RoomList = () => {
         console.log("유즈 이팩트 rooms 들어 오는지 확인용 입니다.", rooms)
         const fetchRoomDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/rooms/${id}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/rooms/${id}`);
                 if (response.data && response.data.rooms) {
                     setRooms(response.data.rooms); // 방 목록을 상태에 저장
                 } else {

@@ -21,9 +21,9 @@ const DormList = ({filters} = {}) => {
             /** User 값 받아서 로그인 한 상태면 위시로 넘겨주고, 로그인되지 않았으면 로그인 창으로 넘겨주기
              */
             if (targetDorm.isWish) {
-                await axios.delete(`http://localhost:8080/wish/${dormId}`, {withCredentials: true});
+                await axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/wish/${dormId}`, {withCredentials: true});
             } else {
-                await axios.get(`http://localhost:8080/wish/${dormId}`, {}, {withCredentials: true});
+                await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/wish/${dormId}`, {}, {withCredentials: true});
             } // 위시리스트 매핑 설정 @영우
         } catch (e) {
             console.error("찜 상태 변경 중 오류 발생", e);
@@ -66,7 +66,7 @@ const DormList = ({filters} = {}) => {
 
             console.log("검색에서 생성된 params 확인: ", params);
 
-            const resp = await axios.get(`http://localhost:8080/dorm?${params}`, {withCredentials: true});
+            const resp = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/dorm?${params}`, {withCredentials: true});
             console.log("데이터가 있나요?", resp.data);
             if (resp.data && resp.data.content) {
                 const newDorms = resp.data.content;
