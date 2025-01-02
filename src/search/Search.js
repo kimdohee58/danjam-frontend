@@ -14,7 +14,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 30px;
-    background: #f0f4f8;
+    //background: #f0f4f8;
     min-height: 100vh;
 `;
 

@@ -33,7 +33,7 @@ const LoadMoreButton = styled.button`
 const ListContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    //gap: 20px;
 `;
 
 function List(props) {

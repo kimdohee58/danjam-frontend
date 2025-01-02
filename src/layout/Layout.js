@@ -11,7 +11,7 @@ import Search from "../search/Search"; // Import the SellerCalendar component
 // Colors
 const colors = {
     darkBlueBlack: 'rgb(2, 13, 29)',
-    lightGrayBlue: 'rgb(150, 161, 170)',
+    // lightGrayBlue: 'rgb(150, 161, 170)',
     mediumGrayBlue: 'rgb(93, 105, 118)',
     darkBlue: 'rgb(40, 53, 68)',
     lightGray: 'rgb(223, 226, 228)',
@@ -55,7 +55,7 @@ const ContentContainer = styled.div`
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 24px;
+    padding: 24px 24px;
     position: relative;
     flex: 1; // Allow ContentContainer to take available space
 `;
