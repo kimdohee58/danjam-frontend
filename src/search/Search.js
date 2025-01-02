@@ -11,11 +11,11 @@ import { addDays } from "date-fns";
 // Styled components
 const Container = styled.div`
     display: flex;
+    width: 100%;
+    min-height: 100vh;
     flex-direction: column;
     align-items: center;
-    padding: 30px;
-    //background: #f0f4f8;
-    min-height: 100vh;
+    position: relative;
 `;
 
 const Title = styled.h1`
@@ -275,6 +275,7 @@ function Search(props) {
 
     return (
         <Container>
+        {/*<>*/}
             <Title onClick={() => navigate('/')}>단잠</Title>
 
             <SearchBar>
@@ -331,6 +332,7 @@ function Search(props) {
                     : <SearchResult search={search} userInfo={userInfo} />}
             </div>
         </Container>
+        // </>
     );
 }
 

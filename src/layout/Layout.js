@@ -11,7 +11,7 @@ import Search from "../search/Search"; // Import the SellerCalendar component
 // Colors
 const colors = {
     darkBlueBlack: 'rgb(2, 13, 29)',
-    // lightGrayBlue: 'rgb(150, 161, 170)',
+    lightGrayBlue: 'rgb(150, 161, 170)',
     mediumGrayBlue: 'rgb(93, 105, 118)',
     darkBlue: 'rgb(40, 53, 68)',
     lightGray: 'rgb(223, 226, 228)',
@@ -187,6 +187,10 @@ const FooterContent = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+`;
+
+const FooterText = styled.p`
+    color: white;
 `;
 
 // FooterLinks Styling
@@ -380,7 +384,7 @@ function Layout() {
             <Footer>
                 <ContentContainer>
                     <FooterContent>
-                        <p>&copy; 2024 Your Company. All rights reserved.</p>
+                        <FooterText>&copy; 2024 Danjam. All rights reserved.</FooterText>
                         <FooterLinks>
                             <FooterLink><a href="#">Privacy Policy</a></FooterLink>
                             <FooterLink><a href="#">Terms of Service</a></FooterLink>
