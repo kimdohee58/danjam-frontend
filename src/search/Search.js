@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
-import { Button } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {Button} from 'react-bootstrap';
+import {useLocation, useNavigate} from 'react-router-dom';
 import List from './List';
 import SearchResult from './SearchResult';
 import styled from 'styled-components';
-import { addDays } from "date-fns";
+import {addDays} from "date-fns";
 
 // Styled components
 const Container = styled.div`
@@ -29,16 +29,16 @@ const SearchBar = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 100%;
+    width: 90%;
     max-width: 1400px;
     background: white;
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     position: relative;
 `;
 
-const SelectWrapper = styled.div`
+const CityWrapper = styled.div`
     position: relative;
     flex: 1;
     margin-right: 10px;
@@ -55,10 +55,11 @@ const DatePickerWrapper = styled.div`
     min-width: 200px;
 `;
 
-const PersonSelector = styled.div`
+const PersonWrapper = styled.div`
     position: relative;
     flex: 1;
     margin-left: 10px;
+    margin-bottom: 4px;
     min-width: 200px;
 `;
 
@@ -73,11 +74,12 @@ const SelectLabel = styled.div`
     border-radius: 30px;
     padding: 12px 20px;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     user-select: none;
     margin-bottom: 5px;
     text-align: center;
+
     &:hover {
         background-color: #f8f8f8;
     }
@@ -91,7 +93,7 @@ const CityList = styled.div`
     background: white;
     border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     width: 100%;
     max-height: 300px;
@@ -109,9 +111,10 @@ const CityButton = styled.div`
     color: #333;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
     margin: 5px;
+
     &:hover {
         background-color: #f8f8f8;
     }
@@ -128,15 +131,38 @@ const DatePickerLabel = styled.div`
     border-radius: 30px;
     padding: 12px 20px;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     user-select: none;
     margin-bottom: 5px;
     width: 100%;
     max-width: 250px;
     text-align: center;
+
     &:hover {
         background-color: #f8f8f8;
+    }
+`;
+
+const PersonButton = styled.button`
+    font-size: 1em;
+    background-color: #f0f4f8;
+    border: 1px solid #ddd;
+    border-radius: 80%;  /* 둥근 모양으로 설정 */
+    cursor: pointer;
+    width: 32px;  /* 크기 조정 */
+    height: 32px;  /* 크기 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 8px 0 8px;  /* 위아래 간격 없앰 */
+
+    &:hover {
+        background-color: #e0e4e8;
+    }
+
+    &:focus {
+        outline: none;
     }
 `;
 
@@ -149,35 +175,11 @@ const PersonLabel = styled.div`
     color: #333;
     border: 1px solid #ddd;
     border-radius: 30px;
-    padding: 12px 20px;
+    padding: 9px 12px;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     user-select: none;
-`;
-
-const Dropdown = styled.div`
-    display: ${props => props.open ? 'block' : 'none'};
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    z-index: 1000;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-`;
-
-const DropdownItem = styled.div`
-    padding: 12px;
-    cursor: pointer;
-    border-radius: 6px;
-    &:hover {
-        background-color: #f8f8f8;
-    }
 `;
 
 const SubmitButton = styled(Button)`
@@ -188,6 +190,7 @@ const SubmitButton = styled(Button)`
     background-color: #FF5A5F;
     border: none;
     color: white;
+
     &:hover {
         background-color: #FF3A3F;
     }
@@ -245,9 +248,10 @@ function Search(props) {
         setDropdownOpen(!dropdownOpen);
     };
 
-    const handleGuestClick = (increment) => {
-        setSelectedPerson(prev => prev + increment);
-        setDropdownOpen(false);
+    const handleGuestClick = (change) => {
+        if (selectedPerson + change >= 0) {
+            setSelectedPerson(prevPerson => prevPerson + change);
+        }
     };
 
     const toggleDatePicker = () => {
@@ -275,11 +279,11 @@ function Search(props) {
 
     return (
         <Container>
-        {/*<>*/}
+            {/*<>*/}
             <Title onClick={() => navigate('/')}>단잠</Title>
 
             <SearchBar>
-                <SelectWrapper>
+                <CityWrapper>
                     <SelectLabel onClick={toggleCityList}>
                         {selectedCity === '선택' ? '도시 선택' : selectedCity}
                     </SelectLabel>
@@ -290,7 +294,7 @@ function Search(props) {
                             </CityButton>
                         ))}
                     </CityList>
-                </SelectWrapper>
+                </CityWrapper>
 
                 <DatePickerWrapper>
                     <DatePickerLabel onClick={toggleDatePicker}>
@@ -313,23 +317,21 @@ function Search(props) {
                     )}
                 </DatePickerWrapper>
 
-                <PersonSelector>
+                <PersonWrapper>
                     <PersonLabel onClick={toggleDropdown}>
-                        인원 {selectedPerson}
+                        <PersonButton onClick={() => handleGuestClick(-1)}>-</PersonButton>
+                            인원 {selectedPerson}
+                        <PersonButton onClick={() => handleGuestClick(+1)}>+</PersonButton>
                     </PersonLabel>
-                    <Dropdown open={dropdownOpen}>
-                        <DropdownItem onClick={() => handleGuestClick(-1)}>- {selectedPerson > 0 ? `(${selectedPerson - 1})` : '없음'}</DropdownItem>
-                        <DropdownItem onClick={() => handleGuestClick(1)}>+ {selectedPerson + 1}</DropdownItem>
-                    </Dropdown>
-                </PersonSelector>
+                </PersonWrapper>
 
                 <SubmitButton onClick={onSubmit}>검색</SubmitButton>
             </SearchBar>
 
-            <div style={{ marginTop: '20px', width: '100%', maxWidth: '1400px' }}>
+            <div style={{marginTop: '20px', width: '100%', maxWidth: '1400px'}}>
                 {search.city === '선택' && search.checkIn === '' && search.checkOut === '' && search.person === 0
-                    ? <List userInfo={userInfo} />
-                    : <SearchResult search={search} userInfo={userInfo} />}
+                    ? <List userInfo={userInfo}/>
+                    : <SearchResult search={search} userInfo={userInfo}/>}
             </div>
         </Container>
         // </>
