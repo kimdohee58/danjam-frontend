@@ -330,7 +330,7 @@ function Layout() {
     return (
         <AppWrapper>
             <Header>
-                <Logo src={logo} alt="Company Logo" onClick={(toMain) => navigate('/', { state: userInfo })} />
+                <Logo src={logo} alt="Company Logo" onClick={() => navigate('/', { state: userInfo })} />
 
                 {/*<Search/>*/}
 

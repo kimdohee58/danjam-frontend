@@ -527,7 +527,6 @@ function Search(props) {
 
     return (
         <Container>
-            {/*<>*/}
             <Title onClick={() => navigate('/')}>단잠</Title>
 
             <SearchBar>
@@ -582,7 +581,6 @@ function Search(props) {
                     : <SearchResult search={search} userInfo={userInfo}/>}
             </div>
         </Container>
-        // </>
     );
 }
 
