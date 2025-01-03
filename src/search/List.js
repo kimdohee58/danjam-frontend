@@ -16,6 +16,7 @@ const LoadMoreButton = styled.button`
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    position: relative;
 
     &:hover {
         background-color: #333;
@@ -33,14 +34,15 @@ const LoadMoreButton = styled.button`
 const ListContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    //gap: 20px;
+    justify-content: center;
+    position: relative;
 `;
 
 function List(props) {
     const [dorms, setDorms] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const size = 15;
+    const size = 14;
 
     const location = useLocation();
     const userInfo = location.state?.userInfo || {};

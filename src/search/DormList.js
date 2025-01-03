@@ -93,7 +93,7 @@ const DormList = ({filters} = {}) => {
 
     return (
         <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
-            {dorms.map(/* 위시새끼 단체로 움직임 */(dorm) => (
+            {dorms.map((dorm) => (
                 <DormCard
                     key={dorm.id}
                     dorm={dorm}

@@ -336,11 +336,12 @@ const CityButton = styled.div`
     cursor: pointer;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s ease;
     margin: 5px;
 
     &:hover {
         background-color: #f8f8f8;
+        transform: scale(1.05);
     }
 
     @media (max-width: 768px) {
@@ -348,6 +349,7 @@ const CityButton = styled.div`
         padding: 8px 12px;
     }
 `;
+
 
 const DatePickerLabel = styled.div`
     display: flex;
@@ -525,9 +527,24 @@ function Search(props) {
         // navigate('/search');
     };
 
+    const handleTitleClick = () => {
+        setSearch({
+            city: '선택',
+            checkIn: '',
+            checkOut: '',
+            person: 0,
+        });
+        setSelectedCity('선택');
+        setSelectedDate({
+            checkIn: new Date(),
+            checkOut: addDays(new Date(), 1),
+        });
+        setSelectedPerson(0);
+    }
+
     return (
         <Container>
-            <Title onClick={() => navigate('/')}>단잠</Title>
+            <Title onClick={handleTitleClick}>단잠</Title>
 
             <SearchBar>
                 <CityWrapper>
