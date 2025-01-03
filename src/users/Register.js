@@ -139,12 +139,13 @@ function Register() {
 
     const onCheck = async () => {
         try {
-            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/validate`, user.email);
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/users/validate`, user.email);
             if (resp.data.result === 'success') {
                 alert('사용 가능한 메일입니다.');
                 setIsValid(false);
             } else {
                 alert('이미 가입된 이메일입니다.');
+                console.log(resp.data.result)
             }
         } catch (error) {
             console.error(error);
@@ -154,8 +155,9 @@ function Register() {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/signUp`, user);
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/users/signUp`, user);
             if (resp.data.result === 'success') {
+                alert('회원가입 성공');
                 moveToNext();
             } else {
                 alert('회원가입 실패');

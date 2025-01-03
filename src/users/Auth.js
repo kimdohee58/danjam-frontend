@@ -31,7 +31,7 @@ function Auth({ onSuccess }) {
             formData.append('password', user.password);
 
             const resp = await axios({
-                url: `${process.env.REACT_APP_API_SERVER_URL}/users/auth`,
+                url: `${process.env.REACT_APP_API_SERVER_URL}/api/users/auth`,
                 method: 'POST',
                 data: formData,
                 withCredentials: true,

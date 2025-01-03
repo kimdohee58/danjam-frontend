@@ -290,7 +290,7 @@ function Layout() {
     const LogIn = () => setShowModal(true);
     const LogOut = async () => {
         try {
-            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/logout`, {}, { withCredentials: true });
+            const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/users/logout`, {}, { withCredentials: true });
             if (resp.status === 200) {
                 navigate('/');
                 setUserInfo({

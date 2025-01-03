@@ -70,7 +70,7 @@ const MemberList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/users/UsersList`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/users/UsersList`, {
                     withCredentials: true
                 });
                 setMembers(response.data);
