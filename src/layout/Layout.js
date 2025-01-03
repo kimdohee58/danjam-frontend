@@ -287,7 +287,8 @@ function Layout() {
     }, []);
 
     const SignUp = () => navigate('/signUp');
-    const LogIn = () => setShowModal(true);
+    // const LogIn = () => setShowModal(true);
+    const LogIn = () => navigate('/login');
     const LogOut = async () => {
         try {
             const resp = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/users/logout`, {}, { withCredentials: true });
